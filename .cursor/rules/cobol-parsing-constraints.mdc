@@ -1,0 +1,19 @@
+---
+description: Parser constraints and source mapping discipline
+globs: **/*.{py,java,ts}
+alwaysApply: false
+---
+
+# COBOL Parsing Constraints
+
+- Keep targeted COBOL dialect assumptions explicit in code and docs.
+- Do not silently drop unsupported constructs; classify and report them.
+- Preserve source span mappings through parse, normalize, and transform stages.
+- Maintain recoverable error paths to allow partial analysis outputs.
+- Track parse coverage metrics by module and codebase snapshot.
+
+## Implementation Guardrails
+
+- Parser changes must include fixtures for dialect edge cases.
+- Copybook resolution logic must emit provenance for expanded fields.
+- Unknown tokens/nodes must be surfaced in diagnostics and telemetry.

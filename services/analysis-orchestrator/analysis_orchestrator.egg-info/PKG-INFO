@@ -1,0 +1,41 @@
+Metadata-Version: 2.4
+Name: analysis-orchestrator
+Version: 0.1.0
+Summary: Analysis orchestration service for retrieval, inference, and verification.
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi>=0.116.0
+Requires-Dist: uvicorn>=0.35.0
+Requires-Dist: pydantic>=2.11.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.3.0; extra == "dev"
+Requires-Dist: httpx>=0.28.0; extra == "dev"
+Requires-Dist: jsonschema>=4.25.0; extra == "dev"
+
+# analysis-orchestrator
+
+Language target: Python.
+
+## Responsibility
+
+- Orchestrate ingest, retrieval, inference, and verifier flows.
+- Enforce evidence contract for claims.
+- Compute readiness signals and impact/lineage artifacts.
+- Coordinate external-first inference with policy-gateway routing.
+
+## Planned Interfaces
+
+- `POST /analysis/run`
+- `GET /analysis/run/{run_id}`
+- `POST /analysis/query`
+- `POST /analysis/impact`
+- `POST /analysis/readiness-evaluate`
+- `POST /analysis/readiness-from-validation`
+
+## Local Run
+
+```bash
+pip install -e .[dev]
+uvicorn app.main:app --reload --port 8011
+pytest
+```

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "masquerade/readiness-gate.schema.json",
+  "title": "ReadinessGateResult",
+  "type": "object",
+  "required": [
+    "module_id",
+    "readiness_score",
+    "threshold_profile",
+    "high_assurance_recompute_passed",
+    "strict_numeric_emulation_passed",
+    "required_approvals",
+    "migration_ready"
+  ],
+  "properties": {
+    "module_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "readiness_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "threshold_profile": {
+      "type": "string",
+      "enum": ["strict", "standard", "permissive"]
+    },
+    "high_assurance_recompute_passed": {
+      "type": "boolean"
+    },
+    "strict_numeric_emulation_passed": {
+      "type": "boolean"
+    },
+    "required_approvals": {
+      "type": "object",
+      "required": ["modernization_engineer", "domain_sme", "risk_controls_owner"],
+      "properties": {
+        "modernization_engineer": { "type": "boolean" },
+        "domain_sme": { "type": "boolean" },
+        "risk_controls_owner": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "blockers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "migration_ready": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}

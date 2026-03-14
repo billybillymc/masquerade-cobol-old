@@ -1,0 +1,18 @@
+---
+description: Reliability and idempotency rules for pipeline jobs
+globs: **/{workers,pipeline,orchestration,jobs}/**
+alwaysApply: false
+---
+
+# Infra Job Idempotency
+
+- Design long-running jobs to be resumable and idempotent.
+- Use durable checkpoints at stage boundaries for restart safety.
+- Include deduplication keys for retry handling and event replay.
+- Emit stage-level metrics (attempts, duration, failure class, recovery path).
+
+## Operational Guardrails
+
+- Separate transient failures from data/logic failures in retries.
+- Avoid side effects before checkpoint commits.
+- Ensure each pipeline stage can be rerun without duplicate writes.

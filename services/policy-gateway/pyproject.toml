@@ -1,0 +1,22 @@
+[project]
+name = "policy-gateway"
+version = "0.1.0"
+description = "Policy routing gateway for inference mode selection."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.116.0",
+  "uvicorn>=0.35.0",
+  "pydantic>=2.11.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.0",
+  "httpx>=0.28.0",
+  "jsonschema>=4.25.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"

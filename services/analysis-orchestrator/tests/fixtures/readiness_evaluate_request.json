@@ -1,0 +1,12 @@
+{
+  "module_id": "module-001",
+  "readiness_score": 0.88,
+  "threshold_profile": "standard",
+  "high_assurance_recompute_passed": true,
+  "strict_numeric_emulation_passed": true,
+  "required_approvals": {
+    "modernization_engineer": true,
+    "domain_sme": true,
+    "risk_controls_owner": true
+  }
+}

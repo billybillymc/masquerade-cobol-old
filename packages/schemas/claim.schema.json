@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "masquerade/claim.schema.json",
+  "title": "Claim",
+  "type": "object",
+  "required": [
+    "claim_id",
+    "claim_text",
+    "support_strength",
+    "confidence_score",
+    "review_status",
+    "evidence"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "support_strength": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["auto-passed", "needs-human", "rejected"]
+    },
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source_id", "span_ref"],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "span_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "node_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

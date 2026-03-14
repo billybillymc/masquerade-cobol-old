@@ -1,0 +1,18 @@
+---
+description: Validation standards for modernization outputs
+globs: **/*{test,spec,harness}*
+alwaysApply: false
+---
+
+# Modernization Validation
+
+- Never claim equivalence without differential execution evidence.
+- Compare legacy and generated implementations on shared input suites.
+- Include edge-case tests for numeric, date, sign, and rounding semantics.
+- Explain diffs with root-cause hypotheses and source references.
+
+## Test Expectations
+
+- Maintain deterministic fixtures and stable output normalization.
+- Tag tests by risk class (critical finance, compliance, non-critical).
+- Record pass rate and uncovered behavior before sharing confidence scores.

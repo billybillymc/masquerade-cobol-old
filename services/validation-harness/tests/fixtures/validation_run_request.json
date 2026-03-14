@@ -1,0 +1,8 @@
+{
+  "run_id": "run-val-001",
+  "module_id": "module-001",
+  "mode": "migration_ready",
+  "total_cases": 25,
+  "fail_count": 0,
+  "strict_numeric_emulation_passed": true
+}
