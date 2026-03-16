@@ -100,8 +100,10 @@ def _stub_cics_read(indent: str, block: str, datasets: dict) -> str:
     datasets[ds_name].operations.add("READ")
 
     lines = []
+    # Move the search key to the FD record key before reading
+    lines.append(f"{indent}MOVE {ridfld} TO {alias}-FD-KEY")
     lines.append(f"{indent}READ {alias}-FILE INTO {into}")
-    lines.append(f"{indent}    KEY IS {ridfld}")
+    lines.append(f"{indent}    KEY IS {alias}-FD-KEY")
     if resp:
         lines.append(f"{indent}    INVALID KEY")
         lines.append(f"{indent}        MOVE 13 TO {resp}")
@@ -197,16 +199,23 @@ def _stub_cics_send_map(indent: str, block: str) -> str:
 
 
 def _stub_cics_receive_map(indent: str, block: str) -> str:
-    """Stub EXEC CICS RECEIVE MAP → READ from mock screen input file."""
+    """Stub EXEC CICS RECEIVE MAP → READ from mock screen input file.
+
+    Reads directly into the symbolic input map record (e.g., COSGN0AI)
+    so that field references like USERIDI OF COSGN0AI work correctly.
+    """
     map_m = _RE_MAP.search(block)
     resp_m = _RE_RESP.search(block)
 
     map_name = map_m.group(1) if map_m else "UNKNOWN"
     resp = resp_m.group(1).strip() if resp_m else ""
 
+    # The symbolic input map is named <MAP>I (e.g., COSGN0AI)
+    input_map = f"{map_name}I"
+
     lines = []
     lines.append(f"{indent}DISPLAY 'RECEIVE-MAP:{map_name}'")
-    lines.append(f"{indent}READ SCREEN-INPUT-FILE INTO SCREEN-INPUT-REC")
+    lines.append(f"{indent}READ SCREEN-INPUT-FILE INTO {input_map}")
     lines.append(f"{indent}END-READ")
     if resp:
         lines.append(f"{indent}MOVE 0 TO {resp}")
