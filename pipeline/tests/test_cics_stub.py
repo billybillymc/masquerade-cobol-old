@@ -100,34 +100,48 @@ class TestCicsPreprocessing:
 class TestStubCompilation:
     """Stubbed source compiles with GnuCOBOL."""
 
-    @pytest.mark.xfail(reason="Requires BMS symbolic map generation (COSGN0AI/COSGN0AO) — next Phase 2 step")
     def test_stubbed_cosgn00c_compiles(self, tmp_path):
-        """COSGN00C after preprocessing compiles with GnuCOBOL."""
+        """COSGN00C after preprocessing + symbolic maps compiles with GnuCOBOL."""
+        import re
         import subprocess
         from cobol_runner import _to_wsl_path
+        from bms_symbolic import generate_all_symbolic_maps
+
+        # Generate symbolic maps
+        sym_dir = tmp_path / "symbolic"
+        generate_all_symbolic_maps(str(CARDDEMO / "app" / "bms"), str(sym_dir))
 
         result = preprocess_cics(str(CARDDEMO / "app" / "cbl" / "COSGN00C.cbl"))
 
-        # Write stubbed source
-        stubbed = tmp_path / "COSGN00C_STUB.cbl"
-        stubbed.write_text(result.source, encoding="utf-8")
+        # Inject file status declarations
+        source = result.source
+        ws_inject = ""
+        for ds in result.datasets:
+            ws_inject += f"       01  {ds.file_alias}-STATUS         PIC XX.\n"
+        if ws_inject:
+            ws_m = re.search(
+                r'(^\s*WORKING-STORAGE\s+SECTION\.)',
+                source, re.MULTILINE | re.IGNORECASE,
+            )
+            if ws_m:
+                pos = ws_m.end()
+                source = source[:pos] + "\n" + ws_inject + source[pos:]
 
-        # Try to compile
+        stubbed = tmp_path / "COSGN00C_STUB.cbl"
+        stubbed.write_text(source, encoding="utf-8")
+
         cpy_dir = _to_wsl_path(str(CARDDEMO / "app" / "cpy"))
-        bms_dir = _to_wsl_path(str(CARDDEMO / "app" / "bms"))
+        sym_wsl = _to_wsl_path(str(sym_dir))
         src_wsl = _to_wsl_path(str(stubbed))
 
-        cmd = f'cobc -x -std=ibm -I {cpy_dir} -I {bms_dir} -o /tmp/cosgn00c_stub {src_wsl}'
+        cmd = f'cobc -x -std=ibm -I {cpy_dir} -I {sym_wsl} -o /tmp/cosgn00c_stub {src_wsl}'
         compile_result = subprocess.run(
             ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
             capture_output=True, text=True, timeout=60,
         )
 
-        # Collect errors (ignore warnings)
         errors = [l for l in compile_result.stderr.splitlines()
                   if "error:" in l.lower()]
 
-        assert compile_result.returncode == 0 or len(errors) == 0, \
-            f"Compilation failed with errors:\n" + "\n".join(errors[:20]) + \
-            f"\n\nFirst 50 lines of stubbed source:\n" + \
-            "\n".join(result.source.splitlines()[:50])
+        assert compile_result.returncode == 0, \
+            f"Compilation failed ({len(errors)} errors):\n" + "\n".join(errors[:20])
