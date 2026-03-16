@@ -1,0 +1,52 @@
+[
+  {
+    "test_id": "cd-transaction-post",
+    "question": "What happens when a credit card transaction is posted?",
+    "codebase": "carddemo",
+    "difficulty": "medium",
+    "program_recall": 0.0,
+    "keyword_hit_rate": 1.0,
+    "source_relevance": 0.360024388,
+    "answer_length": 1144,
+    "has_evidence": true,
+    "mentions_uncertainty": false,
+    "latency_ms": 6671.905200011679,
+    "composite_score": 53.600243879999994,
+    "details": {
+      "retrieval": {
+        "program_recall": 0.0,
+        "keyword_hit_rate": 1.0,
+        "source_relevance": 0.360024388,
+        "retrieved_programs": [
+          "CBIMPORT",
+          "CBTRN01C",
+          "COBIL00C",
+          "COCRDLIC",
+          "COCRDSLC",
+          "COCRDUPC",
+          "COPAUS2C",
+          "CVEXPORT",
+          "POSTTRAN"
+        ],
+        "expected_programs": [
+          "COTRN00C",
+          "COTRN01C",
+          "COTRN02C"
+        ],
+        "keyword_hits": [
+          "transaction",
+          "post",
+          "transact"
+        ],
+        "keyword_misses": []
+      },
+      "quality": {
+        "answer_length": 1144,
+        "has_evidence": true,
+        "mentions_uncertainty": false
+      },
+      "answer_preview": "When a credit card transaction is posted, the `POSTTRAN` job executes the `CBTRN02C` program (app/jcl/POSTTRAN.jcl:15.0). This program processes a daily transaction file (`DALYTRAN`) and updates the transaction master VSAM file (`TRANFILE`), the account data VSAM file (`ACCTFILE`), and creates a tra"
+    },
+    "error": null
+  }
+]

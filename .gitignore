@@ -1,2 +1,10 @@
 existing_codebases.md
 test-codebases/
+spec-kit/
+.claude/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.venv/
+scripts/.runtime/

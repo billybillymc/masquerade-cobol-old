@@ -1,0 +1,128 @@
+[
+  {
+    "id": "cd-interest-calc",
+    "question": "Where do we calculate interest on accounts?",
+    "codebase": "carddemo",
+    "expected_programs": ["CBACT04C"],
+    "expected_keywords": ["interest", "calculate", "account"],
+    "must_mention_files": [],
+    "difficulty": "easy"
+  },
+  {
+    "id": "cd-transaction-post",
+    "question": "What happens when a credit card transaction is posted?",
+    "codebase": "carddemo",
+    "expected_programs": ["CBTRN02C", "POSTTRAN"],
+    "expected_keywords": ["transaction", "post", "TRANSACT"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "cd-transact-file",
+    "question": "Which programs read or write to the TRANSACT file?",
+    "codebase": "carddemo",
+    "expected_programs": ["COTRN00C", "COTRN01C", "COTRN02C", "CBTRN02C"],
+    "expected_keywords": ["TRANSACT", "READ", "WRITE"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "cd-signon",
+    "question": "How does the sign-on process work?",
+    "codebase": "carddemo",
+    "expected_programs": ["COSGN00C"],
+    "expected_keywords": ["sign", "user", "password", "CICS"],
+    "must_mention_files": [],
+    "difficulty": "easy"
+  },
+  {
+    "id": "cd-account-update-cics",
+    "question": "What CICS operations does the account update program perform?",
+    "codebase": "carddemo",
+    "expected_programs": ["COACTUPC"],
+    "expected_keywords": ["CICS", "SEND", "RECEIVE", "READ"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "cd-shared-copybooks",
+    "question": "What copybooks are shared across the most programs?",
+    "codebase": "carddemo",
+    "expected_programs": [],
+    "expected_keywords": ["COCOM01Y", "copybook", "shared"],
+    "must_mention_files": [],
+    "difficulty": "hard"
+  },
+  {
+    "id": "cd-batch-statement",
+    "question": "How does the batch statement generation work?",
+    "codebase": "carddemo",
+    "expected_programs": ["CBSTM03B"],
+    "expected_keywords": ["batch", "statement"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "cd-menu-navigation",
+    "question": "How does menu navigation work? How does the system route between screens?",
+    "codebase": "carddemo",
+    "expected_programs": ["COMEN01C"],
+    "expected_keywords": ["menu", "XCTL", "screen", "option"],
+    "must_mention_files": [],
+    "difficulty": "hard"
+  },
+  {
+    "id": "cd-credit-card-list",
+    "question": "How does the credit card list display work?",
+    "codebase": "carddemo",
+    "expected_programs": ["COCRDLIC"],
+    "expected_keywords": ["card", "list", "display"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "cd-user-management",
+    "question": "How is user CRUD (create, read, update, delete) handled?",
+    "codebase": "carddemo",
+    "expected_programs": ["COUSR00C", "COUSR01C", "COUSR02C", "COUSR03C"],
+    "expected_keywords": ["user", "add", "update", "delete"],
+    "must_mention_files": [],
+    "difficulty": "hard"
+  },
+  {
+    "id": "tf-cotisation",
+    "question": "How is the cotisation communale (municipal tax) calculated?",
+    "codebase": "taxe-fonciere",
+    "expected_programs": [],
+    "expected_keywords": ["cotisation", "communale", "tax", "taux"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "tf-frais-rates",
+    "question": "What are the different frais (fee) rates and how are they split?",
+    "codebase": "taxe-fonciere",
+    "expected_programs": [],
+    "expected_keywords": ["frais", "rate", "split"],
+    "must_mention_files": [],
+    "difficulty": "medium"
+  },
+  {
+    "id": "tf-year-dispatch",
+    "question": "How does the year dispatcher route to the right calculator?",
+    "codebase": "taxe-fonciere",
+    "expected_programs": [],
+    "expected_keywords": ["year", "dispatch", "route", "calculator"],
+    "must_mention_files": [],
+    "difficulty": "easy"
+  },
+  {
+    "id": "tf-rebalancing",
+    "question": "What is the 1-euro rebalancing rule for frais?",
+    "codebase": "taxe-fonciere",
+    "expected_programs": [],
+    "expected_keywords": ["euro", "rebalancing", "frais"],
+    "must_mention_files": [],
+    "difficulty": "hard"
+  }
+]
