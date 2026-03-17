@@ -323,4 +323,6 @@ masquerade-cobol/
 
 ## License
 
-See individual test codebase licenses. CardDemo is Apache 2.0 (AWS).
+MIT License. See [LICENSE](LICENSE).
+
+Test codebases have their own licenses: CardDemo is Apache 2.0 (AWS).
