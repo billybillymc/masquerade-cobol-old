@@ -1,121 +1,191 @@
-# Engineering Architecture (MVP Execution)
+# Engineering Architecture
 
-## 1. System Boundary
+## 1. What This Is
 
-MVP delivers:
-- exploration workflows (RAG + graph + impact/lineage),
-- constrained reimplementation pilot,
-- governance-first migration readiness gates.
+Masquerade is a Python-based COBOL intelligence engine. It parses COBOL source
+trees, builds a dependency graph, extracts business rules and data flows, and
+supports differential testing between original COBOL and modern Python
+reimplementations.
 
-Non-goals remain:
-- full multi-dialect support,
-- full CICS parity,
-- fully automated production cutover.
+The system is a Python monolith — not a multi-service architecture. The design
+below documents the actual modules and their responsibilities as implemented.
 
-## 2. Service Topology
+---
 
-## 2.1 `parser-ir-service` (Java/Kotlin)
+## 2. Module Map
 
-Responsibilities:
-- COBOL parsing (IBM Enterprise COBOL target),
-- copybook resolution,
-- AST generation with stable IDs,
-- graph overlay extraction (`CALLS`, `PERFORMS`, `READS_FIELD`, `WRITES_FIELD`, etc.),
-- parser diagnostics and coverage metrics.
+### 2.1 Parsing (`cobol_parser.py`, `bms_parser.py`, `jcl_parser.py`)
 
-Outputs:
-- AST artifacts (versioned),
-- graph nodes/edges payload,
-- parse diagnostics and coverage report.
+**`cobol_parser.py`** — 1200-line recursive-descent parser for COBOL-85/2002.
+Extracts:
+- Divisions, sections, paragraphs with line spans
+- Copybook `COPY` references (with `REPLACING`)
+- `CALL`, `PERFORM`, `EXEC CICS` targets
+- `SELECT` file controls and `FD` record layouts
+- Data items: level numbers, PIC clauses, `REDEFINES`, `OCCURS`, `VALUE`
+- Conditional blocks and decision points (for cyclomatic complexity)
 
-## 2.2 `analysis-orchestrator` (Python)
+**`bms_parser.py`** — Parses BMS map definitions. Builds a `ScreenFlowIndex`
+mapping mapsets to fields, programs, and screen navigation edges.
 
-Responsibilities:
-- pipeline orchestration,
-- retrieval chunk assembly (AST + graph-aware),
-- LLM request flow (external-first, local-route for sensitive workloads),
-- verifier pass and confidence scoring,
-- impact and lineage query jobs,
-- readiness score computation.
+**`jcl_parser.py`** — Parses JCL job streams. Produces a `JclIndex` of job
+steps, DD datasets, execution order, and cross-job data flows.
 
-Outputs:
-- rule candidates with evidence,
-- explanation artifacts,
-- lineage and impact result artifacts,
-- readiness score snapshots.
+---
 
-## 2.3 `validation-harness` (Python/Java hybrid)
+### 2.2 Graph (`graph_context.py`, `synthesis/`)
 
-Responsibilities:
-- candidate reimplementation test harness,
-- differential execution and mismatch classification,
-- strict numeric emulation checks for migration-ready gates,
-- sandbox-mode bounded-equivalence experiments (non-actionable).
+**`graph_context.py`** — In-memory graph over parsed programs, copybooks, files,
+and BMS maps. Nodes typed as `PGM`, `CPY`, `FILE`, `MAP`. Edges typed as
+`CALLS`, `COPIES`, `READS_FILE`, `CICS_IO`.
 
-Outputs:
-- diff reports,
-- mismatch taxonomy,
-- migration-readiness gate signals.
+Provides:
+- `impact_of(node_id)` — upstream dependency walk (blast radius)
+- `dependency_tree(program)` — outgoing call/copy tree
+- `hub_programs()`, `leaf_programs()`, `dead_code_analysis()`
+- `readiness_score(program)` — composite (isolation, simplicity, testability)
+- `DataFlowIndex` — MOVE/COMPUTE/CALL USING trace per field
 
-## 2.4 `policy-gateway` (TypeScript or Python edge service)
+**`synthesis/`** — LangChain RAG pipeline:
+- `chain.py` — retrieval, reranking (Cohere), streaming LLM (Gemini), query loop
+- `prompts.py` — structured prompt templates for spec, rules, and Q&A modes
+- `ingest.py` — chunks COBOL source + graph metadata → Pinecone
 
-Responsibilities:
-- enforce inference routing policy:
-  - external-first default,
-  - force local for sensitive/proprietary workload tags,
-- mode-switch module (policy templates + audit logs),
-- request-level policy tracing.
+---
 
-Outputs:
-- policy decision logs,
-- routing audit artifacts.
+### 2.3 Analysis (`analyze.py`, `complexity.py`, `copybook_dict.py`)
 
-## 2.5 `web-app` (TypeScript / Next.js)
+**`analyze.py`** — Orchestrates full-codebase analysis: parse all `.cbl` files,
+build graph, extract data flows, compute complexity, write `_analysis/` artifacts.
 
-Responsibilities:
-- exploration UI (questioning, graph browse, lineage, impact),
-- evidence-first rendering with uncertainty and rejected-claim labels,
-- HITL review workflow and approval actions,
-- migration readiness dashboard.
+**`complexity.py`** — Cyclomatic complexity per program and paragraph (decision
+point counting).
 
-## 3. Storage and Data Contracts
+**`copybook_dict.py`** — Builds a searchable field dictionary from all `.cpy`
+files in a codebase.
 
-## 3.1 Storage
+---
 
-- Graph DB: program/copybook/file/table/job dependencies.
-- Metadata DB: runs, scores, approvals, policy events.
-- Object store: AST snapshots, chunk artifacts, diff outputs, eval runs.
-- Search index/vector index: hybrid retrieval.
+### 2.4 Generation (`skeleton_generator.py`, `test_generator.py`, `spec_generator.py`)
 
-## 3.2 Core IDs
+**`skeleton_generator.py`** — Generates typed Python, Java, and C# module stubs
+from parsed COBOL structure. Uses a language-neutral `IRModule` intermediate
+representation with pluggable renderers.
 
-All services must preserve stable IDs:
-- `program_id`, `section_id`, `paragraph_id`, `field_id`, `statement_id`,
-- `artifact_version_id`,
-- `claim_id`, `run_id`, `approval_id`.
+**`test_generator.py`** — Generates scenario-based pytest suites from COBOL
+decision trees (conditional blocks → test cases).
 
-## 4. Critical Runtime Policies
+**`spec_generator.py`** — Generates structured Markdown specs for each program
+(inputs, outputs, data flows, business rules) from graph + parsed data.
 
-- Migration-ready requires:
-  - readiness threshold pass,
-  - high-assurance recompute pass,
-  - strict numeric emulation pass,
-  - 3-party HITL approval.
-- Sandbox artifacts cannot be actioned into migration-ready.
-- Rejected/low-support claims are visible but blocked by default.
+**`api_contract_mapper.py`** — Maps BMS screens to Pydantic request/response
+schemas and FastAPI route stubs.
 
-## 5. Initial Performance and Reliability Targets
+**`repository_mapper.py`** — Maps CICS file operations (READ, WRITE, DELETE) to
+typed repository interfaces.
 
-- p95 lineage <= 4.0s
-- p95 impact <= 6.0s
-- p95 RAG+citation <= 9.0s
-- ingest success >= 99.0%
-- incremental refresh success >= 99.5%
-- parse coverage >= 90% overall, >= 95% migration-candidate modules
+---
 
-## 6. Engineering Risks To Manage Early
+### 2.5 Differential Testing (`differential_harness.py`, `cobol_runner.py`)
 
-- parser coverage volatility due to dialect edge cases,
-- policy drift between orchestrator and UI behavior,
-- confidence score calibration mismatch with reviewer expectations,
-- reviewer throughput bottlenecks in 3-party gate model.
+**`differential_harness.py`** — Core differential engine.
+- `DiffVector` dataclass: inputs, expected outputs, actual outputs, field types
+- `run_vectors(vectors)` → `DiffReport` with per-field pass/fail and confidence score
+- `CobolDecimal` — faithful COBOL numeric type (PIC precision, silent overflow, sign)
+
+**`cobol_runner.py`** — Compiles and executes COBOL via GnuCOBOL in WSL.
+Handles Windows→WSL path conversion, file assignments, and output capture.
+
+---
+
+### 2.6 CLI and Web (`cli.py` + submodules, `web_dashboard.py`)
+
+**`cli.py`** — Interactive REPL entry point. Dispatches to:
+- `cli_graph.py` — graph commands: `/impact`, `/deps`, `/hotspots`, `/isolated`,
+  `/summary`, `/readiness`, `/dead`, `/files`
+- `cli_data.py` — data commands: `/dict`, `/screens`, `/jobs`, `/trace`, `/xref`
+- `cli_generate.py` — generation commands: `/spec`, `/rules`, `/spec-gen`,
+  `/skeleton`, `/test-gen`, `/export`, `/report`, `/eval`, `/complexity`, `/estimate`
+
+**`web_dashboard.py`** — Flask app serving a local analysis dashboard.
+
+---
+
+### 2.7 Reimplementations (`reimpl/`)
+
+Python reimplementations of COBOL programs, organized as a package. Each module
+mirrors one COBOL program using dataclasses for record layouts and dependency
+injection for file I/O (repository pattern). All numeric fields use `Decimal`.
+
+| Scope | Programs |
+|---|---|
+| CardDemo batch | `cbact01c`–`cbact04c`, `cbexport`, `cbimport`, `cbtrn01c`–`cbtrn03c`, `cbstm03a/b`, `cbcus01c` |
+| CardDemo online (CICS) | `cocrdslc`, `cocrdupc`, `cocrdlic`, `cobil00c`, `cotrn00c`–`cotrn02c`, `coactupc`, `coactvwc`, `coadm01c`, `comen01c`, `corpt00c`, `cousr00c`–`cousr03c`, `cobswait` |
+| Sign-on | `cosgn00c` |
+| Utilities | `csutldtc` (date validation / CEEDAYS wrapper) |
+| Shared data | `carddemo_data` (copybook dataclasses) |
+| Other codebases | `star_trek`, `taxe_fonciere`, `cbsa_dbcrfun` |
+
+---
+
+## 3. Data Flow (Analysis Run)
+
+```
+COBOL source (.cbl, .cpy)
+        │
+        ▼
+  cobol_parser.py          → per-program AST dict
+        │
+        ▼
+  analyze.py               → _analysis/*.json artifacts
+        │
+   ┌────┴────┐
+   ▼         ▼
+graph_context   synthesis/ingest.py → Pinecone vectors
+   │
+   ├── readiness scores
+   ├── complexity
+   ├── dead code
+   └── data flows
+```
+
+---
+
+## 4. Infrastructure
+
+| Component | Technology |
+|---|---|
+| COBOL execution | GnuCOBOL 3.x via WSL (Ubuntu) |
+| Vector store | Pinecone |
+| Embedding model | OpenAI text-embedding-ada-002 |
+| Generation LLM | Google Gemini |
+| Reranking | Cohere |
+| Observability | LangSmith |
+| Web UI | Flask (local only) |
+
+All API credentials are loaded from `pipeline/.env` (excluded from version
+control — see `.gitignore`).
+
+---
+
+## 5. Key Design Constraints
+
+- **No fabrication**: all semantic claims must cite source file + line span.
+- **COBOL numeric fidelity**: `CobolDecimal` preserves PIC scale, sign, and
+  silent left-truncation overflow — not Python `float`.
+- **Repository pattern**: reimplementations use injected interfaces for all I/O,
+  making them unit-testable without a CICS runtime.
+- **Differential as ground truth**: Python behaviour is only trusted once a
+  `DiffVector` suite confirms equivalence against compiled COBOL output.
+
+---
+
+## 6. What Was Planned But Not Built
+
+The `MVP_PRD.md` and earlier drafts of this file described a multi-service
+architecture (Java/Kotlin parser service, Neo4j graph DB, Next.js frontend,
+TypeScript policy gateway). None of that was implemented. The directories
+`services/`, `packages/sdk/`, and `infra/` exist as empty placeholders.
+
+The current Python monolith covers the full analysis, generation, and testing
+surface described in the IQ checklist and README.
