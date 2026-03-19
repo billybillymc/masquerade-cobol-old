@@ -163,10 +163,10 @@ for r in rules:
 ### Run the Differential Harness
 
 ```python
-from differential_harness import TestVector, run_vectors, render_report_text
+from differential_harness import DiffVector, run_vectors, render_report_text
 
 vectors = [
-    TestVector(
+    DiffVector(
         vector_id="V001",
         program="CODATE01",
         inputs={"WS-DATE-IN": "20260315"},

@@ -20,7 +20,7 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from cobol_runner import compile_cobol, run_cobol, _to_wsl_path
-from differential_harness import TestVector, save_golden_vectors
+from differential_harness import DiffVector, save_golden_vectors
 
 
 @dataclass
@@ -72,7 +72,7 @@ def parse_display_output(stdout: str, program: str) -> list[dict]:
 def generate_golden_vectors(
     config: GoldenRunConfig,
     work_dir: str = "/tmp/golden_test",
-) -> list[TestVector]:
+) -> list[DiffVector]:
     """Run a COBOL program and capture output as golden test vectors.
 
     Args:
@@ -80,7 +80,7 @@ def generate_golden_vectors(
         work_dir: WSL working directory for temp files
 
     Returns:
-        List of TestVector objects with expected_outputs populated from
+        List of DiffVector objects with expected_outputs populated from
         the COBOL program's DISPLAY output.
     """
     import subprocess
@@ -158,7 +158,7 @@ def generate_golden_vectors(
     # Build test vectors
     vectors = []
     for i, (inp, out) in enumerate(zip(config.input_records, output_records)):
-        vectors.append(TestVector(
+        vectors.append(DiffVector(
             vector_id=f"{config.program}-V{i+1:03d}",
             program=config.program,
             inputs=inp,

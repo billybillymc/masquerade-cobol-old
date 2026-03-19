@@ -24,7 +24,7 @@ from cobol_decimal import CobolDecimal
 
 
 @dataclass
-class TestVector:
+class DiffVector:
     """A single test vector: inputs → expected outputs, with optional actuals."""
     vector_id: str
     program: str
@@ -142,7 +142,7 @@ def compare_fields(
 # ── Vector runner ───────────────────────────────────────────────────────────
 
 
-def run_vectors(vectors: list[TestVector]) -> DiffReport:
+def run_vectors(vectors: list[DiffVector]) -> DiffReport:
     """Run all test vectors and produce a diff report."""
     if not vectors:
         return DiffReport(
@@ -244,7 +244,7 @@ def render_report_text(report: DiffReport) -> str:
 
 
 def save_golden_vectors(
-    vectors: list[TestVector],
+    vectors: list[DiffVector],
     program_id: str,
     output_dir: str,
 ) -> Path:
@@ -270,7 +270,7 @@ def save_golden_vectors(
 def load_golden_vectors(
     program_id: str,
     vectors_dir: str,
-) -> list[TestVector]:
+) -> list[DiffVector]:
     """Load golden vectors from JSON."""
     file_path = Path(vectors_dir) / f"{program_id}.json"
     if not file_path.exists():
@@ -279,7 +279,7 @@ def load_golden_vectors(
     data = json.loads(file_path.read_text(encoding="utf-8"))
     vectors = []
     for d in data:
-        vectors.append(TestVector(
+        vectors.append(DiffVector(
             vector_id=d["vector_id"],
             program=d["program"],
             inputs=d.get("inputs", {}),

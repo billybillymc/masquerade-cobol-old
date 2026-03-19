@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
 from cobol_runner import is_cobc_available, _to_wsl_path
-from differential_harness import TestVector, run_vectors, render_report_text
+from differential_harness import DiffVector, run_vectors, render_report_text
 from reimpl.star_trek import (
     StarTrekGame,
     validate_skill_level,
@@ -59,7 +59,7 @@ class TestDifferentialStarTrek:
         init_output = game.get_initial_output()
         python_has_title = any(TITLE in line for line in init_output)
 
-        vectors = [TestVector(
+        vectors = [DiffVector(
             vector_id="TITLE",
             program="STAR_TREK",
             inputs={},
@@ -78,7 +78,7 @@ class TestDifferentialStarTrek:
         valid, msg = validate_skill_level("9")
         python_has_error = not valid and msg == INVALID_SKILL_MSG
 
-        vectors = [TestVector(
+        vectors = [DiffVector(
             vector_id="INVALID_SKILL",
             program="STAR_TREK",
             inputs={"SKILL": "9"},
@@ -98,7 +98,7 @@ class TestDifferentialStarTrek:
 
             valid, _ = validate_skill_level(level)
 
-            vectors.append(TestVector(
+            vectors.append(DiffVector(
                 vector_id=f"SKILL_{level}",
                 program="STAR_TREK",
                 inputs={"SKILL": level},
@@ -119,7 +119,7 @@ class TestDifferentialStarTrek:
         s1 = game1.get_status()
         s2 = game2.get_status()
 
-        vectors = [TestVector(
+        vectors = [DiffVector(
             vector_id="DETERMINISTIC_INIT",
             program="STAR_TREK",
             inputs={"SEED": "12345678"},
@@ -147,7 +147,7 @@ class TestDifferentialStarTrek:
         output = game.process_command("com 1")
         output_text = " ".join(output)
 
-        vectors = [TestVector(
+        vectors = [DiffVector(
             vector_id="STATUS_CMD",
             program="STAR_TREK",
             inputs={"CMD": "com 1"},
@@ -168,7 +168,7 @@ class TestDifferentialStarTrek:
         output = game.process_command("com 6")
         output_text = " ".join(output)
 
-        vectors = [TestVector(
+        vectors = [DiffVector(
             vector_id="TERMINATE",
             program="STAR_TREK",
             inputs={"CMD": "com 6"},

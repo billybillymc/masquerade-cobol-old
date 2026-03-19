@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
 from cobol_runner import is_cobc_available, _to_wsl_path
-from differential_harness import TestVector, run_vectors, render_report_text
+from differential_harness import DiffVector, run_vectors, render_report_text
 from reimpl.taxe_fonciere import CombatInput, OmZone, AllRates, calculate_tax_batie
 
 TAXE = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "taxe-fonciere"
@@ -163,7 +163,7 @@ class TestDifferentialTaxeFonciere:
             cobol = cobol_results[scenario_id]
             retour, cr, rc = python_scenarios[scenario_id]
 
-            vectors.append(TestVector(
+            vectors.append(DiffVector(
                 vector_id=f"TAXE_S{scenario_id}",
                 program="EFITA3B8",
                 inputs={"SCENARIO": str(scenario_id)},

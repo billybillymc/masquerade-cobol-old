@@ -19,7 +19,7 @@ from golden_generator import (
     parse_display_output,
     generate_golden_vectors,
 )
-from differential_harness import run_vectors, TestVector
+from differential_harness import run_vectors, DiffVector
 
 CARDDEMO = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "carddemo"
 STUBS = Path(__file__).resolve().parent.parent / "stubs"
