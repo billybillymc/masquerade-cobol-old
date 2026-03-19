@@ -152,11 +152,13 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
   <h1><span class="grad">Masquerade</span></h1>
   <p>Analyze. Reimplement. Verify. &mdash; End-to-end COBOL modernization with proven behavioral equivalence.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><strong>465</strong> programs</div>
+    <div class="hero-stat"><strong>494</strong> programs</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>124K</strong> lines</div>
+    <div class="hero-stat"><strong>149K</strong> lines</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>392</strong> tests</div>
+    <div class="hero-stat"><strong>408</strong> tests</div>
+    <div class="hero-div"></div>
+    <div class="hero-stat"><strong>5</strong> codebases</div>
     <div class="hero-div"></div>
     <div class="hero-stat"><strong>100%</strong> differential match</div>
   </div>
@@ -165,8 +167,8 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 
 <!-- ── Stats ── -->
 <div class="stats">
-  <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">4</div><div class="lbl">Codebases Tested</div></div>
-  <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">12</div><div class="lbl">Pipeline Modules</div></div>
+  <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">5</div><div class="lbl">Codebases Tested</div></div>
+  <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">16</div><div class="lbl">Pipeline Modules</div></div>
   <div class="stat anim anim-delay-2"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><div class="val grad">10/10</div><div class="lbl">IQ Items Complete</div></div>
   <div class="stat anim anim-delay-3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><div class="val grad">3</div><div class="lbl">Target Languages</div></div>
 </div>
@@ -174,7 +176,7 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── Pipeline ── -->
 <section class="section">
   <h2>Pipeline Architecture</h2>
-  <p class="sub">12 modules that transform raw COBOL into verified modern code</p>
+  <p class="sub">16 modules that transform raw COBOL into verified modern code</p>
   <div class="pipe-grid" id="pipeline"></div>
 </section>
 
@@ -250,9 +252,10 @@ class CdemoGeneralInfo:
   <div class="final-badge">&#x2714; Proven Behavioral Equivalence</div>
   <h2>Every reimplementation is <span class="grad">verified</span> against the original COBOL &mdash; field by field, deterministically.</h2>
   <div class="final-nums">
-    <div class="final-num"><div class="v grad-green">35</div><div class="l">fields compared</div></div>
-    <div class="final-num"><div class="v grad-green">13</div><div class="l">test vectors</div></div>
+    <div class="final-num"><div class="v grad-green">65</div><div class="l">fields compared</div></div>
+    <div class="final-num"><div class="v grad-green">30</div><div class="l">test vectors</div></div>
     <div class="final-num"><div class="v grad-green">0</div><div class="l">mismatches</div></div>
+    <div class="final-num"><div class="v grad-green">5</div><div class="l">reimplementations</div></div>
   </div>
   <a href="https://github.com/billybillymc/masquerade-cobol" target="_blank" class="gh-btn">&#x2197; View on GitHub</a>
 </section>
@@ -274,6 +277,10 @@ const pipeline = [
   {name:'Diff Harness',desc:'Field-by-field equivalence checking',color:'#f97316',ico:'&#x1F52C;'},
   {name:'Symbol Table',desc:'Hierarchical qualified references',color:'#fb7185',ico:'&#x1F50D;'},
   {name:'CICS Stub',desc:'Preprocessor for standalone execution',color:'#f43f5e',ico:'&#x26A1;'},
+  {name:'BMS Symbolic',desc:'Generate COBOL copybooks from BMS maps',color:'#e879f9',ico:'&#x1F4CB;'},
+  {name:'Record I/O',desc:'Pack/unpack COBOL fixed-width records',color:'#818cf8',ico:'&#x1F4E6;'},
+  {name:'COBOL Runner',desc:'Compile + execute via GnuCOBOL in WSL',color:'#67e8f9',ico:'&#x1F680;'},
+  {name:'Golden Generator',desc:'Automated golden vector creation',color:'#86efac',ico:'&#x1F3AF;'},
 ];
 
 const iq = [
@@ -292,15 +299,25 @@ const nist = [
 ];
 
 const codebases = [
-  {name:'AWS CardDemo',desc:'Credit card management \u2014 CICS online + batch',programs:44,lines:'30K',type:'CICS + Batch',
-   reimpl:'COSGN00C sign-on program',fields:18,confidence:100,
+  {name:'AWS CardDemo',desc:'Credit card management \u2014 CICS online + batch processing',programs:44,lines:'30K',type:'CICS + Batch',
+   reimpl:'COSGN00C sign-on + CBACT01C batch',fields:29,confidence:100,
    scenarios:[
      {name:'Admin Login',input:'ADMIN001 + PASS1234',exp:'XCTL \u2192 COADM01C'},
      {name:'Regular Login',input:'USER0001 + MYPASSWD',exp:'XCTL \u2192 COMEN01C'},
      {name:'Wrong Password',input:'ADMIN001 + WRONGPWD',exp:'Error message, no transfer'},
      {name:'User Not Found',input:'UNKNOWN1 + ANYTHING',exp:'Error message, no transfer'},
+     {name:'Batch Account (CBACT01C)',input:'Indexed account file',exp:'11 output fields match golden'},
    ]},
-  {name:'Star Trek',desc:'1979 game \u2014 deep nesting, GO TO, random generation',programs:1,lines:'1.6K',type:'Interactive',
+  {name:'IBM CBSA Banking',desc:'Banking system \u2014 accounts, customers, debit/credit, transfers',programs:29,lines:'25K',type:'CICS + DB2',
+   reimpl:'DBCRFUN debit/credit \u2192 cbsa_dbcrfun.py (379 lines)',fields:16,confidence:100,
+   scenarios:[
+     {name:'Credit to Savings',input:'Amount +500.00',exp:'Balance updated, type=CRE'},
+     {name:'Debit Sufficient Funds',input:'Amount -200.00',exp:'Balance updated, type=DEB'},
+     {name:'Insufficient Funds',input:'Payment -99999',exp:'Fail code 3'},
+     {name:'Mortgage Restricted',input:'Payment on MORTGAGE',exp:'Fail code 4'},
+     {name:'Account Not Found',input:'Invalid account',exp:'Fail code 1'},
+   ]},
+  {name:'Star Trek',desc:'1979 game \u2014 1,615-line full reimplementation with deterministic seed',programs:1,lines:'1.6K',type:'Interactive',
    reimpl:'ctrek.cob \u2192 star_trek.py (1,615 lines)',fields:12,confidence:100,
    scenarios:[
      {name:'Title Screen',input:'Any input',exp:'*STAR TREK* displayed'},
@@ -310,7 +327,7 @@ const codebases = [
      {name:'Status Command',input:'com 1',exp:'Fuel + Shield display'},
      {name:'Terminate',input:'com 6',exp:'Game over + stranded'},
    ]},
-  {name:'Taxe Fonci\u00e8re',desc:'French property tax \u2014 EVALUATE ALSO, complex computation',programs:6,lines:'3K',type:'Subroutine',
+  {name:'Taxe Fonci\u00e8re',desc:'French property tax \u2014 669-line reimplementation with full fee calculation',programs:6,lines:'3K',type:'Subroutine',
    reimpl:'EFITA3B8 \u2192 taxe_fonciere.py (669 lines)',fields:8,confidence:100,
    scenarios:[
      {name:'Valid Input (no rates)',input:'ccobnb=2, dan=2018',exp:'CR=24 RC=01'},
