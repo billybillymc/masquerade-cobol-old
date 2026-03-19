@@ -156,11 +156,11 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
     <div class="hero-div"></div>
     <div class="hero-stat"><strong>149K</strong> lines</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>463</strong> tests</div>
+    <div class="hero-stat"><strong>476</strong> tests</div>
     <div class="hero-div"></div>
     <div class="hero-stat"><strong>5</strong> codebases</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>34</strong> reimplementations</div>
+    <div class="hero-stat"><strong>35</strong> reimplementations</div>
   </div>
   <div class="scroll-hint">&darr;</div>
 </header>
@@ -168,7 +168,7 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── Stats ── -->
 <div class="stats">
   <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">5</div><div class="lbl">Codebases Tested</div></div>
-  <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">16</div><div class="lbl">Pipeline Modules</div></div>
+  <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">19</div><div class="lbl">Pipeline Modules</div></div>
   <div class="stat anim anim-delay-2"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><div class="val grad">10/10</div><div class="lbl">IQ Items Complete</div></div>
   <div class="stat anim anim-delay-3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><div class="val grad">3</div><div class="lbl">Target Languages</div></div>
 </div>
@@ -176,14 +176,14 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── Pipeline ── -->
 <section class="section">
   <h2>Pipeline Architecture</h2>
-  <p class="sub">16 modules that transform raw COBOL into verified modern code</p>
+  <p class="sub">19 modules that transform raw COBOL into verified modern code</p>
   <div class="pipe-grid" id="pipeline"></div>
 </section>
 
 <!-- ── IQ ── -->
 <section class="section">
   <h2>Implementation Quality</h2>
-  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 463 tests across all modules</p>
+  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 476 tests across all modules</p>
   <div class="iq-grid" id="iq-grid"></div>
 </section>
 
@@ -208,11 +208,11 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
         <div style="color:var(--muted);font-size:.82rem;margin-top:.2rem">COBOL programs</div>
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
-        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">34</div>
+        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">35</div>
         <div style="color:var(--muted);font-size:.82rem;margin-top:.2rem">Python modules</div>
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
-        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">55</div>
+        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">84</div>
         <div style="color:var(--muted);font-size:.82rem;margin-top:.2rem">new tests</div>
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
@@ -292,9 +292,9 @@ class CdemoGeneralInfo:
   <h2>Every reimplementation is <span class="grad">verified</span> against the original COBOL &mdash; field by field, deterministically.</h2>
   <div class="final-nums">
     <div class="final-num"><div class="v grad-green">65</div><div class="l">fields compared</div></div>
-    <div class="final-num"><div class="v grad-green">463</div><div class="l">passing tests</div></div>
+    <div class="final-num"><div class="v grad-green">476</div><div class="l">passing tests</div></div>
     <div class="final-num"><div class="v grad-green">0</div><div class="l">mismatches</div></div>
-    <div class="final-num"><div class="v grad-green">34</div><div class="l">Python modules</div></div>
+    <div class="final-num"><div class="v grad-green">35</div><div class="l">Python modules</div></div>
   </div>
   <a href="https://github.com/billybillymc/masquerade-cobol" target="_blank" class="gh-btn">&#x2197; View on GitHub</a>
 </section>
@@ -320,14 +320,17 @@ const pipeline = [
   {name:'Record I/O',desc:'Pack/unpack COBOL fixed-width records',color:'#818cf8',ico:'&#x1F4E6;'},
   {name:'COBOL Runner',desc:'Compile + execute via GnuCOBOL in WSL',color:'#67e8f9',ico:'&#x1F680;'},
   {name:'Golden Generator',desc:'Automated golden vector creation',color:'#86efac',ico:'&#x1F3AF;'},
+  {name:'CLI Graph',desc:'Impact, deps, hotspots, and dead-code commands',color:'#7c3aed',ico:'&#x1F578;'},
+  {name:'CLI Data',desc:'Dict, screens, jobs, trace, and xref commands',color:'#0d9488',ico:'&#x1F4CA;'},
+  {name:'CLI Generate',desc:'Spec, rules, skeleton, test-gen, and export commands',color:'#b45309',ico:'&#x2699;'},
 ];
 
 const iq = [
   {id:'IQ-01',name:'Conditional Logic',tests:22},{id:'IQ-02',name:'Copybook Wiring',tests:12},
-  {id:'IQ-03',name:'Numeric Semantics',tests:49},{id:'IQ-04',name:'Business Rules',tests:15},
+  {id:'IQ-03',name:'Numeric Semantics',tests:66},{id:'IQ-04',name:'Business Rules',tests:15},
   {id:'IQ-05',name:'Behavioral Tests',tests:10},{id:'IQ-06',name:'Repository Mapping',tests:14},
   {id:'IQ-07',name:'API Contracts',tests:15},{id:'IQ-08',name:'Multi-Language',tests:27},
-  {id:'IQ-09',name:'Diff Harness',tests:15},{id:'IQ-10',name:'Symbol Table',tests:12},
+  {id:'IQ-09',name:'Diff Harness',tests:27},{id:'IQ-10',name:'Symbol Table',tests:12},
 ];
 
 const nist = [
