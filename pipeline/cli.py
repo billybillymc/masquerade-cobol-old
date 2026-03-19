@@ -67,6 +67,45 @@ KNOWN_CODEBASES = {
             "What are the OM (ordures ménagères) zone rate categories?",
         ],
     },
+    "legacy-benchmark": {
+        "dir": str(_test_codebases / "legacy-benchmark"),
+        "label": "COBOL Legacy Benchmark — Investment Portfolio Management (42 programs, 7K LOC)",
+        "questions": [
+            "How does PORTTRAN validate and apply a transaction to a portfolio position?",
+            "What is the call chain from INQONLN down to the DB2 layer?",
+            "How does ERRPROC handle errors — what copybooks and data structures does it use?",
+            "Which programs are responsible for batch position updates and what is the sequence?",
+            "How does SECMGR enforce security checks for the online inquiry system?",
+            "What copybooks are shared across the most programs and what do they define?",
+            "How does the batch checkpoint/restart logic (CKPRST) work?",
+            "What is the audit trail mechanism — which programs write to AUDITLOG?",
+        ],
+    },
+    "bankdemo": {
+        "dir": str(_test_codebases / "bankdemo"),
+        "label": "BankDemo — Micro Focus CICS Banking Demo (164 files, 34K LOC)",
+        "questions": [
+            "How does the bank menu program route to different transaction screens?",
+            "What is the account inquiry and update flow?",
+            "How are VSAM file reads and writes structured across the programs?",
+            "Which programs handle credit and debit operations?",
+            "How does the transfer funds operation work end-to-end?",
+            "What copybooks define the core account and customer data structures?",
+        ],
+    },
+    "cbsa": {
+        "dir": str(_test_codebases / "cbsa"),
+        "label": "CBSA — IBM CICS Banking Sample Application (29 programs, 27K LOC)",
+        "questions": [
+            "How does CREACC create a new account and what validations does it apply?",
+            "What is the debit/credit (DBCRFUN) logic and how does it update balances?",
+            "How do the CRDTAGY1-5 credit agency programs work — what do they simulate?",
+            "What is the full call chain for a customer inquiry (INQCUST)?",
+            "How does XFRFUN handle fund transfers between accounts?",
+            "Which copybooks define the core data structures shared across all programs?",
+            "How does DELCUS handle cascading deletion of a customer and their accounts?",
+        ],
+    },
 }
 
 
