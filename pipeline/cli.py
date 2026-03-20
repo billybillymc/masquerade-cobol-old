@@ -106,6 +106,38 @@ KNOWN_CODEBASES = {
             "How does DELCUS handle cascading deletion of a customer and their accounts?",
         ],
     },
+    "cnaf": {
+        "dir": str(_test_codebases / "cnaf"),
+        "label": "CNAF — French Family Allowances Fund (52 programs, ~3.5M LOC)",
+        "questions": [
+            "What programs calculate the base family allowance (allocations familiales)?",
+            "How is income (ressources) assessed and which thresholds trigger benefit changes?",
+            "What is the logic for calculating the RSA (revenu de solidarité active)?",
+            "Which programs handle the annual recalculation campaign (campagne de liquidation)?",
+            "How does the system determine benefit eligibility for a foyer (household)?",
+            "What data structures represent the beneficiary (allocataire) record?",
+            "Which programs read or write to the main beneficiary master file?",
+            "How are exceptional payments (rappels) calculated and posted?",
+            "What is the control flow when a birth event triggers a new entitlement calculation?",
+            "How does the system handle suspended (suspendu) or closed (radié) cases?",
+        ],
+    },
+    "cobolcraft": {
+        "dir": str(_test_codebases / "cobolcraft"),
+        "label": "CobolCraft — Minecraft Server in COBOL (268 files, 30K LOC)",
+        "questions": [
+            "How does the server handle incoming TCP packets and dispatch them to handlers?",
+            "What is the chunk generation and serialization logic in chunk-io.cob?",
+            "How does the NBT encoder/decoder handle nested compound tags?",
+            "What data structures represent player state and inventory?",
+            "How does the crafting system match shaped and shapeless recipes?",
+            "What is the block physics and collision detection logic?",
+            "How does the server handle player login and session authentication?",
+            "What is the world persistence format and how are region files read/written?",
+            "How does the entity tick system work and what entities are supported?",
+            "How does the server broadcast chunk updates to connected clients?",
+        ],
+    },
 }
 
 
