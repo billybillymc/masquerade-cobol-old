@@ -470,7 +470,7 @@
 <section class="hero" id="top">
   <div class="hero-content">
     <h1>Masquerade COBOL</h1>
-    <p class="tagline">An open-source COBOL intelligence engine that parses legacy systems, extracts business logic, and generates modern-language reimplementations with verified behavioral equivalence.</p>
+    <p class="tagline">An agent-friendly, open-source COBOL intelligence engine. Built so coding agents (and humans) can parse legacy systems, extract business logic, and generate verified modern-language reimplementations.</p>
     <div class="hero-stats">
       <div class="stat"><span class="stat-num">13.8K</span><span class="stat-label">Lines of Pipeline</span></div>
       <div class="stat"><span class="stat-num">37</span><span class="stat-label">Test Suites</span></div>
@@ -486,6 +486,7 @@
 <!-- Nav -->
 <nav class="nav" id="nav">
   <a href="#what">What It Does</a>
+  <a href="#agent">Agent-First</a>
   <a href="#value">Why It Matters</a>
   <a href="#arch">Architecture</a>
   <a href="#prep">Prep Work</a>
@@ -546,6 +547,92 @@
   </div>
 </section>
 
+<!-- SECTION: Agent-First -->
+<section class="section" id="agent">
+  <div class="section-header">
+    <span class="step-num">Core Design Principle</span>
+    <h2>Built for Coding Agents</h2>
+    <p>Masquerade isn't just a tool for humans. It's designed from the ground up so that AI coding agents (Claude, Cursor, Copilot, Devin, etc.) can operate on legacy COBOL codebases autonomously.</p>
+  </div>
+
+  <div class="card" style="border-color: var(--accent); background: linear-gradient(135deg, var(--surface), rgba(108,92,231,0.06));">
+    <h3>Why This Matters</h3>
+    <p style="margin-bottom:1rem">Most COBOL tooling outputs prose reports, PDFs, or GUI dashboards. An agent can't use any of that. Masquerade outputs <strong>structured, machine-readable JSON</strong> at every stage &mdash; so an agent can parse a COBOL system, read the dependency graph, understand the business rules, generate a reimplementation, and verify it all passed &mdash; in a single automated loop.</p>
+    <p>This makes Masquerade the <strong>COBOL-aware toolkit layer</strong> that any coding agent can build on top of.</p>
+  </div>
+
+  <div class="value-grid">
+    <div class="value-card">
+      <span class="icon">&#128196;</span>
+      <h4>Structured JSON Outputs</h4>
+      <p>Every pipeline stage produces machine-readable JSON &mdash; <code>programs.json</code>, <code>graph.json</code>, <code>stats.json</code>. No prose, no PDFs. Agents can parse and reason over results directly.</p>
+    </div>
+    <div class="value-card">
+      <span class="icon">&#9000;</span>
+      <h4>CLI-Native Interface</h4>
+      <p>Single-command analysis: <code>python analyze.py &lt;path&gt;</code>. No GUI required, no interactive prompts. Agents can invoke the full pipeline from a shell command.</p>
+    </div>
+    <div class="value-card">
+      <span class="icon">&#128295;</span>
+      <h4>Deterministic Pipeline</h4>
+      <p>Same input, same output. No randomness in parsing, graph building, or skeleton generation. Agents can rely on stable, reproducible results across runs.</p>
+    </div>
+    <div class="value-card">
+      <span class="icon">&#128269;</span>
+      <h4>Typed Data Contracts</h4>
+      <p>Copybook fields carry PIC metadata (digits, scale, signed, usage). Generated skeletons use typed dataclasses, not string blobs. Agents get real type information to work with.</p>
+    </div>
+    <div class="value-card">
+      <span class="icon">&#9989;</span>
+      <h4>Self-Verifying Loop</h4>
+      <p>The differential harness lets an agent write a reimplementation and immediately verify it against golden COBOL output &mdash; no human in the loop needed. Fail, fix, re-run.</p>
+    </div>
+    <div class="value-card">
+      <span class="icon">&#128202;</span>
+      <h4>Readiness Scoring</h4>
+      <p>Every program gets a numeric readiness score (isolation, simplicity, testability). Agents can prioritize which programs to tackle first without needing human judgment.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The Agent Workflow</h3>
+    <p style="margin-bottom:1rem;color:var(--muted)">A coding agent working with Masquerade follows this loop:</p>
+    <pre><code><span class="cmt"># 1. Agent analyzes the COBOL codebase</span>
+python analyze.py ../test-codebases/carddemo
+
+<span class="cmt"># 2. Agent reads structured output</span>
+<span class="cmt">#    programs.json  &rarr; AST, data flows, conditionals per program</span>
+<span class="cmt">#    graph.json     &rarr; dependency graph (who calls whom)</span>
+<span class="cmt">#    stats.json     &rarr; LOC, complexity, readiness scores</span>
+
+<span class="cmt"># 3. Agent picks highest-readiness program and reads its spec</span>
+python cli.py generate --spec CBACT01C
+
+<span class="cmt"># 4. Agent generates skeleton + tests</span>
+python cli.py generate --skeleton CBACT01C --lang python
+python cli.py generate --tests CBACT01C
+
+<span class="cmt"># 5. Agent writes the reimplementation (filling in the skeleton)</span>
+<span class="cmt"># 6. Agent runs differential tests to verify equivalence</span>
+python -m pytest tests/test_differential_full.py -v
+
+<span class="cmt"># 7. If tests fail &rarr; agent reads the diff report, fixes, re-runs</span>
+<span class="cmt"># 8. If tests pass &rarr; move to next program</span></code></pre>
+  </div>
+
+  <div class="card">
+    <h3>What to Highlight in the README</h3>
+    <ul>
+      <li>Lead with "agent-friendly" in the project description and repo tagline</li>
+      <li>Include a dedicated "For Coding Agents" section showing the JSON schema of outputs</li>
+      <li>Document the CLI flags that matter for non-interactive use (no prompts, exit codes, JSON output mode)</li>
+      <li>Provide a <code>CLAUDE.md</code> / <code>.cursorrules</code> / <code>.github/copilot-instructions.md</code> that teaches agents how to use the pipeline</li>
+      <li>Show the agent loop diagram in the README &mdash; parse, generate, implement, verify, repeat</li>
+      <li>Mention which real codebases have been fully reimplemented this way (CardDemo, Star Trek, Taxe Fonciere)</li>
+    </ul>
+  </div>
+</section>
+
 <!-- SECTION: Value -->
 <section class="section" id="value">
   <div class="section-header">
@@ -567,8 +654,8 @@
     </div>
     <div class="value-card">
       <span class="icon">&#129302;</span>
-      <h4>AI-Native Architecture</h4>
-      <p>Built-in RAG pipeline, LLM-assisted rule extraction, and structured prompts. Positioned at the intersection of AI and legacy code &mdash; a hot space.</p>
+      <h4>AI-Native + Agent-Ready</h4>
+      <p>Built-in RAG pipeline, LLM-assisted rule extraction, structured prompts, and machine-readable outputs at every stage. Not just AI-assisted &mdash; agent-operable.</p>
     </div>
     <div class="value-card">
       <span class="icon">&#9989;</span>
