@@ -1,3 +1,0 @@
-INFO:     127.0.0.1:53671 - "GET /healthz HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53676 - "POST /validation/run HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53678 - "POST /validation/run HTTP/1.1" 200 OK
