@@ -139,6 +139,66 @@ Field-by-field equivalence checking between COBOL golden outputs and Python reim
 
 ---
 
+## RAG-Powered Q&A
+
+The synthesis pipeline (`synthesis/chain.py`) enables natural-language questions about any analyzed COBOL codebase:
+
+1. **Embed** the user's question using OpenAI embeddings (with local cache)
+2. **Search** Pinecone vector database for relevant code chunks
+3. **Expand** results with graph neighbors (callers, callees, shared copybooks)
+4. **Rerank** using Cohere (optional, degrades gracefully without API key)
+5. **Resolve** copybook content inline for field-level context
+6. **Generate** a grounded answer using Google Gemini with source citations
+
+**Prompt contract**: All answers must cite sources as `file_path:start_line-end_line`. Claims without evidence are explicitly rejected ("I cannot determine this from the provided code context.").
+
+**Models used**: Google Gemini 2.5 Flash (LLM, temperature=0.0), OpenAI text-embedding-3-small (embeddings), Cohere rerank-v3.5 (reranking, optional).
+
+---
+
+## Reimplementation Spec Generation
+
+The `/spec` CLI command generates full reimplementation specifications by combining structural analysis (from the parser/graph — treated as ground truth) with RAG-retrieved code context (for behavioral understanding):
+
+- **Purpose statement** — what the program does and its role in the system
+- **Input/output contracts** — files, CICS maps, CALL parameters, copybook structures
+- **Business rules** — numbered list with evidence citations and confidence levels
+- **Data contracts** — copybook descriptions with key fields and roles
+- **Dependencies** — each dependency with relationship type and why it's needed
+- **Control flow summary** — main execution path through paragraphs with decision points
+- **Reimplementation notes** — suggested modern patterns, type mappings, edge cases, what to preserve exactly
+
+---
+
+## Interactive CLI
+
+The REPL (`cli.py`) provides 20+ commands organized into three categories:
+
+**Graph commands** (`cli_graph.py`):
+- `/impact <name>` — blast-radius analysis for a program or copybook
+- `/deps <name>` — dependency tree visualization
+- `/hotspots` — hub programs with highest change risk
+- `/isolated` — leaf programs (safe reimplementation candidates)
+- `/readiness <name>` — detailed readiness score breakdown
+- `/dead` — dead code analysis (unreachable paragraphs, orphan programs)
+
+**Data commands** (`cli_data.py`):
+- `/dict <field>` — copybook field lookup with PIC, type, and parent info
+- `/screens` — BMS screen map browser
+- `/jobs` — JCL job/step viewer
+- `/trace <field>` — field-level data flow tracing
+- `/xref <name>` — cross-reference lookup
+
+**Generation commands** (`cli_generate.py`):
+- `/spec <program>` — LLM-powered reimplementation spec
+- `/rules <program>` — LLM-powered business rule extraction
+- `/skeleton <program>` — Python skeleton with typed copybook fields
+- `/test-gen <program>` — behavioral test suite generation
+- `/complexity <program>` — cyclomatic complexity analysis
+- `/estimate <program>` — migration effort estimation
+
+---
+
 ## Symbol Table and Scope Resolution
 
 Resolves hierarchical COBOL field references (`FIELD OF GROUP OF RECORD`):

@@ -91,8 +91,32 @@ The parser degrades gracefully: partial results are still useful.
 
 ---
 
-## Offline by Default
+## Agent-First Design
 
-Core analysis (parsing, graph building, skeleton generation, test generation, differential testing) requires no API keys and no network access. The LLM-assisted business rule extraction is the only feature that optionally uses an external API, and the structural tier provides a fully offline alternative.
+The entire pipeline is designed to be operated by a coding agent as effectively as by a human:
 
-This matters for enterprise users working with sensitive code.
+**Structured, machine-readable artifacts**: `programs.json` and `graph.json` are JSON — agents parse them natively. No scraping HTML reports or parsing prose.
+
+**Spec-driven contracts**: Every feature has a specification in `specs/` with explicit inputs, outputs, and acceptance criteria. Agents follow these as implementation contracts rather than interpreting vague instructions.
+
+**Step-by-step workflow guide**: `READ_THIS_LAST.md` reads as an agent prompt: concrete commands, expected outputs, decision criteria for what to pick next. An agent can follow it end-to-end without improvising.
+
+**Deterministic verification**: 625 tests mean an agent can make changes and immediately verify nothing broke. No manual inspection needed between steps.
+
+**Evidence contract**: Every claim anchored to source line spans. Agents get grounded context, not summaries they might hallucinate on top of.
+
+This isn't an afterthought — the structured artifacts, step-by-step guide, and deterministic tests were designed so that a human-agent pair can reimplement COBOL programs faster than either could alone. The human provides domain judgment; the agent handles the volume.
+
+---
+
+## Two-Layer Intelligence: Offline + LLM
+
+The pipeline has two complementary layers:
+
+**Offline layer** (no API keys, fully deterministic): parsing, graph building, skeleton generation, structural business rules, behavioral test generation, CobolDecimal, differential testing. This is the foundation — everything an agent needs to do structural analysis and verification.
+
+**LLM layer** (requires API keys): RAG Q&A, semantic business rule extraction, reimplementation spec generation, impact analysis. This uses Google Gemini for LLM inference, OpenAI for embeddings, Pinecone for vector search, and optionally Cohere for reranking.
+
+The LLM layer builds on the offline layer's artifacts, not the other way around. You can reimplement COBOL programs using only the offline layer. The LLM layer accelerates understanding — especially for the initial "what does this program actually do?" question that's hardest to answer from structure alone.
+
+Cohere reranking degrades gracefully (falls back to vector scores). The structural business rule tier provides an offline alternative to LLM-powered extraction. The system is usable at every tier.

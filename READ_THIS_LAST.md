@@ -2,6 +2,8 @@
 
 This is a step-by-step guide for using Masquerade to reimplement a COBOL program as verified Python. Follow the steps in order.
 
+**For coding agents**: This guide is designed to work as an agent prompt. Point your agent (Claude Code, Cursor, Copilot, etc.) at this file and it will follow the workflow: analyze, explore the graph, pick targets, generate skeletons, write reimplementations, and verify with differential tests. Every step produces structured, machine-readable artifacts the agent can consume.
+
 ---
 
 ## Step 1 — Add Your COBOL Codebase
@@ -106,6 +108,8 @@ The skeleton includes:
 
 ## Step 6 — Extract Business Rules
 
+### Structural extraction (offline, no API keys)
+
 ```python
 from business_rules import extract_structural_rules
 
@@ -114,9 +118,44 @@ for r in rules:
     print(f'[{r.rule_type}] conf={r.confidence}  {r.claim}')
 ```
 
+### LLM-powered extraction (requires API keys — deeper semantic understanding)
+
+If you have API keys configured (see README), use the CLI for richer rule extraction:
+
+```bash
+cd pipeline
+python cli.py
+# Inside the REPL:
+/switch <name>
+/rules MY-PROGRAM
+```
+
+The LLM tier uses Google Gemini with RAG context to identify business rules that pattern matching misses — authentication flows, domain-specific routing, implicit constraints. All outputs go through anti-hallucination validation: claims without matching source evidence are rejected.
+
 Rule types: `VALIDATION`, `CALCULATION`, `ROUTING`, `THRESHOLD`, `STATE_TRANSITION`, `ACCESS_CONTROL`, `DATA_TRANSFORM`.
 
-Each rule includes evidence (source line spans), a confidence level, and a classification. Use these to understand what the program actually does in business terms.
+---
+
+## Step 6b — Ask Questions About the Code (LLM-powered)
+
+With API keys configured, use the CLI to ask natural-language questions:
+
+```bash
+/switch <name>
+> Where do we calculate late fees?
+> What happens when a credit card transaction is posted?
+> How does the sign-on process work?
+```
+
+Every answer cites sources as `file_path:start_line-end_line`. The RAG pipeline retrieves relevant code chunks, expands with graph neighbors (callers, callees, shared copybooks), reranks, and generates a grounded answer.
+
+## Step 6c — Generate a Reimplementation Spec (LLM-powered)
+
+```bash
+/spec MY-PROGRAM
+```
+
+Produces a full specification document: purpose, inputs/outputs, business rules with evidence, data contracts, dependencies, control flow summary, and reimplementation notes (suggested patterns, type mappings, edge cases).
 
 ---
 

@@ -11,6 +11,19 @@ python -m pytest pipeline/tests/ pipeline/reimpl/ -v  # should be 625 passing
 
 Requires Python 3.11+.
 
+For LLM-powered features (RAG Q&A, semantic rules, spec generation), create `pipeline/.env` with API keys:
+
+```bash
+GOOGLE_API_KEY=...        # Google Gemini 2.5 Flash
+OPENAI_API_KEY=...        # OpenAI embeddings (text-embedding-3-small)
+PINECONE_API_KEY=...      # Pinecone vector database
+COHERE_API_KEY=...        # Cohere reranking (optional)
+```
+
+## Working with a Coding Agent
+
+This repo is designed to be operated by a coding agent (Claude Code, Cursor, etc.). Point your agent at `READ_THIS_LAST.md` — it's a step-by-step workflow guide that works as an agent prompt. The structured JSON artifacts, spec contracts in `specs/`, and 625 deterministic tests make agent-driven reimplementation effective.
+
 ## Ways to Contribute
 
 ### Add a new COBOL codebase
