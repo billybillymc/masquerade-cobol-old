@@ -11,3 +11,8 @@ __pycache__/
 .pytest_cache/
 .venv/
 scripts/.runtime/
+.cursor/
+.specify/
+PRD/
+engineering/
+specs/

@@ -1,4 +1,4 @@
-# Masquerade — COBOL to Python Reimplementation Engine
+# Masquerade — COBOL-to-Python Reimplementation Engine
 
 Masquerade parses legacy COBOL systems, uses LLM-powered analysis to extract their business logic, and helps you reimplement them in Python with verified behavioral equivalence.
 
