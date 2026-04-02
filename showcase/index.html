@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masquerade — COBOL Intelligence Engine</title>
+<title>Masquerade — COBOL to Python Reimplementation Engine</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -96,10 +96,6 @@ a{color:inherit;text-decoration:none}
 .proof-meta span{font-size:.78rem;padding:4px 10px;background:rgba(99,102,241,.1);border-radius:6px;color:#a5b4fc}
 .reimpl{display:inline-block;padding:6px 14px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:8px;color:var(--green);font-size:.82rem;font-family:'JetBrains Mono',monospace;margin-bottom:1.5rem}
 
-/* Ring */
-.ring-wrap{text-align:center}
-.ring-wrap svg{width:120px;height:120px}
-.ring-label{color:var(--muted);font-size:.78rem;margin-top:.25rem}
 
 /* Scenario Table */
 .sc-table{margin-bottom:2rem}
@@ -148,26 +144,26 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 
 <!-- ── Hero ── -->
 <header class="hero">
-  <div class="hero-badge">COBOL Intelligence Engine</div>
+  <div class="hero-badge">Open Source COBOL to Python Engine</div>
   <h1><span class="grad">Masquerade</span></h1>
-  <p>Analyze. Reimplement. Verify. &mdash; End-to-end COBOL modernization with proven behavioral equivalence.</p>
+  <p>Analyze. Reimplement. Verify. &mdash; Open-source COBOL to Python reimplementation with proven behavioral equivalence.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><strong>494</strong> programs</div>
+    <div class="hero-stat"><strong>906</strong> programs</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>149K</strong> lines</div>
+    <div class="hero-stat"><strong>222K</strong> lines</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>476</strong> tests</div>
+    <div class="hero-stat"><strong>625</strong> tests</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>5</strong> codebases</div>
+    <div class="hero-stat"><strong>8</strong> codebases</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>35</strong> reimplementations</div>
+    <div class="hero-stat"><strong>40</strong> reimplementations</div>
   </div>
   <div class="scroll-hint">&darr;</div>
 </header>
 
 <!-- ── Stats ── -->
 <div class="stats">
-  <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">5</div><div class="lbl">Codebases Tested</div></div>
+  <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">8</div><div class="lbl">Codebases Tested</div></div>
   <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">19</div><div class="lbl">Pipeline Modules</div></div>
   <div class="stat anim anim-delay-2"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><div class="val grad">10/10</div><div class="lbl">IQ Items Complete</div></div>
   <div class="stat anim anim-delay-3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><div class="val grad">3</div><div class="lbl">Target Languages</div></div>
@@ -183,7 +179,7 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── IQ ── -->
 <section class="section">
   <h2>Implementation Quality</h2>
-  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 476 tests across all modules</p>
+  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 625 tests across all modules</p>
   <div class="iq-grid" id="iq-grid"></div>
 </section>
 
@@ -291,15 +287,16 @@ class CdemoGeneralInfo:
   <div class="final-badge">&#x2714; Proven Behavioral Equivalence</div>
   <h2>Every reimplementation is <span class="grad">verified</span> against the original COBOL &mdash; field by field, deterministically.</h2>
   <div class="final-nums">
-    <div class="final-num"><div class="v grad-green">65</div><div class="l">fields compared</div></div>
-    <div class="final-num"><div class="v grad-green">476</div><div class="l">passing tests</div></div>
+    <div class="final-num"><div class="v grad-green">906</div><div class="l">programs ingested</div></div>
+    <div class="final-num"><div class="v grad-green">222K</div><div class="l">lines analyzed</div></div>
+    <div class="final-num"><div class="v grad-green">625</div><div class="l">passing tests</div></div>
     <div class="final-num"><div class="v grad-green">0</div><div class="l">mismatches</div></div>
-    <div class="final-num"><div class="v grad-green">35</div><div class="l">Python modules</div></div>
+    <div class="final-num"><div class="v grad-green">40</div><div class="l">Python modules</div></div>
   </div>
   <a href="https://github.com/billybillymc/masquerade-cobol" target="_blank" class="gh-btn">&#x2197; View on GitHub</a>
 </section>
 
-<footer>Masquerade COBOL Intelligence Engine &mdash; MIT License</footer>
+<footer>Masquerade &mdash; Open Source COBOL to Python Engine &mdash; MIT License</footer>
 
 <script>
 // ── Data ──
@@ -342,7 +339,7 @@ const nist = [
 
 const codebases = [
   {name:'AWS CardDemo',desc:'Credit card management \u2014 fully reimplemented: all 31 programs across CICS online + batch',programs:31,lines:'30K',type:'CICS + Batch',
-   reimpl:'31 programs \u2192 34 Python modules: sign-on, menus, accounts, cards, transactions, billing, reports, batch export/import',fields:29,confidence:100,
+   reimpl:'31 programs \u2192 34 Python modules: sign-on, menus, accounts, cards, transactions, billing, reports, batch export/import',
    scenarios:[
      {name:'Admin Login (COSGN00C)',input:'ADMIN001 + PASS1234',exp:'XCTL \u2192 COADM01C'},
      {name:'Account Update (COACTUPC)',input:'Account 1001, new credit limit',exp:'Changes committed to database'},
@@ -351,7 +348,7 @@ const codebases = [
      {name:'Batch Export\u2192Import (CBEXPORT/CBIMPORT)',input:'5 entity types, 10 records',exp:'Round-trip lossless, 0 errors'},
    ]},
   {name:'IBM CBSA Banking',desc:'Banking system \u2014 accounts, customers, debit/credit, transfers',programs:29,lines:'25K',type:'CICS + DB2',
-   reimpl:'DBCRFUN debit/credit \u2192 cbsa_dbcrfun.py (379 lines)',fields:16,confidence:100,
+   reimpl:'DBCRFUN debit/credit \u2192 cbsa_dbcrfun.py (379 lines)',
    scenarios:[
      {name:'Credit to Savings',input:'Amount +500.00',exp:'Balance updated, type=CRE'},
      {name:'Debit Sufficient Funds',input:'Amount -200.00',exp:'Balance updated, type=DEB'},
@@ -360,7 +357,7 @@ const codebases = [
      {name:'Account Not Found',input:'Invalid account',exp:'Fail code 1'},
    ]},
   {name:'Star Trek',desc:'1979 game \u2014 1,615-line full reimplementation with deterministic seed',programs:1,lines:'1.6K',type:'Interactive',
-   reimpl:'ctrek.cob \u2192 star_trek.py (1,615 lines)',fields:12,confidence:100,
+   reimpl:'ctrek.cob \u2192 star_trek.py (1,615 lines)',
    scenarios:[
      {name:'Title Screen',input:'Any input',exp:'*STAR TREK* displayed'},
      {name:'Invalid Skill',input:'Level 9',exp:'INVALID SKILL LEVEL'},
@@ -370,12 +367,39 @@ const codebases = [
      {name:'Terminate',input:'com 6',exp:'Game over + stranded'},
    ]},
   {name:'Taxe Fonci\u00e8re',desc:'French property tax \u2014 669-line reimplementation with full fee calculation',programs:6,lines:'3K',type:'Subroutine',
-   reimpl:'EFITA3B8 \u2192 taxe_fonciere.py (669 lines)',fields:8,confidence:100,
+   reimpl:'EFITA3B8 \u2192 taxe_fonciere.py (669 lines)',
    scenarios:[
      {name:'Valid Input (no rates)',input:'ccobnb=2, dan=2018',exp:'CR=24 RC=01'},
      {name:'Wrong Article Code',input:'ccobnb=1',exp:'CR=12 RC=01'},
      {name:'Wrong Year',input:'dan=2019',exp:'CR=12 RC=02'},
      {name:'Empty Input',input:'All blank',exp:'CR=12'},
+   ]},
+  {name:'Rocket BankDemo',desc:'Rocket Enterprise Server banking demo \u2014 CICS online + JCL batch, VSAM &amp; PostgreSQL back-ends',programs:81,lines:'19K',type:'CICS + JCL',
+   reimpl:'UDATECNV \u2192 udatecnv.py (95 lines) &bull; UTWOSCMP \u2192 utwoscmp.py (8 lines)',
+   scenarios:[
+     {name:'ISO \u2192 DD.MMM.YY (UDATECNV)',input:"type='0' data='2024-03-15' out='1'",exp:"'15.Mar.24'"},
+     {name:'YYYYMMDD \u2192 DD.MMM.YYYY',input:"type='1' data='19851106' out='2'",exp:"'06.Nov.1985'"},
+     {name:'YYMMDD century window',input:"type='2' data='490601' out='2'",exp:"'01.Jun.2049'"},
+     {name:'Julian YYDDD leap day',input:"type='3' data='24060' out='2'",exp:"'29.Feb.2024'"},
+     {name:"One's complement (UTWOSCMP)",input:'\\x01\\x7f\\x80\\xfe',exp:'\\xfe\\x80\\x7f\\x01'},
+   ]},
+  {name:'Legacy Benchmark',desc:'Investment portfolio management \u2014 production-grade LLM modernization challenge suite',programs:42,lines:'7K',type:'Batch + Online',
+   reimpl:'RTNCDE00 \u2192 rtncde00.py (75 lines) \u2014 return code state machine + DB2 stub',
+   scenarios:[
+     {name:'Initialize (RC=I)',input:'request=I',exp:'current=0, highest=0, status=S'},
+     {name:'Set code 0 (RC=S)',input:'new_code=0',exp:'status=S (success)'},
+     {name:'Set code 4 (RC=S)',input:'new_code=4',exp:'status=W (warning)'},
+     {name:'Set code 7 (RC=S)',input:'new_code=7',exp:'status=E (error)'},
+     {name:'Get after set (RC=G)',input:'after set new_code=6',exp:'return_value=6, return_status=E'},
+   ]},
+  {name:'CobolCraft',desc:'A full Minecraft 1.21.4 server written entirely in COBOL \u2014 terrain, multiplayer, crafting, physics',programs:206,lines:'25K',type:'Network Server',
+   reimpl:'uuid.cob \u2192 cc_uuid.py (35 lines) &bull; json-parse.cob \u2192 cc_json_parse.py (210 lines)',
+   scenarios:[
+     {name:'UUID-ToString (nil)',input:'\\x00 \u00d7 16',exp:'00000000-0000-0000-0000-000000000000'},
+     {name:'UUID-FromString round-trip',input:'550e8400-e29b-41d4-a716-446655440000',exp:'16-byte binary, lossless'},
+     {name:'JSON string + escapes',input:'"say \\"hi\\""',exp:'say "hi"'},
+     {name:'JSON integer negative',input:'-42',exp:'-42'},
+     {name:'JSON FindValue',input:'"name":"Alice","age":30 \u2192 key=age',exp:'offset points to 30'},
    ]},
 ];
 
@@ -412,14 +436,6 @@ function renderProof(idx) {
   activeTab = idx;
   const cb = codebases[idx];
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  const ring = `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#1e293b" stroke-width="10"/>
-    <circle cx="60" cy="60" r="50" fill="none" stroke="#4ade80" stroke-width="10" stroke-linecap="round"
-      stroke-dasharray="${cb.confidence*3.14} 314" transform="rotate(-90 60 60)">
-      <animate attributeName="stroke-dasharray" from="0 314" to="${cb.confidence*3.14} 314" dur="1.2s" fill="freeze"/>
-    </circle>
-    <text x="60" y="55" text-anchor="middle" fill="white" font-size="22" font-weight="bold">${cb.confidence}%</text>
-    <text x="60" y="73" text-anchor="middle" fill="#94a3b8" font-size="10">confidence</text></svg>`;
-
   document.getElementById('proof-box').innerHTML = `
     <div class="proof-top">
       <div>
@@ -429,7 +445,6 @@ function renderProof(idx) {
           <span>${cb.programs} programs</span><span>${cb.lines} lines</span><span>${cb.type}</span>
         </div>
       </div>
-      <div class="ring-wrap">${ring}<div class="ring-label">${cb.fields} fields compared</div></div>
     </div>
     <div class="reimpl">${cb.reimpl}</div>
     <div class="sc-table">

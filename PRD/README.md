@@ -1,5 +1,7 @@
 # Masquerade PRD Index
 
+> **Note**: These are historical design documents from Masquerade's development. They capture the reasoning behind architectural decisions and are preserved for contributor context. For current documentation, see the [README](../README.md) and [docs/](../docs/).
+
 This PRD is split into focused documents so decisions can evolve independently.
 
 ## Product Direction

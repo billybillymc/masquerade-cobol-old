@@ -1,104 +1,43 @@
-# READ THIS LAST — Masquerade COBOL Pipeline: Complete Workflow
+# How to Reimplement a COBOL Program in Python
 
-This document is the authoritative guide for adding a new COBOL codebase to
-Masquerade from scratch: clone → analyze → explore → generate → reimplement →
-test. Every step is concrete and runnable. Follow them in order.
+This is a step-by-step guide for using Masquerade to reimplement a COBOL program as verified Python. Follow the steps in order.
 
 ---
 
-## What This Project Is
+## Step 1 — Add Your COBOL Codebase
 
-Masquerade is a COBOL intelligence engine. Given any COBOL codebase it:
-
-1. Parses all `.cbl`, `.cob`, `.cpy`, `.bms`, `.jcl` files into a structured AST
-2. Builds a dependency graph (CALL, COPY, FILE, CICS_IO edges)
-3. Generates specs, skeletons (Python/Java/C#), and business rule catalogs
-4. Supports writing Python reimplementations verified by differential test suites
-
-All work lives under `pipeline/`. Tests live in `pipeline/tests/`.
-Reimplementations live in `pipeline/reimpl/`.
-
----
-
-## Step 1 — Clone the Codebase
+Place your COBOL source under `test-codebases/<name>/`:
 
 ```bash
 git clone --depth=1 <repo-url> test-codebases/<name>
 ```
 
-Count files and LOC before starting:
+The parser handles `.cbl`, `.cob`, `.cpy`, `.bms` files automatically. It targets fixed-format IBM/mainframe COBOL (COBOL-85/2002) with standard column layout.
 
-```powershell
-$files = Get-ChildItem -Recurse -Include "*.cob","*.cbl","*.cpy" test-codebases/<name>
-$loc   = ($files | ForEach-Object { (Get-Content $_.FullName -Raw).Split("`n").Count } | Measure-Object -Sum).Sum
-Write-Host "Files: $($files.Count)  LOC: $loc"
-```
+**What's supported**: standard column layout, CICS EXEC blocks, JCL, BMS screen maps, COMP/COMP-3/BINARY-LONG types.
 
-**Parser compatibility note**: The parser (`cobol_parser.py`) targets fixed-format
-IBM/mainframe COBOL (COBOL-85, COBOL-2002). It handles:
-- `.cbl`, `.cob`, `.cpy`, `.bms` extensions (all auto-discovered)
-- Standard column layout (cols 1-6 sequence, 7 indicator, 8-11 area A, 12-72 area B)
-- CICS EXEC blocks, JCL, BMS screen maps
-- `BINARY-LONG`, `BINARY-LONG-LONG`, `COMP`, `COMP-3`
-
-It does **not** fully handle:
-- **Free-format COBOL** (`*>` comments, no fixed columns, GnuCOBOL extensions)
-- Nested programs (`END PROGRAM` / multiple `IDENTIFICATION DIVISION` in one file)
-- Vendor extensions like `ANY LENGTH`, `EXTERNAL`
-
-CobolCraft (Minecraft server in COBOL) is an example of a free-format codebase.
-The parser extracts COPY dependencies correctly but misses most paragraph structure.
-This is expected — document it and proceed; COPY graph and business rules still work.
+**What's not fully supported**: free-format COBOL (GnuCOBOL extensions), nested programs, vendor-specific extensions like `ANY LENGTH`.
 
 ---
 
-## Step 2 — Analyze the Codebase
+## Step 2 — Analyze
 
 ```bash
 cd pipeline
 python analyze.py ../test-codebases/<name>
 ```
 
-This produces `test-codebases/<name>/_analysis/`:
-- `programs.json` — per-program AST (paragraphs, data flows, conditionals)
-- `graph.json` — full dependency graph (nodes + edges)
+This produces `test-codebases/<name>/_analysis/` with:
+- `programs.json` — per-program structural AST (paragraphs, data flows, conditionals)
+- `graph.json` — dependency graph (CALL, COPY, FILE edges)
 - `stats.json` — summary statistics
 - `call_graph.dot` — Graphviz visualization
 
-**Expected output** (check these numbers make sense):
-```
-Artifacts written to ../test-codebases/<name>/_analysis/
-  programs.json  — per-program structure (N programs)
-  graph.json     — full dependency graph (N nodes, N edges)
-  stats.json     — summary statistics
-```
-
 ---
 
-## Step 3 — Register the Codebase in the CLI
+## Step 3 — Pick a Program to Reimplement
 
-Edit `pipeline/cli.py` — add an entry to `KNOWN_CODEBASES`:
-
-```python
-"<name>": {
-    "dir": str(_test_codebases / "<name>"),
-    "label": "<Description> (N programs, NK LOC)",
-    "questions": [
-        "What does <key program> do?",
-        "How is <core concept> calculated?",
-        # ... 8-10 questions that showcase the domain
-    ],
-},
-```
-
-Commit: `git add pipeline/cli.py && git commit -m "Register <name> in CLI codebase menu"`
-
----
-
-## Step 4 — Graph Exploration
-
-Run graph analysis to understand the codebase structure before picking programs
-to reimplement:
+Use the dependency graph to find good starting targets:
 
 ```python
 import json
@@ -106,129 +45,87 @@ from pathlib import Path
 from graph_context import GraphIndex
 
 codebase = Path('../test-codebases/<name>')
-idx      = GraphIndex(str(codebase / '_analysis'))
+idx = GraphIndex(str(codebase / '_analysis'))
 programs = json.loads((codebase / '_analysis/programs.json').read_text())
-stats    = json.loads((codebase / '_analysis/stats.json').read_text())
 
-# Hub programs (most depended-upon — high change risk)
-for name, score in idx.hub_programs(15):
-    print(f'  {score}  {name}')
-
-# Leaf programs (no callers — safe reimplementation candidates)
+# Leaf programs (no downstream callers — safe to reimplement first)
 for name in idx.leaf_programs()[:20]:
-    print(f'  {name}')
+    print(name)
 
-# Readiness scores (0-100; higher = easier to reimplement)
+# Readiness scores (higher = more structure extracted, easier to reimplement)
 scores = [(p, idx.readiness_score(p)) for p in programs]
 scores.sort(key=lambda x: x[1].get('score', 0) if isinstance(x[1], dict) else x[1], reverse=True)
-for name, score in scores[:20]:
+for name, score in scores[:10]:
     s = score.get('score', score) if isinstance(score, dict) else score
     print(f'  {s:.2f}  {name}')
-
-# Dead code
-dead = idx.dead_code_analysis()
-# Keys: unreachable_paragraphs, orphan_programs, unused_copybooks, summary
 ```
 
-**What to look for:**
-- Hub programs = high copybook fan-in → complex data contracts
-- Leaf programs with high readiness = best first reimplement targets
-- Programs with many paragraphs + conditional blocks = most interesting business logic
-- Orphan programs = utility/batch programs that run standalone (good for differential testing)
+**Pick programs that are:**
+1. Leaf programs (no downstream callers — no cascading breakage)
+2. High readiness score (parser extracted enough structure)
+3. Clear inputs/outputs (batch programs with sequential I/O are easiest)
+4. Interesting business logic (something worth demonstrating)
 
 ---
 
-## Step 5 — Spec Generation
-
-Generate a structured Markdown spec for a chosen program:
+## Step 4 — Generate a Specification
 
 ```python
 from spec_generator import generate_program_spec
 
-# NOTE: graph stores IDs as uppercase+hyphenated: 'MY-PROGRAM' not 'My-Program'
-# The programs.json dict may use the original casing. Use the graph-normalized ID.
-graph_id = 'MY-PROGRAM'   # must match PGM:<graph_id> node in graph.json
-spec = generate_program_spec(graph_id, idx, programs, str(codebase))
-
-if spec is None:
-    print('Program not found in graph — check the node ID casing')
-    # List PGM: nodes: [k for k in idx.nodes if k.startswith('PGM:')]
-else:
-    print(spec.complexity_grade, spec.readiness_score, spec.migration_wave)
-    spec_md = spec.render_markdown() if hasattr(spec, 'render_markdown') else str(spec)
-    Path('_analysis/generated/<program>.spec.md').write_text(spec_md)
+spec = generate_program_spec("MY-PROGRAM", idx, programs, str(codebase))
+print(spec.complexity_grade, spec.readiness_score, spec.migration_wave)
 ```
 
-**Tip**: Find the correct graph node ID:
+The spec tells you the program's complexity grade, what it calls, what data it touches, and how hard it will be to reimplement.
+
+**Tip**: Graph node IDs are uppercase and hyphenated (`MY-PROGRAM`, not `My-Program`). Find the right ID with:
 ```python
-pgm_nodes = [k for k in idx.nodes if k.startswith('PGM:')]
-# Then search: [k for k in pgm_nodes if 'MYNAME' in k.upper()]
+[k for k in idx.nodes if 'MYNAME' in k.upper()]
 ```
 
 ---
 
-## Step 6 — Skeleton Generation (Python / Java / C#)
+## Step 5 — Generate a Python Skeleton
 
 ```python
 from skeleton_generator import generate_skeleton
-from skeleton_ir import spec_to_ir, PythonRenderer, JavaRenderer, CSharpRenderer
 from copybook_dict import CopybookDictionary
 
-cbd = CopybookDictionary(str(codebase))   # loads all .cpy files
-
-py_code   = generate_skeleton(spec, cbd)
-ir        = spec_to_ir(spec)
-java_code = JavaRenderer().render(ir)
-cs_code   = CSharpRenderer().render(ir)
+cbd = CopybookDictionary(str(codebase))
+skeleton = generate_skeleton(spec, cbd)
+print(skeleton)
 ```
 
-Skeletons include:
-- Typed dataclasses from copybooks (PIC X → str, PIC 9 → int, PIC 9V99 → Decimal)
+The skeleton includes:
+- Typed `@dataclass` for each copybook (PIC X -> `str`, PIC 9 -> `int`, PIC 9V99 -> `Decimal`)
 - Method stubs per paragraph with CICS/file operation comments
 - Repository interface stubs for VSAM/sequential file operations
-- FastAPI route stubs for BMS screen programs
 
 ---
 
-## Step 7 — Business Rule Extraction
+## Step 6 — Extract Business Rules
 
 ```python
 from business_rules import extract_structural_rules
 
-prog_data = programs['MY-PROGRAM']   # use exact key from programs.json
-rules = extract_structural_rules('MY-PROGRAM', prog_data)
-
+rules = extract_structural_rules("MY-PROGRAM", programs["MY-PROGRAM"])
 for r in rules:
     print(f'[{r.rule_type}] conf={r.confidence}  {r.claim}')
 ```
 
-Rule types: `VALIDATION`, `CALCULATION`, `ROUTING`, `THRESHOLD`,
-`STATE_TRANSITION`, `ACCESS_CONTROL`, `DATA_TRANSFORM`.
+Rule types: `VALIDATION`, `CALCULATION`, `ROUTING`, `THRESHOLD`, `STATE_TRANSITION`, `ACCESS_CONTROL`, `DATA_TRANSFORM`.
 
-Each rule includes:
-- `claim`: concise description of the inferred behavior
-- `evidence`: source line spans
-- `confidence`: HIGH / MEDIUM / LOW
-- `rule_type`: classification
+Each rule includes evidence (source line spans), a confidence level, and a classification. Use these to understand what the program actually does in business terms.
 
 ---
 
-## Step 8 — Pick a Program to Reimplement
+## Step 7 — Write Your Reimplementation
 
-Pick criteria (in priority order):
-1. **Readiness score ≥ 70** — parser extracted enough structure
-2. **Leaf program** — no downstream callers means no cascading breakage
-3. **Has clear inputs/outputs** — batch programs with sequential I/O are easiest
-4. **No CICS dependency** — CICS programs need stub injection; skip for first pass
-5. **Interesting business logic** — something worth demonstrating
+Create `pipeline/reimpl/<program_name>.py`. Convert the COBOL program name to Python snake_case: `MY-PROGRAM` -> `my_program.py`.
 
-Write the reimplementation to `pipeline/reimpl/<program_name>.py`.
+Use this structure:
 
-**File naming**: convert COBOL program name to Python snake_case:
-- `MY-PROGRAM` → `my_program.py`
-- `BLOCKS-PARSE-STATE` → `blocks_parse_state.py`
-
-**Structure template**:
 ```python
 """
 Reimplementation of <PROGRAM-ID>.
@@ -244,10 +141,11 @@ Signature (LINKAGE SECTION):
 Logic:
   1. <paragraph 1 description>
   2. <paragraph 2 description>
-  ...
 """
 from __future__ import annotations
 from dataclasses import dataclass
+from cobol_decimal import CobolDecimal
+from decimal import Decimal
 
 @dataclass
 class Result:
@@ -257,16 +155,18 @@ def run(input_value: str) -> Result:
     ...
 ```
 
+Use `CobolDecimal` for any numeric fields where COBOL's truncation/overflow behavior matters. This is the most common source of reimplementation bugs.
+
 ---
 
-## Step 9 — Write Differential Tests
+## Step 8 — Write Differential Tests
 
-Write tests to `pipeline/tests/test_<name>_reimpl.py`.
-
-**Test structure**: one class per function, one test per behavior boundary.
-Map each test to a specific COBOL construct it verifies:
+Create `pipeline/reimpl/test_<program_name>.py`:
 
 ```python
+import pytest
+from <program_name> import run, Result
+
 class TestMyProgram:
     def test_happy_path(self):
         """Mirrors EVALUATE WHEN 'OK' branch in MAIN-PARA (line N)."""
@@ -275,80 +175,76 @@ class TestMyProgram:
 
     def test_missing_required_field(self):
         """Mirrors IF LK-FIELD = SPACES -> MOVE 1 TO LK-FAILURE (line N)."""
-        with pytest.raises(ValueError):
-            run("")
+        result = run("")
+        assert result.failure != 0
 
     def test_boundary_value(self):
         """Mirrors WHEN OTHER -> fallback logic."""
         ...
 ```
 
-**Coverage checklist for each program**:
+**Cover these for each program:**
 - [ ] Happy path (normal input)
 - [ ] Missing/blank required inputs
 - [ ] Each branch of the main EVALUATE/IF
 - [ ] Boundary values (min, max, zero, empty)
-- [ ] Error path (failure flag set)
-- [ ] Realistic domain data (e.g. actual JSON structure)
+- [ ] Error paths (failure flag set)
+- [ ] Realistic domain data
 
-Run: `python -m pytest tests/test_<name>_reimpl.py -v`
+Run: `python -m pytest pipeline/reimpl/test_<program_name>.py -v`
 
 ---
 
-## Step 10 — Commit
+## Step 9 — Verify with the Differential Harness
 
-```bash
-git add pipeline/reimpl/<program>.py pipeline/tests/test_<name>_reimpl.py
-git commit -m "Add <name> reimpl: <PROGRAM-ID> with N tests"
+For programs where you have COBOL golden outputs (from running the original):
+
+```python
+from differential_harness import DiffVector, run_vectors, render_report_text
+
+vectors = [
+    DiffVector(
+        vector_id="V001",
+        program="MY-PROGRAM",
+        inputs={"WS-INPUT": "test-value"},
+        expected_outputs={"WS-OUTPUT": "expected-value"},
+        actual_outputs={"WS-OUTPUT": my_reimpl_result},
+        field_types={"WS-OUTPUT": "str"},
+    ),
+]
+report = run_vectors(vectors)
+print(render_report_text(report))
+# Confidence: 100.0%
 ```
 
----
-
-## Quick Reference: Codebase Registry
-
-| Key | Label | Programs | LOC |
-|-----|-------|----------|-----|
-| `carddemo` | AWS CardDemo — Credit Card Processing | 44 | 30K |
-| `cbsa` | IBM CICS Banking Sample Application | 29 | 27K |
-| `bankdemo` | Micro Focus CICS Banking Demo | 164 | 34K |
-| `legacy-benchmark` | Investment Portfolio Management | 42 | 7K |
-| `star-trek` | Classic Star Trek Game | 1 | 1.6K |
-| `taxe-fonciere` | French Property Tax | 6 | 2.3K |
-| `cnaf` | French Family Allowances Fund | 52 | ~3.5M |
-| `cobolcraft` | Minecraft Server in COBOL | 268 | 30K |
+The harness uses CobolDecimal-aware comparison for numeric fields — it compares stored values under the same PIC definition, not raw Python floats.
 
 ---
 
-## Known Parser Limitations
+## Reference: Existing Reimplementations
 
-| Limitation | Impact | Workaround |
-|------------|--------|------------|
-| Free-format COBOL (GnuCOBOL style, `*>` comments) | Paragraph extraction fails; COPY graph still works | Accept partial parse; use COPY dependency graph + manual source reading |
-| Nested programs (multiple `IDENTIFICATION DIVISION` per file) | Only last program detected | Split files or accept partial extraction |
-| `ANY LENGTH` / `EXTERNAL` clauses | Parsed but type info lost | Annotate manually in reimpl docstring |
-| Level-78 constants | Not extracted as symbols | Read from source directly |
-| `BINARY-LONG-LONG`, `BINARY-SHORT` | Mapped to int | Use `int` in reimpl |
-| CICS EXEC blocks | Identified but not deep-parsed | Use stub injection (see `cics_stub.py`) |
+Look at `pipeline/reimpl/` for 40 working examples across 7 codebases. Good starting points:
+
+| Program | File | Why it's a good example |
+|---------|------|------------------------|
+| UDATECNV | `udatecnv.py` | Simple utility: date format conversion, clear inputs/outputs |
+| RTNCDE00 | `rtncde00.py` | State machine: return code routing with branching logic |
+| cc_uuid | `cc_uuid.py` | String processing: UUID formatting, no CICS dependency |
+| DBCRFUN | `cbsa_dbcrfun.py` | Calculation: debit/credit engine with CobolDecimal arithmetic |
+| EFITA3B8 | `efita3b8.py` | Complex logic: French property tax with nested EVALUATE ALSO |
 
 ---
 
-## Common Failure Modes
+## Common Issues
 
 **`generate_program_spec` returns None**
-→ The program ID isn't in the graph. Graph stores IDs uppercase+hyphenated.
-→ List nodes: `[k for k in idx.nodes if k.startswith('PGM:')]`
-→ Pass the graph-normalized ID (e.g. `'BLOCKS-PARSE-STATE'` not `'Blocks-Parse-State'`)
+The program ID isn't in the graph. Graph uses uppercase+hyphenated IDs. List available programs: `[k for k in idx.nodes if k.startswith('PGM:')]`
+
+**Parser extracts 0 paragraphs**
+Your codebase is likely free-format COBOL. The parser targets fixed-format. The dependency graph still works — use it for COPY relationships and read the source manually for paragraph logic.
 
 **`CopybookDictionary()` TypeError**
-→ Requires `codebase_dir` argument: `CopybookDictionary(str(codebase))`
+Pass the codebase directory as a string: `CopybookDictionary(str(codebase))`
 
 **`GraphIndex()` TypeError**
-→ Takes `analysis_dir` string, not a raw graph dict: `GraphIndex(str(codebase / '_analysis'))`
-
-**Parser extracts 0 paragraphs from all programs**
-→ Codebase is free-format COBOL. Verify with: `Get-Content file.cob -TotalCount 10`
-→ Look for `*>` comments and non-column-aligned code. Accept and proceed.
-
-**Analysis hangs on very large files (>5MB per file)**
-→ CobolCraft `chunk-io.cob` (40KB) is fine. CNAF files (14-17MB each) cause hangs.
-→ For CNAF-scale files, use `--dry-run` with a per-file timeout.
+Pass the analysis directory: `GraphIndex(str(codebase / '_analysis'))`
