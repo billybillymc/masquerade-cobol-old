@@ -1,0 +1,80 @@
+*> This file contains common routines for entities. If this was Java, these routines would be found in parent
+*> classes and invoked via super.method(). In COBOL, we call them explicitly.
+
+*> --- EntityBase-Serialize ---
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EntityBase-Serialize.
+
+DATA DIVISION.
+LINKAGE SECTION.
+    COPY DD-CALLBACK-ENTITY-SERIALIZE.
+
+PROCEDURE DIVISION USING LK-ENTITY LK-NBTENC LK-BUFFER.
+    CALL "NbtEncode-UUID" USING LK-NBTENC LK-BUFFER "UUID" LK-ENTITY-UUID
+
+    CALL "NbtEncode-List" USING LK-NBTENC LK-BUFFER "Pos"
+    CALL "NbtEncode-Double" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-X
+    CALL "NbtEncode-Double" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-Y
+    CALL "NbtEncode-Double" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-Z
+    CALL "NbtEncode-EndList" USING LK-NBTENC LK-BUFFER
+
+    CALL "NbtEncode-List" USING LK-NBTENC LK-BUFFER "Rotation"
+    CALL "NbtEncode-Float" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-YAW
+    CALL "NbtEncode-Float" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-PITCH
+    CALL "NbtEncode-EndList" USING LK-NBTENC LK-BUFFER
+
+    CALL "NbtEncode-List" USING LK-NBTENC LK-BUFFER "Motion"
+    CALL "NbtEncode-Double" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-VELOCITY-X
+    CALL "NbtEncode-Double" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-VELOCITY-Y
+    CALL "NbtEncode-Double" USING LK-NBTENC LK-BUFFER OMITTED LK-ENTITY-VELOCITY-Z
+    CALL "NbtEncode-EndList" USING LK-NBTENC LK-BUFFER
+
+    CALL "NbtEncode-Byte" USING LK-NBTENC LK-BUFFER "OnGround" LK-ENTITY-ON-GROUND
+    CALL "NbtEncode-Byte" USING LK-NBTENC LK-BUFFER "NoGravity" LK-ENTITY-NO-GRAVITY
+
+    *> TODO add more fields
+
+    GOBACK.
+
+END PROGRAM EntityBase-Serialize.
+
+*> --- EntityBase-Deserialize ---
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EntityBase-Deserialize.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+    01 INT32                BINARY-LONG.
+LINKAGE SECTION.
+    COPY DD-CALLBACK-ENTITY-DESERIALIZE.
+
+PROCEDURE DIVISION USING LK-ENTITY LK-NBTDEC LK-BUFFER LK-TAG.
+    EVALUATE LK-TAG
+        WHEN "UUID"
+            CALL "NbtDecode-UUID" USING LK-NBTDEC LK-BUFFER LK-ENTITY-UUID
+        WHEN "Pos"
+            CALL "NbtDecode-List" USING LK-NBTDEC LK-BUFFER INT32
+            CALL "NbtDecode-Double" USING LK-NBTDEC LK-BUFFER LK-ENTITY-X
+            CALL "NbtDecode-Double" USING LK-NBTDEC LK-BUFFER LK-ENTITY-Y
+            CALL "NbtDecode-Double" USING LK-NBTDEC LK-BUFFER LK-ENTITY-Z
+            CALL "NbtDecode-EndList" USING LK-NBTDEC LK-BUFFER
+        WHEN "Rotation"
+            CALL "NbtDecode-List" USING LK-NBTDEC LK-BUFFER INT32
+            CALL "NbtDecode-Float" USING LK-NBTDEC LK-BUFFER LK-ENTITY-YAW
+            CALL "NbtDecode-Float" USING LK-NBTDEC LK-BUFFER LK-ENTITY-PITCH
+            CALL "NbtDecode-EndList" USING LK-NBTDEC LK-BUFFER
+        WHEN "Motion"
+            CALL "NbtDecode-List" USING LK-NBTDEC LK-BUFFER INT32
+            CALL "NbtDecode-Double" USING LK-NBTDEC LK-BUFFER LK-ENTITY-VELOCITY-X
+            CALL "NbtDecode-Double" USING LK-NBTDEC LK-BUFFER LK-ENTITY-VELOCITY-Y
+            CALL "NbtDecode-Double" USING LK-NBTDEC LK-BUFFER LK-ENTITY-VELOCITY-Z
+            CALL "NbtDecode-EndList" USING LK-NBTDEC LK-BUFFER
+        WHEN "OnGround"
+            CALL "NbtDecode-Byte" USING LK-NBTDEC LK-BUFFER LK-ENTITY-ON-GROUND
+        WHEN "NoGravity"
+            CALL "NbtDecode-Byte" USING LK-NBTDEC LK-BUFFER LK-ENTITY-NO-GRAVITY
+        WHEN OTHER
+            CALL "NbtDecode-Skip" USING LK-NBTDEC LK-BUFFER
+    END-EVALUATE.
+
+END PROGRAM EntityBase-Deserialize.

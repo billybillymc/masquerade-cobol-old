@@ -1,0 +1,2 @@
+program,type,code_lines,total_lines,paragraphs,callers,callees,copybooks,readiness_score,isolation,simplicity,dependency_clarity,testability,cyclomatic_complexity,max_nesting,complexity_grade,effort_days,risk_level,migration_wave
+STAR_TREK,Batch,1400,1581,90,0,0,0,80.0,100,20,100,100,,,,8.4,MEDIUM,Wave 2: Core Migration

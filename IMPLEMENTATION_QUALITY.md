@@ -27,11 +27,11 @@ Summary of Masquerade's capabilities, each backed by dedicated test suites. See 
 | **Impact Analysis** | Change blast-radius assessment using dependency graph + LLM interpretation |
 | **Interactive CLI** | 20+ commands for graph analysis, data exploration, and LLM-powered generation |
 
-**Total pipeline tests**: 512 (across all offline features + parser + graph + specs)
+**Total pipeline tests**: 502 (across all offline features + parser + graph + specs)
 
 ## Reimplementation Coverage
 
-40 COBOL programs reimplemented in Python with differential test suites:
+37 COBOL programs reimplemented in Python with differential test suites:
 
 | Codebase | Programs reimplemented | Tests |
 |----------|----------------------|-------|
@@ -39,19 +39,17 @@ Summary of Masquerade's capabilities, each backed by dedicated test suites. See 
 | IBM CBSA | 1 (DBCRFUN) | 8 |
 | Star Trek | 1 (full game) | 10 |
 | Taxe Fonciere | 1 (EFITA3B8) | 9 |
-| Rocket BankDemo | 2 (UDATECNV, UTWOSCMP) | 12 |
-| Legacy Benchmark | 1 (RTNCDE00) | 5 |
 | CobolCraft | 2 (uuid, json-parse) | 7 |
 
-**Total reimplementation tests**: 113
+**Total reimplementation tests**: 58
 
 ## Validated Codebases
 
-The parser has been validated against 8 real COBOL codebases totaling 906 programs and 222K lines of code. The NIST COBOL-85 validation suite achieves a 98.6% pass rate (7,757 pass / 111 fail).
+The parser has been validated against 5 real COBOL codebases totaling 273 programs and 96K lines of code.
 
 ## Running All Tests
 
 ```bash
 python -m pytest pipeline/tests/ pipeline/reimpl/ -v
-# 625 tests, all passing
+# 560 tests, all passing
 ```

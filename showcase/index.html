@@ -73,17 +73,6 @@ a{color:inherit;text-decoration:none}
 .iq-id{font-size:.75rem;font-weight:600;color:var(--muted);font-family:'JetBrains Mono',monospace}
 .iq-name{font-weight:600;font-size:.92rem}.iq-tests{color:var(--muted);font-size:.78rem;margin-top:.2rem}
 
-/* ── NIST ── */
-.nist-bars{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;align-items:end;height:220px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1rem .75rem;margin-bottom:1rem}
-.nist-col{display:flex;flex-direction:column;align-items:center;gap:2px}
-.nist-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height .8s ease}
-.nist-bar.pass{background:var(--green)}.nist-bar.fail{background:var(--red)}
-.nist-label{font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:4px}
-.nist-note{text-align:center;color:var(--muted);font-size:.88rem;max-width:700px;margin:1rem auto 0;line-height:1.6}
-.nist-big{text-align:center;margin-bottom:1.5rem;font-size:1.8rem;font-weight:700}
-.nist-big .pass-num{color:var(--green)}.nist-big .fail-num{color:var(--red)}
-.nist-big .slash{color:var(--muted);margin:0 .5rem}
-
 /* ── Proof ── */
 .proof-bg{background:linear-gradient(180deg,transparent,rgba(99,102,241,.06),transparent);padding:5rem 0}
 .tabs{display:flex;justify-content:center;gap:.5rem;margin-bottom:2rem}
@@ -136,7 +125,6 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 @media(max-width:768px){
   .sc-head,.sc-row{grid-template-columns:1fr 1fr 36px}.sc-exp,.sc-head span:nth-child(3){display:none}
   .proof-top{flex-direction:column}.final-nums{gap:2rem}
-  .nist-bars{grid-template-columns:repeat(6,1fr);height:160px}
 }
 </style>
 </head>
@@ -148,22 +136,22 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
   <h1><span class="grad">Masquerade</span></h1>
   <p>Analyze. Reimplement. Verify. &mdash; Open-source COBOL to Python reimplementation with proven behavioral equivalence.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><strong>906</strong> programs</div>
+    <div class="hero-stat"><strong>273</strong> programs</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>222K</strong> lines</div>
+    <div class="hero-stat"><strong>96K</strong> lines</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>625</strong> tests</div>
+    <div class="hero-stat"><strong>560</strong> tests</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>8</strong> codebases</div>
+    <div class="hero-stat"><strong>5</strong> codebases</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>40</strong> reimplementations</div>
+    <div class="hero-stat"><strong>37</strong> reimplementations</div>
   </div>
   <div class="scroll-hint">&darr;</div>
 </header>
 
 <!-- ── Stats ── -->
 <div class="stats">
-  <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">8</div><div class="lbl">Codebases Tested</div></div>
+  <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">5</div><div class="lbl">Codebases Tested</div></div>
   <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">19</div><div class="lbl">Pipeline Modules</div></div>
   <div class="stat anim anim-delay-2"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><div class="val grad">10/10</div><div class="lbl">IQ Items Complete</div></div>
   <div class="stat anim anim-delay-3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><div class="val grad">3</div><div class="lbl">Target Languages</div></div>
@@ -179,17 +167,8 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── IQ ── -->
 <section class="section">
   <h2>Implementation Quality</h2>
-  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 625 tests across all modules</p>
+  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 560 tests across all modules</p>
   <div class="iq-grid" id="iq-grid"></div>
-</section>
-
-<!-- ── NIST ── -->
-<section class="section">
-  <h2>NIST COBOL-85 Validation</h2>
-  <p class="sub">414 programs &bull; 89,427 lines &bull; Official compiler validation suite</p>
-  <div class="nist-big"><span class="pass-num">7,757</span><span class="slash">/</span><span class="fail-num">111</span> &nbsp; <span style="color:var(--muted);font-size:1rem;font-weight:400">98.6% pass rate</span></div>
-  <div class="nist-bars" id="nist-chart"></div>
-  <p class="nist-note">All 111 failures: debugging declaratives (obsolete), implementor-defined switches, file status edge cases. <strong>Zero failures</strong> in arithmetic, control flow, data movement, string handling, sort/merge, or inter-program calls.</p>
 </section>
 
 <!-- ── CardDemo Callout ── -->
@@ -287,7 +266,7 @@ class CdemoGeneralInfo:
   <div style="background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(74,222,128,.12));border:1px solid rgba(74,222,128,.25);border-radius:16px;padding:3rem;max-width:960px;margin:0 auto;text-align:center">
     <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);color:#4ade80;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.5rem">Built for AI Coding Agents</div>
     <h3 style="font-size:1.8rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem">Point Your Agent. Follow the Guide. Verify the Result.</h3>
-    <p style="color:var(--muted);max-width:640px;margin:0 auto 2rem;line-height:1.6">Masquerade produces structured JSON artifacts, spec-driven contracts, and a step-by-step workflow guide that coding agents (Claude Code, Cursor, Copilot) follow natively. LLM-powered RAG answers questions about the code. 625 deterministic tests verify every change. You bring domain judgment &mdash; the agent handles volume.</p>
+    <p style="color:var(--muted);max-width:640px;margin:0 auto 2rem;line-height:1.6">Masquerade produces structured JSON artifacts, spec-driven contracts, and a step-by-step workflow guide that coding agents (Claude Code, Cursor, Copilot) follow natively. LLM-powered RAG answers questions about the code. 560 deterministic tests verify every change. You bring domain judgment &mdash; the agent handles volume.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;text-align:left;max-width:800px;margin:0 auto">
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
         <div style="font-size:.85rem;font-weight:600;margin-bottom:.3rem">Structured Artifacts</div>
@@ -303,7 +282,7 @@ class CdemoGeneralInfo:
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
         <div style="font-size:.85rem;font-weight:600;margin-bottom:.3rem">Deterministic Tests</div>
-        <div style="color:var(--muted);font-size:.8rem;line-height:1.4">625 tests &mdash; agent runs after every change, catches regressions instantly</div>
+        <div style="color:var(--muted);font-size:.8rem;line-height:1.4">560 tests &mdash; agent runs after every change, catches regressions instantly</div>
       </div>
     </div>
   </div>
@@ -314,11 +293,11 @@ class CdemoGeneralInfo:
   <div class="final-badge">&#x2714; Proven Behavioral Equivalence</div>
   <h2>Every reimplementation is <span class="grad">verified</span> against the original COBOL &mdash; field by field, deterministically.</h2>
   <div class="final-nums">
-    <div class="final-num"><div class="v grad-green">906</div><div class="l">programs ingested</div></div>
-    <div class="final-num"><div class="v grad-green">222K</div><div class="l">lines analyzed</div></div>
-    <div class="final-num"><div class="v grad-green">625</div><div class="l">passing tests</div></div>
+    <div class="final-num"><div class="v grad-green">273</div><div class="l">programs ingested</div></div>
+    <div class="final-num"><div class="v grad-green">96K</div><div class="l">lines analyzed</div></div>
+    <div class="final-num"><div class="v grad-green">560</div><div class="l">passing tests</div></div>
     <div class="final-num"><div class="v grad-green">0</div><div class="l">mismatches</div></div>
-    <div class="final-num"><div class="v grad-green">40</div><div class="l">Python modules</div></div>
+    <div class="final-num"><div class="v grad-green">37</div><div class="l">Python modules</div></div>
   </div>
   <a href="https://github.com/billybillymc/masquerade-cobol" target="_blank" class="gh-btn">&#x2197; View on GitHub</a>
 </section>
@@ -355,13 +334,6 @@ const iq = [
   {id:'IQ-05',name:'Behavioral Tests',tests:10},{id:'IQ-06',name:'Repository Mapping',tests:14},
   {id:'IQ-07',name:'API Contracts',tests:15},{id:'IQ-08',name:'Multi-Language',tests:27},
   {id:'IQ-09',name:'Diff Harness',tests:27},{id:'IQ-10',name:'Symbol Table',tests:12},
-];
-
-const nist = [
-  {mod:'NC',pass:4532,fail:35},{mod:'IF',pass:797,fail:0},{mod:'ST',pass:239,fail:0},
-  {mod:'IC',pass:175,fail:1},{mod:'SQ',pass:587,fail:5},{mod:'IX',pass:458,fail:21},
-  {mod:'RL',pass:235,fail:0},{mod:'SM',pass:282,fail:1},{mod:'SG',pass:325,fail:0},
-  {mod:'DB',pass:56,fail:47},{mod:'OB',pass:27,fail:1},{mod:'RW',pass:44,fail:0},
 ];
 
 const codebases = [
@@ -401,25 +373,7 @@ const codebases = [
      {name:'Wrong Year',input:'dan=2019',exp:'CR=12 RC=02'},
      {name:'Empty Input',input:'All blank',exp:'CR=12'},
    ]},
-  {name:'Rocket BankDemo',desc:'Rocket Enterprise Server banking demo \u2014 CICS online + JCL batch, VSAM &amp; PostgreSQL back-ends',programs:81,lines:'19K',type:'CICS + JCL',
-   reimpl:'UDATECNV \u2192 udatecnv.py (95 lines) &bull; UTWOSCMP \u2192 utwoscmp.py (8 lines)',
-   scenarios:[
-     {name:'ISO \u2192 DD.MMM.YY (UDATECNV)',input:"type='0' data='2024-03-15' out='1'",exp:"'15.Mar.24'"},
-     {name:'YYYYMMDD \u2192 DD.MMM.YYYY',input:"type='1' data='19851106' out='2'",exp:"'06.Nov.1985'"},
-     {name:'YYMMDD century window',input:"type='2' data='490601' out='2'",exp:"'01.Jun.2049'"},
-     {name:'Julian YYDDD leap day',input:"type='3' data='24060' out='2'",exp:"'29.Feb.2024'"},
-     {name:"One's complement (UTWOSCMP)",input:'\\x01\\x7f\\x80\\xfe',exp:'\\xfe\\x80\\x7f\\x01'},
-   ]},
-  {name:'Legacy Benchmark',desc:'Investment portfolio management \u2014 production-grade LLM modernization challenge suite',programs:42,lines:'7K',type:'Batch + Online',
-   reimpl:'RTNCDE00 \u2192 rtncde00.py (75 lines) \u2014 return code state machine + DB2 stub',
-   scenarios:[
-     {name:'Initialize (RC=I)',input:'request=I',exp:'current=0, highest=0, status=S'},
-     {name:'Set code 0 (RC=S)',input:'new_code=0',exp:'status=S (success)'},
-     {name:'Set code 4 (RC=S)',input:'new_code=4',exp:'status=W (warning)'},
-     {name:'Set code 7 (RC=S)',input:'new_code=7',exp:'status=E (error)'},
-     {name:'Get after set (RC=G)',input:'after set new_code=6',exp:'return_value=6, return_status=E'},
-   ]},
-  {name:'CobolCraft',desc:'A full Minecraft 1.21.4 server written entirely in COBOL \u2014 terrain, multiplayer, crafting, physics',programs:206,lines:'25K',type:'Network Server',
+  {name:'CobolCraft',desc:'A full Minecraft 1.21.4 server written entirely in COBOL \u2014 terrain, multiplayer, crafting, physics',programs:206,lines:'30K',type:'Network Server',
    reimpl:'uuid.cob \u2192 cc_uuid.py (35 lines) &bull; json-parse.cob \u2192 cc_json_parse.py (210 lines)',
    scenarios:[
      {name:'UUID-ToString (nil)',input:'\\x00 \u00d7 16',exp:'00000000-0000-0000-0000-000000000000'},
@@ -444,18 +398,6 @@ document.getElementById('iq-grid').innerHTML = iq.map((item,i) =>
     <div class="iq-name">${item.name}</div>
     <div class="iq-tests">${item.tests} tests</div>
   </div>`).join('');
-
-// ── Render NIST Chart ──
-const maxNist = Math.max(...nist.map(n=>n.pass));
-document.getElementById('nist-chart').innerHTML = nist.map(n => {
-  const ph = Math.max(2, (n.pass/maxNist)*180);
-  const fh = n.fail > 0 ? Math.max(2, (n.fail/maxNist)*180) : 0;
-  return `<div class="nist-col">
-    <div class="nist-bar pass" style="height:${ph}px" title="${n.pass} PASS"></div>
-    ${fh > 0 ? `<div class="nist-bar fail" style="height:${fh}px" title="${n.fail} FAIL"></div>` : ''}
-    <div class="nist-label">${n.mod}</div>
-  </div>`;
-}).join('');
 
 // ── Render Proof Tabs ──
 let activeTab = 0;

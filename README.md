@@ -12,7 +12,7 @@ Masquerade is built to be operated by a coding agent (Claude Code, Cursor, Copil
 - **`graph.json`** — dependency graph an agent uses to trace impact and find reimplementation targets
 - **Spec-driven workflow** — every feature has a specification in `specs/` that an agent follows as a contract
 - **`READ_THIS_LAST.md`** — a step-by-step workflow guide that works as an agent prompt: analyze → explore → pick target → generate skeleton → reimplement → test → verify
-- **Deterministic test suites** — 625 tests that an agent runs after every change to catch regressions immediately
+- **Deterministic test suites** — 560 tests that an agent runs after every change to catch regressions immediately
 - **Evidence contract** — every claim is anchored to source line spans, giving agents grounded context instead of hallucination-prone summaries
 
 The typical workflow: point your coding agent at a COBOL codebase, tell it to follow the guide, and it will analyze the system, pick reimplementation targets, generate skeletons, write Python reimplementations, and verify them — with you reviewing at each step.
@@ -179,22 +179,19 @@ print(render_report_text(report))
 
 ## Included Test Codebases
 
-Masquerade ships with 8 real COBOL codebases (906 programs, 222K lines of code) for testing and learning:
+Masquerade ships with 5 real COBOL codebases (273 programs, 96K lines of code) for testing and learning:
 
 | Codebase | What it is | Programs | Lines |
 |----------|-----------|----------|-------|
-| **carddemo** | AWS CardDemo — credit card management with CICS online + batch processing | 31 | 30K |
-| **cbsa** | IBM CICS Banking Sample — accounts, customers, debit/credit, transfers | 29 | 25K |
-| **nist-cobol85** | Official NIST COBOL-85 compiler validation suite (98.6% parse rate) | 414 | 89K |
+| **carddemo** | AWS CardDemo — credit card management with CICS online + batch processing | 31 | 33K |
+| **cbsa** | IBM CICS Banking Sample — accounts, customers, debit/credit, transfers | 29 | 27K |
 | **star-trek** | 1979 Star Trek game — deep GO TO nesting, PERFORM VARYING | 1 | 1.6K |
-| **taxe-fonciere** | French property tax calculation — EVALUATE ALSO, complex fee logic | 6 | 3K |
-| **bankdemo** | Rocket Enterprise Server banking demo — CICS online + JCL batch | 81 | 19K |
-| **legacy-benchmark** | Investment portfolio management — designed to benchmark modernization tools | 42 | 7K |
-| **cobolcraft** | A Minecraft 1.21.4 server written entirely in COBOL | 206 | 25K |
+| **taxe-fonciere** | French property tax calculation — EVALUATE ALSO, complex fee logic | 6 | 4.5K |
+| **cobolcraft** | A Minecraft 1.21.4 server written entirely in COBOL | 206 | 30K |
 
 ## Included Python Reimplementations
 
-40 COBOL programs have been fully reimplemented in Python with differential test suites in `pipeline/reimpl/`. These serve as reference examples for how to approach reimplementation:
+37 COBOL programs have been fully reimplemented in Python with differential test suites in `pipeline/reimpl/`. These serve as reference examples for how to approach reimplementation:
 
 | Codebase | Reimplemented | What's covered |
 |----------|--------------|----------------|
@@ -202,8 +199,6 @@ Masquerade ships with 8 real COBOL codebases (906 programs, 222K lines of code) 
 | **IBM CBSA** | DBCRFUN | Debit/credit engine |
 | **Star Trek** | Full game | Complete 1,615-line game logic |
 | **Taxe Fonciere** | EFITA3B8 | Full property tax fee calculation (669 lines) |
-| **Rocket BankDemo** | UDATECNV, UTWOSCMP | Date conversion, byte complement utilities |
-| **Legacy Benchmark** | RTNCDE00 | Return code state machine |
 | **CobolCraft** | uuid, json-parse | UUID handling and full JSON token parser |
 
 ## Running Tests
@@ -211,15 +206,15 @@ Masquerade ships with 8 real COBOL codebases (906 programs, 222K lines of code) 
 ```bash
 # All pipeline tests (parser, graph, specs, skeletons, CobolDecimal, etc.)
 python -m pytest pipeline/tests/ -v
-# 512 tests
+# 502 tests
 
 # All reimplementation differential tests
 python -m pytest pipeline/reimpl/ -v
-# 113 tests
+# 58 tests
 
 # Everything
 python -m pytest pipeline/tests/ pipeline/reimpl/ -v
-# 625 tests, all passing
+# 560 tests, all passing
 ```
 
 ## Architecture
@@ -338,9 +333,9 @@ masquerade-cobol/
       chunker.py               # Code chunking for embeddings
       embedder.py              # OpenAI embedding generation
       uploader.py              # Pinecone vector upload
-    tests/                     # 512 pipeline tests
-    reimpl/                    # 40 reimplemented programs + 113 tests
-  test-codebases/              # 8 real COBOL systems (906 programs, 222K LOC)
+    tests/                     # 502 pipeline tests
+    reimpl/                    # 37 reimplemented programs + 58 tests
+  test-codebases/              # 5 real COBOL systems (273 programs, 96K LOC)
   specs/                       # Feature specifications (agent-consumable contracts)
   docs/
     FEATURES.md                # Detailed feature documentation

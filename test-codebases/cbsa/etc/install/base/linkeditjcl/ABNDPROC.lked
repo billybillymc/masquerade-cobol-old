@@ -1,0 +1,6 @@
+*
+* Copyright IBM Corp. 2023
+*
+    INCLUDE CBSAMOD(ABNDPROC)
+    ENTRY ABNDPROC
+    NAME ABNDPROC(R)

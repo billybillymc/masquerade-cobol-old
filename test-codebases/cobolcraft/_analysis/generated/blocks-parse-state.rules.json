@@ -1,0 +1,86 @@
+[
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R1",
+    "claim": "When the state ID is out of range This",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=406, end_line=429, code_text='', block_type='IF')"
+    ],
+    "confidence": "HIGH",
+    "rule_type": "CALCULATION",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R2",
+    "claim": "Iterates until PROPERTY-IN",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=452, end_line=478, code_text='', block_type='PERFORM_INLINE')"
+    ],
+    "confidence": "MEDIUM",
+    "rule_type": "CALCULATION",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": "Loop body details not fully analyzed"
+  },
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R3",
+    "claim": "When LK-STATE-ID >= BLOCK-ENTRY-MINIMUM-STATE-ID (IDX) AND LK-STATE",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=488, end_line=491, code_text='', block_type='IF')"
+    ],
+    "confidence": "HIGH",
+    "rule_type": "CALCULATION",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R4",
+    "claim": "When two block state IDs belong to the same block type ICATION DIVISION -ID Blocks-CompareBlockType VISION",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=499, end_line=503, code_text='', block_type='IF')"
+    ],
+    "confidence": "HIGH",
+    "rule_type": "STATE_TRANSITION",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R5",
+    "claim": "When LK-STATE-ID-1 >= BLOCK-ENTRY-MINIMUM-STATE-ID (BLOCK-INDEX) AN",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=524, end_line=529, code_text='', block_type='IF')"
+    ],
+    "confidence": "HIGH",
+    "rule_type": "THRESHOLD",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R6",
+    "claim": "When LK-PROPERTY-NAME = LK-STATE-PROPERTY-NAME (PROPERTY-INDEX)",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=550, end_line=553, code_text='', block_type='IF')"
+    ],
+    "confidence": "HIGH",
+    "rule_type": "STATE_TRANSITION",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "Blocks-Parse-State.VISION.R7",
+    "claim": "When LK-PROPERTY-NAME = LK-STATE-PROPERTY-NAME (PROPERTY-INDEX)",
+    "evidence": [
+      "Evidence(file='..\\\\test-codebases\\\\cobolcraft\\\\src\\\\blocks.cob', start_line=573, end_line=576, code_text='', block_type='IF')"
+    ],
+    "confidence": "HIGH",
+    "rule_type": "STATE_TRANSITION",
+    "paragraph": "VISION",
+    "program": "Blocks-Parse-State",
+    "uncertainty": ""
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "rule_id": "DELACC.A010.R1",
+    "claim": "When DELACC-DEL-SUCCESS = 'Y'",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\DELACC.cbl",
+        "start_line": 218,
+        "end_line": 224,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "A010",
+    "program": "DELACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "DELACC.RAD010.R2",
+    "claim": "When SQLCODE NOT = 0 AND SQLCODE NOT = +100",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\DELACC.cbl",
+        "start_line": 282,
+        "end_line": 343,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "RAD010",
+    "program": "DELACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "DELACC.RAD010.R3",
+    "claim": "When SQLCODE = +100",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\DELACC.cbl",
+        "start_line": 350,
+        "end_line": 357,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "RAD010",
+    "program": "DELACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "DELACC.RAD010.R4",
+    "claim": "When SQLCODE = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\DELACC.cbl",
+        "start_line": 363,
+        "end_line": 367,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "RAD010",
+    "program": "DELACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "DELACC.DADB010.R5",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\DELACC.cbl",
+        "start_line": 444,
+        "end_line": 448,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "DADB010",
+    "program": "DELACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "DELACC.WPD010.R6",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\DELACC.cbl",
+        "start_line": 552,
+        "end_line": 616,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "WPD010",
+    "program": "DELACC",
+    "uncertainty": ""
+  }
+]

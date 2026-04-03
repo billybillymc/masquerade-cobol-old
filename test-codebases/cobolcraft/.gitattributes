@@ -1,0 +1,12 @@
+* text=auto eol=lf
+*.txt text
+*.md text
+*.json text
+*.cob text
+*.cpy text
+*.c text
+*.cpp text
+*.h text
+*.hpp text
+*.sh text
+*.nbt binary

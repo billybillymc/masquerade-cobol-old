@@ -197,23 +197,6 @@ body {
 .iq-name { font-weight: 600; font-size: 0.95rem; }
 .iq-tests { color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem; }
 
-/* ── NIST ── */
-.nist-chart {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-.nist-note {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
 /* ── Proof Section ── */
 .proof-section {
   background: linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.05) 50%, transparent 100%);

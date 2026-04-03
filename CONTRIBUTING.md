@@ -6,7 +6,7 @@
 git clone https://github.com/billybillymc/masquerade-cobol.git
 cd masquerade-cobol
 pip install -r pipeline/requirements.txt
-python -m pytest pipeline/tests/ pipeline/reimpl/ -v  # should be 625 passing
+python -m pytest pipeline/tests/ pipeline/reimpl/ -v  # should be 560 passing
 ```
 
 Requires Python 3.11+.
@@ -22,7 +22,7 @@ COHERE_API_KEY=...        # Cohere reranking (optional)
 
 ## Working with a Coding Agent
 
-This repo is designed to be operated by a coding agent (Claude Code, Cursor, etc.). Point your agent at `READ_THIS_LAST.md` — it's a step-by-step workflow guide that works as an agent prompt. The structured JSON artifacts, spec contracts in `specs/`, and 625 deterministic tests make agent-driven reimplementation effective.
+This repo is designed to be operated by a coding agent (Claude Code, Cursor, etc.). Point your agent at `READ_THIS_LAST.md` — it's a step-by-step workflow guide that works as an agent prompt. The structured JSON artifacts, spec contracts in `specs/`, and 560 deterministic tests make agent-driven reimplementation effective.
 
 ## Ways to Contribute
 

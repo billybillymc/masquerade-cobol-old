@@ -1,0 +1,61 @@
+{
+  "node_counts": {
+    "PROGRAM": 24,
+    "PARAGRAPH": 23,
+    "COPYBOOK": 29,
+    "FILE": 1
+  },
+  "edge_counts": {
+    "CALL": 40,
+    "DATA_PASSES": 1796,
+    "COPIES": 42,
+    "READS_FILE": 1,
+    "PERFORMS": 16
+  },
+  "total_programs": 6,
+  "total_loc": 2306,
+  "total_code_lines": 1391,
+  "total_comment_lines": 670,
+  "total_paragraphs": 23,
+  "total_copybook_refs": 42,
+  "total_inter_program_calls": 40,
+  "total_cics_operations": 0,
+  "programs_online_cics": 0,
+  "programs_batch": 6,
+  "total_data_flows": 27,
+  "unresolved_copybooks": [
+    "XB30",
+    "XB35",
+    "XB36",
+    "XB37",
+    "XB38",
+    "XB40",
+    "XB41",
+    "XB45",
+    "XB46",
+    "XB47",
+    "XB50",
+    "XB51",
+    "XTAU2"
+  ],
+  "unresolved_calls": [
+    "CBLTDLI",
+    "EFITA3B0",
+    "EFITA3B1",
+    "EFITA3B2",
+    "EFITA3B3",
+    "EFITA3B4",
+    "EFITA3B5",
+    "EFITA3B6",
+    "EFITA3B7",
+    "EFITA3N0",
+    "EFITA3N1",
+    "EFITA3N2",
+    "EFITA3N3",
+    "EFITA3N4",
+    "EFITA3N5",
+    "EFITA3N6",
+    "EFITA3N7",
+    "FMSPCB"
+  ]
+}

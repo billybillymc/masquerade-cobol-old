@@ -1,0 +1,8 @@
+//*
+//* Copyright IBM Corp. 2023
+//*
+//* JCL to compile and link-edit BMS map BNK1DAM
+// JCLLIB ORDER=CBSA.CICSBSA.BUILDJCL
+// INCLUDE MEMBER=DEFAULT
+//BNK1DAM  EXEC PROC=MAPGEN,MEMBER=BNK1DAM,RMODE=ANY,
+//         OUTC='*'

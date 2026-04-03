@@ -1,0 +1,218 @@
+[
+  {
+    "rule_id": "XFRFUN.A010.R1",
+    "claim": "When COMM-AMT <= ZERO",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 289,
+        "end_line": 293,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "CALCULATION",
+    "paragraph": "A010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.UAD010.R2",
+    "claim": "When COMM-FACCNO = COMM-TACCNO AND COMM-FSCODE = COMM-TSCODE",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 316,
+        "end_line": 376,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "UAD010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.UAD010.R3",
+    "claim": "When COMM-FACCNO < COMM-TACCNO",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 378,
+        "end_line": 904,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "UAD010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.UADF010.R4",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 964,
+        "end_line": 980,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "VALIDATION",
+    "paragraph": "UADF010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.UADF010.R5",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1014,
+        "end_line": 1027,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "VALIDATION",
+    "paragraph": "UADF010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.UADT010.R6",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1091,
+        "end_line": 1559,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "UADT010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.WTPD010.R7",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1646,
+        "end_line": 1720,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "WTPD010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.CFSDD010.R8",
+    "claim": "Routes based on SQLCODE with 2 branches: When SQLCODE = 923, MOVE 'DB2 Connection lost ' TO STORM-DRAIN-CONDITION; When SQLCODE has no matching case (OTHER), MOVE 'Not Storm Drain     ' TO STORM-DRAIN-CONDITION",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1744,
+        "end_line": 1752,
+        "code_text": "",
+        "block_type": "EVALUATE"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "CFSDD010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.CFSDD010.R9",
+    "claim": "When STORM-DRAIN-CONDITION NOT EQUAL 'Not Storm Drain     '",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1754,
+        "end_line": 1763,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "VALIDATION",
+    "paragraph": "CFSDD010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.AH010.R10",
+    "claim": "Routes based on MY-ABEND-CODE with 2 branches: When MY-ABEND-CODE = 'AD2Z', MOVE SQLCODE TO SQLCODE-DISPLAY; When MY-ABEND-CODE = 'AFCR', 'AFCS', 'AFCT', MOVE 'Y' TO WS-STORM-DRAIN; EXEC CICS SYNCPOINT ROLLBACK RESP (WS-CICS-RESP) RESP2 (WS-CICS-RESP2) END-EXEC; IF WS-CICS-RESP NOT = DFHRESP (NORMAL)",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1786,
+        "end_line": 1895,
+        "code_text": "",
+        "block_type": "EVALUATE"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "AH010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.AH010.R11",
+    "claim": "When WS-CICS-RESP NOT = DFHRESP (NORMAL)",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1821,
+        "end_line": 1887,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "AH010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "XFRFUN.AH010.R12",
+    "claim": "When WS-STORM-DRAIN = 'N'",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\XFRFUN.cbl",
+        "start_line": 1897,
+        "end_line": 1903,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "AH010",
+    "program": "XFRFUN",
+    "uncertainty": ""
+  }
+]

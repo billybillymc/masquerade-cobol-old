@@ -1,9 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from 'recharts';
-import {
   Terminal, Cpu, FileCode, GitBranch, Shield, Zap, CheckCircle2,
   ArrowRight, Code2, Database, Globe, Layers, Search,
   FlaskConical, Brain, ChevronDown, ExternalLink, Award,
@@ -82,20 +79,6 @@ const CODEBASES = [
   },
 ];
 
-const NIST_DATA = [
-  { module: 'NC', pass: 4532, fail: 35 },
-  { module: 'IF', pass: 797, fail: 0 },
-  { module: 'ST', pass: 239, fail: 0 },
-  { module: 'IC', pass: 175, fail: 1 },
-  { module: 'SQ', pass: 587, fail: 5 },
-  { module: 'IX', pass: 458, fail: 21 },
-  { module: 'RL', pass: 235, fail: 0 },
-  { module: 'SM', pass: 282, fail: 1 },
-  { module: 'SG', pass: 325, fail: 0 },
-  { module: 'DB', pass: 56, fail: 47 },
-  { module: 'OB', pass: 27, fail: 1 },
-  { module: 'RW', pass: 44, fail: 0 },
-];
 
 function Section({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const ref = useRef(null);
@@ -231,29 +214,6 @@ function App() {
             </motion.div>
           ))}
         </div>
-      </Section>
-
-      {/* ── NIST ── */}
-      <Section>
-        <h2 className="section-title">NIST COBOL-85 Validation</h2>
-        <p className="section-desc">414 programs &bull; 89,427 lines &bull; 7,757 PASS / 111 FAIL &bull; 98.6% pass rate</p>
-        <div className="nist-chart">
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={NIST_DATA} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-              <XAxis dataKey="module" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 8 }} />
-              <Bar dataKey="pass" fill="#4ade80" name="PASS" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="fail" fill="#f43f5e" name="FAIL" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-        <p className="nist-note">
-          All 111 failures: debugging declaratives (obsolete), implementor-defined switches,
-          file status edge cases. Zero failures in arithmetic, control flow, data movement,
-          string handling, sort/merge, or inter-program calls.
-        </p>
       </Section>
 
       {/* ── THE PROOF ── */}

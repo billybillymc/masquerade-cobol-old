@@ -1,0 +1,254 @@
+[
+  {
+    "rule_id": "CREACC.P010.R1",
+    "claim": "When EIBRESP IS NOT EQUAL TO DFHRESP (NORMAL) OR INQCUST-INQ-SUCCESS IS NOT EQUAL TO 'Y'",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 314,
+        "end_line": 322,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "P010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.P010.R2",
+    "claim": "When WS-CICS-RESP IS NOT EQUAL TO DFHRESP (NORMAL)",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 329,
+        "end_line": 336,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "P010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.P010.R3",
+    "claim": "When COMM-SUCCESS IN INQACCCU-COMMAREA = 'N'",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 338,
+        "end_line": 344,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "VALIDATION",
+    "paragraph": "P010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.P010.R4",
+    "claim": "When NUMBER-OF-ACCOUNTS IN INQACCCU-COMMAREA > 9",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 347,
+        "end_line": 352,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "P010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.P010.R5",
+    "claim": "When COMM-SUCCESS OF DFHCOMMAREA = 'N'",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 359,
+        "end_line": 361,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "P010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.ENC010.R6",
+    "claim": "When WS-CICS-RESP NOT = DFHRESP (NORMAL)",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 397,
+        "end_line": 401,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "ENC010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.DNC010.R7",
+    "claim": "When WS-CICS-RESP NOT = DFHRESP (NORMAL)",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 419,
+        "end_line": 423,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "DNC010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.FNA010.R8",
+    "claim": "When SQLCODE IS NOT EQUAL TO ZERO",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 455,
+        "end_line": 600,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "FNA010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.FNA010.R9",
+    "claim": "When SQLCODE IS NOT EQUAL TO ZERO",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 622,
+        "end_line": 765,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "FNA010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.WAD010.R10",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 859,
+        "end_line": 867,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "DATA_TRANSFORM",
+    "paragraph": "WAD010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.WPD010.R11",
+    "claim": "When SQLCODE NOT = 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 999,
+        "end_line": 1062,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "WPD010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.CD010.R12",
+    "claim": "Routes based on WS-ORIG-DATE-MM with 3 branches: When WS-ORIG-DATE-MM = 1, 3, 5, 7, 8, 10, 12, execute statements; When WS-ORIG-DATE-MM = 9, 4, 6, 11, execute statements; When WS-ORIG-DATE-MM = 2, IF LEAP-YEAR = ZERO",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 1137,
+        "end_line": 1171,
+        "code_text": "",
+        "block_type": "EVALUATE"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "CD010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.CD010.R13",
+    "claim": "When LEAP-YEAR = ZERO \u2192 When LEAP-YEAR > 0",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 1156,
+        "end_line": 1169,
+        "code_text": "",
+        "block_type": "IF"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "CALCULATION",
+    "paragraph": "CD010",
+    "program": "CREACC",
+    "uncertainty": ""
+  },
+  {
+    "rule_id": "CREACC.ATC010.R14",
+    "claim": "Routes based on TRUE with 2 branches: When TRUE = COMM-ACC-TYPE IN DFHCOMMAREA (1:3) = 'ISA', COMM-ACC-TYPE IN DFHCOMMAREA (1:8) = 'MORTGAGE', COMM-ACC-TYPE IN DFHCOMMAREA (1:6) = 'SAVING', COMM-ACC-TYPE IN DFHCOMMAREA (1:7) = 'CURRENT', COMM-ACC-TYPE IN DFHCOMMAREA (1:4) = 'LOAN', MOVE 'Y' TO COMM-SUCCESS OF DFHCOMMAREA; When TRUE has no matching case (OTHER), MOVE 'N' TO COMM-SUCCESS OF DFHCOMMAREA; MOVE 'A' TO COMM-FAIL-CODE IN DFHCOMMAREA",
+    "evidence": [
+      {
+        "file": "..\\test-codebases\\cbsa\\src\\base\\cobol_src\\CREACC.cbl",
+        "start_line": 1215,
+        "end_line": 1225,
+        "code_text": "",
+        "block_type": "EVALUATE"
+      }
+    ],
+    "confidence": "HIGH",
+    "rule_type": "ROUTING",
+    "paragraph": "ATC010",
+    "program": "CREACC",
+    "uncertainty": ""
+  }
+]

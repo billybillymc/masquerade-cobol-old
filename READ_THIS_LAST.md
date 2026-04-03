@@ -266,8 +266,6 @@ Look at `pipeline/reimpl/` for 40 working examples across 7 codebases. Good star
 
 | Program | File | Why it's a good example |
 |---------|------|------------------------|
-| UDATECNV | `udatecnv.py` | Simple utility: date format conversion, clear inputs/outputs |
-| RTNCDE00 | `rtncde00.py` | State machine: return code routing with branching logic |
 | cc_uuid | `cc_uuid.py` | String processing: UUID formatting, no CICS dependency |
 | DBCRFUN | `cbsa_dbcrfun.py` | Calculation: debit/credit engine with CobolDecimal arithmetic |
 | EFITA3B8 | `efita3b8.py` | Complex logic: French property tax with nested EVALUATE ALSO |

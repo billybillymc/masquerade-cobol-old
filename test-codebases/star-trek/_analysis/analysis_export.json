@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "codebase": "star-trek",
+    "generator": "Masquerade COBOL Intelligence Engine"
+  },
+  "summary": {
+    "total_programs": 1,
+    "total_loc": 1581,
+    "total_code_lines": 1400,
+    "cics_programs": 0,
+    "batch_programs": 1,
+    "total_copybooks": 0,
+    "total_edges": 145
+  },
+  "effort_estimate": {
+    "total_programs": 1,
+    "total_loc": 1400,
+    "total_effort_days": 8.4,
+    "total_effort_weeks": 1.7,
+    "total_effort_months": 0.4,
+    "batch_effort_days": 8.4,
+    "cics_effort_days": 0,
+    "high_risk_count": 0,
+    "low_risk_count": 0,
+    "dead_code_loc": 1400,
+    "quick_win_count": 0
+  },
+  "migration_waves": [
+    {
+      "name": "Wave 1: Quick Wins",
+      "program_count": 0,
+      "effort_days": 0,
+      "programs": []
+    },
+    {
+      "name": "Wave 2: Core Migration",
+      "program_count": 1,
+      "effort_days": 8.4,
+      "programs": [
+        "STAR_TREK"
+      ]
+    },
+    {
+      "name": "Wave 3: Complex Programs",
+      "program_count": 0,
+      "effort_days": 0,
+      "programs": []
+    }
+  ],
+  "programs": [
+    {
+      "program": "STAR_TREK",
+      "type": "Batch",
+      "code_lines": 1400,
+      "total_lines": 1581,
+      "paragraphs": 90,
+      "callers": 0,
+      "callees": 0,
+      "copybooks": 0,
+      "readiness_score": 80.0,
+      "isolation": 100,
+      "simplicity": 20,
+      "dependency_clarity": 100,
+      "testability": 100,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 8.4,
+      "risk_level": "MEDIUM",
+      "migration_wave": "Wave 2: Core Migration"
+    }
+  ],
+  "dead_code": {
+    "unreachable_paragraphs": 0,
+    "orphan_programs": [
+      "STAR_TREK"
+    ],
+    "unused_copybooks": []
+  }
+}

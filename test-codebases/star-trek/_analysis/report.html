@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Masquerade Analysis Report - star-trek</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.5; }
+  header { background: #161b22; border-bottom: 1px solid #30363d; padding: 20px 32px; }
+  header h1 { font-size: 22px; color: #58a6ff; }
+  header .subtitle { color: #8b949e; font-size: 13px; margin-top: 4px; }
+  nav { background: #161b22; border-bottom: 1px solid #30363d; padding: 0 32px; display: flex; gap: 0; position: sticky; top: 0; z-index: 10; }
+  nav a { color: #8b949e; text-decoration: none; padding: 10px 16px; font-size: 13px; border-bottom: 2px solid transparent; }
+  nav a:hover { color: #c9d1d9; border-bottom-color: #30363d; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 32px; }
+  section { margin-bottom: 40px; }
+  h2 { font-size: 18px; color: #f0883e; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #21262d; }
+  h3 { font-size: 14px; color: #58a6ff; margin: 20px 0 8px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px 20px; }
+  .card-value { font-size: 28px; font-weight: 700; color: #58a6ff; }
+  .card-label { font-size: 13px; color: #8b949e; margin-top: 2px; }
+  .card-detail { font-size: 11px; color: #484f58; margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  thead th { text-align: left; padding: 8px 10px; color: #8b949e; font-weight: 600; border-bottom: 2px solid #30363d; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tbody td { padding: 6px 10px; border-bottom: 1px solid #21262d; }
+  tbody tr:hover { background: #161b22; }
+  .dim { color: #484f58; }
+  .summary-bar { margin-bottom: 16px; font-size: 14px; }
+  p { margin-bottom: 12px; }
+  footer { text-align: center; padding: 24px; color: #484f58; font-size: 11px; border-top: 1px solid #21262d; margin-top: 40px; }
+  @media print {
+    body { background: white; color: #1f2328; }
+    header, nav { background: white; border-color: #d1d9e0; }
+    header h1 { color: #0969da; }
+    .card { border-color: #d1d9e0; }
+    .card-value { color: #0969da; }
+    nav { position: static; }
+    h2 { color: #bf8700; border-color: #d1d9e0; }
+    h3 { color: #0969da; }
+    tbody td { border-color: #d1d9e0; }
+    thead th { border-color: #d1d9e0; }
+    .dim { color: #656d76; }
+    tbody tr:hover { background: transparent; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Masquerade Analysis Report</h1>
+  <div class="subtitle">star-trek &middot; Generated 2026-03-15 09:37</div>
+</header>
+<nav><a href="#summary">Summary</a><a href="#readiness">Readiness</a><a href="#complexity">Complexity</a><a href="#effort">Effort</a><a href="#dead-code">Dead Code</a><a href="#hotspots">Hotspots</a><a href="#dataflow">Data Flow</a></nav>
+<main>
+
+    <section id="summary">
+      <h2>Executive Summary</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-value">1</div>
+          <div class="card-label">Programs</div>
+          <div class="card-detail">0 CICS &middot; 1 Batch</div>
+        </div>
+        <div class="card">
+          <div class="card-value">1,581</div>
+          <div class="card-label">Total Lines</div>
+          <div class="card-detail">1,400 code &middot; 80 comments</div>
+        </div>
+        <div class="card">
+          <div class="card-value">0</div>
+          <div class="card-label">Copybooks</div>
+          <div class="card-detail">0 shared across programs</div>
+        </div>
+        <div class="card">
+          <div class="card-value">145</div>
+          <div class="card-label">Dependencies</div>
+          <div class="card-detail">145 PERFORMS</div>
+        </div>
+        <div class="card">
+          <div class="card-value">1</div>
+          <div class="card-label">Components</div>
+          <div class="card-detail">Largest: 1 programs</div>
+        </div>
+        <div class="card">
+          <div class="card-value">90</div>
+          <div class="card-label">Paragraphs</div>
+          <div class="card-detail">0 potentially dead</div>
+        </div>
+      </div>
+    </section>
+    <section id="readiness">
+      <h2>Reimplementation Readiness</h2>
+      <div class="summary-bar">
+        <span style="color:#3fb950">1 Good</span> &middot;
+        <span style="color:#d29922">0 Moderate</span> &middot;
+        <span style="color:#f85149">0 Complex</span> &middot;
+        1 total programs
+      </div>
+      <table>
+        <thead><tr>
+          <th>Program</th><th>Score</th><th></th><th>Iso</th><th>Sim</th><th>Dep</th><th>Test</th><th>LOC</th><th>Type</th><th>Grade</th>
+        </tr></thead>
+        <tbody><tr>
+          <td><strong>STAR_TREK</strong></td>
+          <td style="color:#3fb950;font-weight:600">80</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:80.0%;height:100%"></div></div></td>
+          <td>100</td>
+          <td>20</td>
+          <td>100</td>
+          <td>100</td>
+          <td>1400</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr></tbody>
+      </table>
+    </section>
+    <section id="effort">
+      <h2>Migration Effort Estimate</h2>
+      <div class="grid-3">
+        <div class="card"><div class="card-value">8</div><div class="card-label">Person-Days Total</div><div class="card-detail">1.7 weeks / 0.4 months</div></div>
+        <div class="card"><div class="card-value">8 / 0</div><div class="card-label">Batch / CICS Days</div></div>
+        <div class="card"><div class="card-value" style="color:#3fb950">0</div><div class="card-label">Quick Wins</div><div class="card-detail">0 low risk, 0 high risk</div></div>
+      </div>
+      <p class="dim">Covers analysis + design + coding + unit testing. Does not include integration testing, UAT, data migration, or deployment.</p>
+      <h3>Migration Waves</h3>
+      <table><thead><tr><th>Wave</th><th>Programs</th><th>Days</th><th>Programs</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Wave 2: Core Migration</strong></td>
+          <td>1</td>
+          <td>8</td>
+          <td class="dim">STAR_TREK</td>
+        </tr></tbody></table>
+      <h3>Per-Program Breakdown</h3>
+      <table><thead><tr><th>Program</th><th>LOC</th><th>Type</th><th>Ready</th><th>Days</th><th>Risk</th><th>Notes</th></tr></thead>
+      <tbody><tr>
+          <td><strong>STAR_TREK</strong></td>
+          <td>1400</td>
+          <td>Batch</td>
+          <td>80</td>
+          <td><strong>8.4</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr></tbody></table>
+    </section>
+    <section id="dead-code">
+      <h2>Dead Code Analysis</h2>
+      <div class="grid-3">
+        <div class="card"><div class="card-value" style="color:#f85149">0</div><div class="card-label">Unreachable Paragraphs</div><div class="card-detail">0.0% of 90</div></div>
+        <div class="card"><div class="card-value">1</div><div class="card-label">Orphan Programs</div><div class="card-detail">No callers found</div></div>
+        <div class="card"><div class="card-value">0</div><div class="card-label">Unused Copybooks</div><div class="card-detail">Not COPY'd by any program</div></div>
+      </div>
+      
+      <h3>Orphan Programs (no callers)</h3><p class='dim'>May be JCL/CICS entry points or truly unused.</p><table><thead><tr><th>Program</th><th>LOC</th><th>Type</th><th>Callees</th></tr></thead><tbody><tr>
+          <td><strong>STAR_TREK</strong></td>
+          <td>1400</td>
+          <td>Batch</td>
+          <td class="dim">(leaf)</td>
+        </tr></tbody></table>
+    </section>
+        <section id="hotspots">
+          <h2>Hotspot Programs (Change Risk)</h2>
+          <table><thead><tr><th>Program</th><th>Score</th><th></th><th>Callers</th><th>Callees</th><th>Copybooks</th></tr></thead>
+          <tbody><tr>
+          <td><strong>STAR_TREK</strong></td>
+          <td>0</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:0%;height:100%"></div></div></td>
+          <td>0</td><td>0</td><td>0</td>
+        </tr></tbody></table>
+        </section>
+        <section id="dataflow">
+          <h2>Data Flow Summary</h2>
+          <p class="dim">169 total data assignments across 1 programs</p>
+          <table><thead><tr><th>Program</th><th>Flows</th><th>Fields Written</th><th>Fields Read</th></tr></thead>
+          <tbody><tr>
+              <td><strong>STAR_TREK</strong></td>
+              <td>169</td>
+              <td>215</td>
+              <td>152</td>
+            </tr></tbody></table>
+        </section>
+</main>
+<footer>Generated by Masquerade COBOL Intelligence Engine &middot; 2026-03-15 09:37</footer>
+</body>
+</html>

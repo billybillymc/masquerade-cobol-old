@@ -1,0 +1,59 @@
+{
+  "node_counts": {
+    "PROGRAM": 60,
+    "COPYBOOK": 68,
+    "PARAGRAPH": 870,
+    "FILE": 47,
+    "MAP": 14
+  },
+  "edge_counts": {
+    "COPIES": 348,
+    "PERFORMS": 946,
+    "CALL": 61,
+    "CICS_IO": 91,
+    "DATA_PASSES": 613,
+    "XCTL": 32,
+    "LINK": 1,
+    "READS_FILE": 54
+  },
+  "total_programs": 44,
+  "total_loc": 30175,
+  "total_code_lines": 22893,
+  "total_comment_lines": 3906,
+  "total_paragraphs": 871,
+  "total_copybook_refs": 348,
+  "total_inter_program_calls": 94,
+  "total_cics_operations": 240,
+  "programs_online_cics": 25,
+  "programs_batch": 19,
+  "total_data_flows": 581,
+  "unresolved_copybooks": [
+    "CMQGMOV",
+    "CMQMDV",
+    "CMQODV",
+    "CMQPMOV",
+    "CMQTML",
+    "CMQV",
+    "DFHAID",
+    "DFHBMSCA",
+    "REPLACING"
+  ],
+  "unresolved_calls": [
+    "CBLTDLI",
+    "CCARD-NEXT-PROG",
+    "CDEMO-ADMIN-OPT-PGMNAME(WS-OPTION",
+    "CDEMO-MENU-OPT-PGMNAME(WS-OPTION",
+    "CDEMO-TO-PROGRAM",
+    "CEE3ABD",
+    "COBDATFT",
+    "LIT-ADDTPGM",
+    "LIT-MENUPGM",
+    "MQCLOSE",
+    "MQGET",
+    "MQOPEN",
+    "MQPUT",
+    "MQPUT1",
+    "MVSWAIT",
+    "WS-PGM-AUTH-FRAUD"
+  ]
+}

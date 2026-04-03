@@ -2,7 +2,6 @@ existing_codebases.md
 .env
 pipeline/.env
 **/.env
-test-codebases/
 spec-kit/
 .claude/
 __pycache__/

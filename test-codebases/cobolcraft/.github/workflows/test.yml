@@ -1,0 +1,50 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        # Ubuntu 24.04 (LTS) has GnuCOBOL 3.1.2, while Ubuntu 25.04 (non-LTS) has GnuCOBOL 3.2.0.
+        image-tag: ["24.04", "25.04"]
+        # Test on both x86 and ARM host architectures.
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ubuntu:${{ matrix.image-tag }}
+    steps:
+      - run: uname -a && dpkg --print-architecture
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install GnuCOBOL
+        run: apt-get update && apt-get install -y gnucobol build-essential zlib1g-dev curl openjdk-21-jre-headless
+
+      - run: cobc --version
+
+      - name: Build
+        run: make --jobs="$(nproc)"
+
+      - name: Run tests
+        shell: bash
+        run: make test
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          set -eo pipefail
+          printf 'stop\n' | make run | tee run.log
+          grep -q 'Done!' run.log
+          grep -q 'Stopping server' run.log

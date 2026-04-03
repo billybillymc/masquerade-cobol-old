@@ -1,0 +1,22 @@
+{
+  "node_counts": {
+    "PROGRAM": 1,
+    "PARAGRAPH": 90
+  },
+  "edge_counts": {
+    "PERFORMS": 145
+  },
+  "total_programs": 1,
+  "total_loc": 1581,
+  "total_code_lines": 1400,
+  "total_comment_lines": 80,
+  "total_paragraphs": 90,
+  "total_copybook_refs": 0,
+  "total_inter_program_calls": 0,
+  "total_cics_operations": 0,
+  "programs_online_cics": 0,
+  "programs_batch": 1,
+  "total_data_flows": 169,
+  "unresolved_copybooks": [],
+  "unresolved_calls": []
+}

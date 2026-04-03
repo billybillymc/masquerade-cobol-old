@@ -101,7 +101,7 @@ The entire pipeline is designed to be operated by a coding agent as effectively 
 
 **Step-by-step workflow guide**: `READ_THIS_LAST.md` reads as an agent prompt: concrete commands, expected outputs, decision criteria for what to pick next. An agent can follow it end-to-end without improvising.
 
-**Deterministic verification**: 625 tests mean an agent can make changes and immediately verify nothing broke. No manual inspection needed between steps.
+**Deterministic verification**: 560 tests mean an agent can make changes and immediately verify nothing broke. No manual inspection needed between steps.
 
 **Evidence contract**: Every claim anchored to source line spans. Agents get grounded context, not summaries they might hallucinate on top of.
 

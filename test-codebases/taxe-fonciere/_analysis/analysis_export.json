@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "codebase": "taxe-fonciere",
+    "generator": "Masquerade COBOL Intelligence Engine"
+  },
+  "summary": {
+    "total_programs": 24,
+    "total_loc": 2306,
+    "total_code_lines": 1391,
+    "cics_programs": 0,
+    "batch_programs": 24,
+    "total_copybooks": 29,
+    "total_edges": 1895
+  },
+  "effort_estimate": {
+    "total_programs": 6,
+    "total_loc": 1391,
+    "total_effort_days": 6.3,
+    "total_effort_weeks": 1.3,
+    "total_effort_months": 0.3,
+    "batch_effort_days": 6.3,
+    "cics_effort_days": 0,
+    "high_risk_count": 0,
+    "low_risk_count": 3,
+    "dead_code_loc": 97,
+    "quick_win_count": 3
+  },
+  "migration_waves": [
+    {
+      "name": "Wave 1: Quick Wins",
+      "program_count": 5,
+      "effort_days": 3.6,
+      "programs": [
+        "EFITAUX2",
+        "CTXTA3B",
+        "CTXTA3N",
+        "EFITA3B8",
+        "EFITA3N8"
+      ]
+    },
+    {
+      "name": "Wave 2: Core Migration",
+      "program_count": 1,
+      "effort_days": 2.7,
+      "programs": [
+        "FMSTAU2"
+      ]
+    },
+    {
+      "name": "Wave 3: Complex Programs",
+      "program_count": 0,
+      "effort_days": 0,
+      "programs": []
+    }
+  ],
+  "programs": [
+    {
+      "program": "EFITAUX2",
+      "type": "Batch",
+      "code_lines": 194,
+      "total_lines": 340,
+      "paragraphs": 5,
+      "callers": 2,
+      "callees": 0,
+      "copybooks": 8,
+      "readiness_score": 79.5,
+      "isolation": 55,
+      "simplicity": 80,
+      "dependency_clarity": 100,
+      "testability": 90,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 0.5,
+      "risk_level": "LOW",
+      "migration_wave": "Wave 1: Quick Wins"
+    },
+    {
+      "program": "EFITA3B8",
+      "type": "Batch",
+      "code_lines": 309,
+      "total_lines": 516,
+      "paragraphs": 0,
+      "callers": 1,
+      "callees": 2,
+      "copybooks": 8,
+      "readiness_score": 77.0,
+      "isolation": 70,
+      "simplicity": 60,
+      "dependency_clarity": 100,
+      "testability": 80,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 0.9,
+      "risk_level": "LOW",
+      "migration_wave": "Wave 1: Quick Wins"
+    },
+    {
+      "program": "EFITA3N8",
+      "type": "Batch",
+      "code_lines": 388,
+      "total_lines": 772,
+      "paragraphs": 0,
+      "callers": 1,
+      "callees": 2,
+      "copybooks": 8,
+      "readiness_score": 77.0,
+      "isolation": 70,
+      "simplicity": 60,
+      "dependency_clarity": 100,
+      "testability": 80,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 1.2,
+      "risk_level": "LOW",
+      "migration_wave": "Wave 1: Quick Wins"
+    },
+    {
+      "program": "CTXTA3B",
+      "type": "Batch",
+      "code_lines": 53,
+      "total_lines": 79,
+      "paragraphs": 1,
+      "callers": 0,
+      "callees": 9,
+      "copybooks": 0,
+      "readiness_score": 69.8,
+      "isolation": 100,
+      "simplicity": 95,
+      "dependency_clarity": 0,
+      "testability": 80,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 0.5,
+      "risk_level": "MEDIUM",
+      "migration_wave": "Wave 1: Quick Wins"
+    },
+    {
+      "program": "CTXTA3N",
+      "type": "Batch",
+      "code_lines": 44,
+      "total_lines": 67,
+      "paragraphs": 1,
+      "callers": 0,
+      "callees": 9,
+      "copybooks": 0,
+      "readiness_score": 69.8,
+      "isolation": 100,
+      "simplicity": 95,
+      "dependency_clarity": 0,
+      "testability": 80,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 0.5,
+      "risk_level": "MEDIUM",
+      "migration_wave": "Wave 1: Quick Wins"
+    },
+    {
+      "program": "FMSTAU2",
+      "type": "Batch",
+      "code_lines": 403,
+      "total_lines": 532,
+      "paragraphs": 16,
+      "callers": 2,
+      "callees": 2,
+      "copybooks": 14,
+      "readiness_score": 45.5,
+      "isolation": 55,
+      "simplicity": 60,
+      "dependency_clarity": 0,
+      "testability": 70,
+      "cyclomatic_complexity": null,
+      "max_nesting": null,
+      "complexity_grade": null,
+      "effort_days": 2.7,
+      "risk_level": "MEDIUM",
+      "migration_wave": "Wave 2: Core Migration"
+    }
+  ],
+  "dead_code": {
+    "unreachable_paragraphs": 0,
+    "orphan_programs": [
+      "CTXTA3B",
+      "CTXTA3N"
+    ],
+    "unused_copybooks": []
+  }
+}

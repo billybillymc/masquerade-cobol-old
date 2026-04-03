@@ -1,0 +1,5 @@
+digraph cobol_calls {
+  rankdir=LR;
+  node [shape=box, style=filled];
+  "STAR_TREK" [fillcolor="#7BC67E", fontcolor="white"];
+}

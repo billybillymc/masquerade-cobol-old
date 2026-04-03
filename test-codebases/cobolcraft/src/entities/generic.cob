@@ -1,0 +1,46 @@
+*> --- RegisterEntity-Generic ---
+IDENTIFICATION DIVISION.
+PROGRAM-ID. RegisterEntity-Generic.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+    01 SERIALIZE-PTR            PROGRAM-POINTER.
+    01 DESERIALIZE-PTR          PROGRAM-POINTER.
+    01 TICK-PTR                 PROGRAM-POINTER.
+    01 REGISTRY-ID              BINARY-LONG UNSIGNED.
+    01 REGISTRY-LENGTH          BINARY-LONG UNSIGNED.
+    01 REGISTRY-ENTRY-ID        BINARY-LONG UNSIGNED.
+
+PROCEDURE DIVISION.
+    SET SERIALIZE-PTR TO ENTRY "EntityBase-Serialize"
+    SET DESERIALIZE-PTR TO ENTRY "EntityBase-Deserialize"
+    SET TICK-PTR TO ENTRY "Callback-Tick"
+
+    CALL "Registries-LookupRegistry" USING "minecraft:entity_type" REGISTRY-ID
+    COPY ASSERT REPLACING COND BY ==REGISTRY-ID > 0==,
+        MSG BY =="RegisterEntity-Generic: Missing entity type registry"==.
+
+    CALL "Registries-EntryCount" USING REGISTRY-ID REGISTRY-LENGTH
+    PERFORM VARYING REGISTRY-ENTRY-ID FROM 0 BY 1 UNTIL REGISTRY-ENTRY-ID >= REGISTRY-LENGTH
+        CALL "SetCallback-EntitySerialize" USING REGISTRY-ENTRY-ID SERIALIZE-PTR
+        CALL "SetCallback-EntityDeserialize" USING REGISTRY-ENTRY-ID DESERIALIZE-PTR
+        CALL "SetCallback-EntityTick" USING REGISTRY-ENTRY-ID TICK-PTR
+    END-PERFORM
+
+    GOBACK.
+
+    *> --- Callback-Tick ---
+    IDENTIFICATION DIVISION.
+    PROGRAM-ID. Callback-Tick.
+
+    DATA DIVISION.
+    LINKAGE SECTION.
+        COPY DD-CALLBACK-ENTITY-TICK.
+
+    PROCEDURE DIVISION USING LK-ENTITY LK-PLAYER-AABBS LK-REMOVE.
+        MOVE 0 TO LK-REMOVE
+        GOBACK.
+
+    END PROGRAM Callback-Tick.
+
+END PROGRAM RegisterEntity-Generic.

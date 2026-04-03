@@ -1,0 +1,3255 @@
+{
+  "nodes": [
+    {
+      "id": "PGM:STAR_TREK",
+      "name": "STAR_TREK",
+      "type": "PROGRAM",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "total_lines": 1581,
+        "code_lines": 1400,
+        "comment_lines": 80,
+        "paragraph_count": 90,
+        "data_flow_count": 169,
+        "author": null
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:0000-PROGRAM-CONTROL",
+      "name": "0000-PROGRAM-CONTROL",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 248,
+        "end_line": 263,
+        "call_count": 0,
+        "perform_count": 3,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:0100-HOUSEKEEPING",
+      "name": "0100-HOUSEKEEPING",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 263,
+        "end_line": 331,
+        "call_count": 0,
+        "perform_count": 3,
+        "cics_count": 0,
+        "data_flow_count": 14
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:0500-PRT-INST",
+      "name": "0500-PRT-INST",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 331,
+        "end_line": 351,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:0550-ADD-INST",
+      "name": "0550-ADD-INST",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 351,
+        "end_line": 362,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1000-MAINLINE",
+      "name": "1000-MAINLINE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 362,
+        "end_line": 370,
+        "call_count": 0,
+        "perform_count": 3,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1100-CHK-GALAXY",
+      "name": "1100-CHK-GALAXY",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 370,
+        "end_line": 390,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1120-RESET",
+      "name": "1120-RESET",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 390,
+        "end_line": 400,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1145-CK-FLAG",
+      "name": "1145-CK-FLAG",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 400,
+        "end_line": 406,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1150-CK-TIME",
+      "name": "1150-CK-TIME",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 406,
+        "end_line": 442,
+        "call_count": 0,
+        "perform_count": 4,
+        "cics_count": 0,
+        "data_flow_count": 5
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1160-DBL-K",
+      "name": "1160-DBL-K",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 442,
+        "end_line": 449,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1170-MOVE-ON-HQ",
+      "name": "1170-MOVE-ON-HQ",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 449,
+        "end_line": 464,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "name": "1200-INITIALIZE-GALAXY",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 464,
+        "end_line": 483,
+        "call_count": 0,
+        "perform_count": 6,
+        "cics_count": 0,
+        "data_flow_count": 5
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1220-ROLL",
+      "name": "1220-ROLL",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 483,
+        "end_line": 489,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "name": "1225-DBL-ROLL",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 489,
+        "end_line": 496,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1230-MOVE-STARS",
+      "name": "1230-MOVE-STARS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 496,
+        "end_line": 501,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1240-MOVE-ROMULONS",
+      "name": "1240-MOVE-ROMULONS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 501,
+        "end_line": 506,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1250-MOVE-KLINGONS",
+      "name": "1250-MOVE-KLINGONS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 506,
+        "end_line": 512,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1260-MOVE-BASE",
+      "name": "1260-MOVE-BASE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 512,
+        "end_line": 518,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1270-MOVE-E",
+      "name": "1270-MOVE-E",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 518,
+        "end_line": 526,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1280-MOVE-HQ",
+      "name": "1280-MOVE-HQ",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 526,
+        "end_line": 534,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:1700-CK-VAR-WARP",
+      "name": "1700-CK-VAR-WARP",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 534,
+        "end_line": 553,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "name": "2000-PROCESS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 553,
+        "end_line": 606,
+        "call_count": 0,
+        "perform_count": 12,
+        "cics_count": 0,
+        "data_flow_count": 5
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3000-COM-FUN",
+      "name": "3000-COM-FUN",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 606,
+        "end_line": 643,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 5
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3010-COM",
+      "name": "3010-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 643,
+        "end_line": 647,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3020-COM",
+      "name": "3020-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 647,
+        "end_line": 651,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3030-COM",
+      "name": "3030-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 651,
+        "end_line": 655,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3040-COM",
+      "name": "3040-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 655,
+        "end_line": 665,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3050-COM",
+      "name": "3050-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 665,
+        "end_line": 669,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:3060-COM",
+      "name": "3060-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 669,
+        "end_line": 690,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "name": "4000-DISPLAY-G",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 690,
+        "end_line": 737,
+        "call_count": 0,
+        "perform_count": 6,
+        "cics_count": 0,
+        "data_flow_count": 9
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:4200-TEST-VAR",
+      "name": "4200-TEST-VAR",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 737,
+        "end_line": 743,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "name": "4500-DISP-HIT",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 743,
+        "end_line": 748,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:4700-DISP-HIT",
+      "name": "4700-DISP-HIT",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 748,
+        "end_line": 753,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:5400-TRANS-BACK",
+      "name": "5400-TRANS-BACK",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 753,
+        "end_line": 759,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:5500-TRANSFER-BACK",
+      "name": "5500-TRANSFER-BACK",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 759,
+        "end_line": 765,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:5900-TRANS",
+      "name": "5900-TRANS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 765,
+        "end_line": 771,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:6000-TRANSFER",
+      "name": "6000-TRANSFER",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 771,
+        "end_line": 777,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:6500-DISPLAY-MT",
+      "name": "6500-DISPLAY-MT",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 777,
+        "end_line": 784,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:6600-MINI-DIS",
+      "name": "6600-MINI-DIS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 784,
+        "end_line": 790,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:6700-MINI-MOD",
+      "name": "6700-MINI-MOD",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 790,
+        "end_line": 795,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "name": "7000-NAV-CK",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 795,
+        "end_line": 819,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7100-NAV",
+      "name": "7100-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 819,
+        "end_line": 844,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 4
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7110-NAV",
+      "name": "7110-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 844,
+        "end_line": 849,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7120-NAV",
+      "name": "7120-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 849,
+        "end_line": 854,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7130-NAV",
+      "name": "7130-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 854,
+        "end_line": 859,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7140-NAV",
+      "name": "7140-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 859,
+        "end_line": 864,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7150-NAV",
+      "name": "7150-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 864,
+        "end_line": 869,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7160-NAV",
+      "name": "7160-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 869,
+        "end_line": 874,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7170-NAV",
+      "name": "7170-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 874,
+        "end_line": 879,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7180-NAV",
+      "name": "7180-NAV",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 879,
+        "end_line": 886,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7200-PHA",
+      "name": "7200-PHA",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 886,
+        "end_line": 957,
+        "call_count": 0,
+        "perform_count": 13,
+        "cics_count": 0,
+        "data_flow_count": 18
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7201-REPLACE",
+      "name": "7201-REPLACE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 957,
+        "end_line": 961,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7202-REPLACE",
+      "name": "7202-REPLACE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 961,
+        "end_line": 965,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7210-REP-BL",
+      "name": "7210-REP-BL",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 965,
+        "end_line": 984,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "name": "7220-COMPUTE-DIST",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 984,
+        "end_line": 999,
+        "call_count": 0,
+        "perform_count": 3,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7225-FIND-E",
+      "name": "7225-FIND-E",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 999,
+        "end_line": 1005,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7230-COMPUTE",
+      "name": "7230-COMPUTE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1005,
+        "end_line": 1031,
+        "call_count": 0,
+        "perform_count": 3,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7240-DIST-K",
+      "name": "7240-DIST-K",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1031,
+        "end_line": 1044,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7243-DIST-R",
+      "name": "7243-DIST-R",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1044,
+        "end_line": 1057,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7245-DIST-B",
+      "name": "7245-DIST-B",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1057,
+        "end_line": 1069,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7247-EST-NBR",
+      "name": "7247-EST-NBR",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1069,
+        "end_line": 1078,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7248-EST-K",
+      "name": "7248-EST-K",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1078,
+        "end_line": 1084,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7249-EST-R",
+      "name": "7249-EST-R",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1084,
+        "end_line": 1090,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "name": "7250-ROMULON-CK",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1090,
+        "end_line": 1138,
+        "call_count": 0,
+        "perform_count": 8,
+        "cics_count": 0,
+        "data_flow_count": 7
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7300-TOR",
+      "name": "7300-TOR",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1138,
+        "end_line": 1198,
+        "call_count": 0,
+        "perform_count": 11,
+        "cics_count": 0,
+        "data_flow_count": 6
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "name": "7350-ROMULON-CK",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1198,
+        "end_line": 1235,
+        "call_count": 0,
+        "perform_count": 7,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7400-STA",
+      "name": "7400-STA",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1235,
+        "end_line": 1258,
+        "call_count": 0,
+        "perform_count": 3,
+        "cics_count": 0,
+        "data_flow_count": 4
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7500-DEF",
+      "name": "7500-DEF",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1258,
+        "end_line": 1274,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 4
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7520-ASC",
+      "name": "7520-ASC",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1274,
+        "end_line": 1294,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 4
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7600-DOC",
+      "name": "7600-DOC",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1294,
+        "end_line": 1319,
+        "call_count": 0,
+        "perform_count": 5,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7650-TRANS-STAR",
+      "name": "7650-TRANS-STAR",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1319,
+        "end_line": 1341,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7670-STRANS",
+      "name": "7670-STRANS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1341,
+        "end_line": 1347,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7700-LRS",
+      "name": "7700-LRS",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1347,
+        "end_line": 1400,
+        "call_count": 0,
+        "perform_count": 5,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7730-TRADE-TBL",
+      "name": "7730-TRADE-TBL",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1400,
+        "end_line": 1409,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 2
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7750-TRADE-ACT",
+      "name": "7750-TRADE-ACT",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1409,
+        "end_line": 1415,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7770-INSPECT-SCAN",
+      "name": "7770-INSPECT-SCAN",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1415,
+        "end_line": 1422,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7800-INT",
+      "name": "7800-INT",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1422,
+        "end_line": 1439,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:7850-SEARCH",
+      "name": "7850-SEARCH",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1439,
+        "end_line": 1446,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8000-BOMB",
+      "name": "8000-BOMB",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1446,
+        "end_line": 1465,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "name": "8100-DMG-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1465,
+        "end_line": 1476,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8120-DAM-COM",
+      "name": "8120-DAM-COM",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1476,
+        "end_line": 1487,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 3
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8150-TEST-AGN",
+      "name": "8150-TEST-AGN",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1487,
+        "end_line": 1493,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8160-TEST-AGN",
+      "name": "8160-TEST-AGN",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1493,
+        "end_line": 1499,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "name": "8200-CK-DONE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1499,
+        "end_line": 1513,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "name": "8300-CK-FUEL-DAMAGE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1513,
+        "end_line": 1531,
+        "call_count": 0,
+        "perform_count": 2,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8340-CK-FL",
+      "name": "8340-CK-FL",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1531,
+        "end_line": 1538,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8350-CK-SHIFT",
+      "name": "8350-CK-SHIFT",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1538,
+        "end_line": 1547,
+        "call_count": 0,
+        "perform_count": 1,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8400-GENERATE",
+      "name": "8400-GENERATE",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1547,
+        "end_line": 1560,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:8500-FINISH-GAME",
+      "name": "8500-FINISH-GAME",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1560,
+        "end_line": 1579,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 1
+      }
+    },
+    {
+      "id": "PGM:STAR_TREK::PARA:9000-END-OF-JOB",
+      "name": "9000-END-OF-JOB",
+      "type": "PARAGRAPH",
+      "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+      "metadata": {
+        "program": "STAR_TREK",
+        "start_line": 1579,
+        "end_line": 1581,
+        "call_count": 0,
+        "perform_count": 0,
+        "cics_count": 0,
+        "data_flow_count": 0
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "PGM:STAR_TREK::PARA:0000-PROGRAM-CONTROL",
+      "target": "PGM:STAR_TREK::PARA:0100-HOUSEKEEPING",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 249,
+          "is_loop": false,
+          "thru": "0100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:0000-PROGRAM-CONTROL",
+      "target": "PGM:STAR_TREK::PARA:1000-MAINLINE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 250,
+          "is_loop": false,
+          "thru": "1000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:0000-PROGRAM-CONTROL",
+      "target": "PGM:STAR_TREK::PARA:9000-END-OF-JOB",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 251,
+          "is_loop": false,
+          "thru": "9000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:0100-HOUSEKEEPING",
+      "target": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 322,
+          "is_loop": false,
+          "thru": "1200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:0100-HOUSEKEEPING",
+      "target": "PGM:STAR_TREK::PARA:0500-PRT-INST",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 326,
+          "is_loop": false,
+          "thru": "0500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:0100-HOUSEKEEPING",
+      "target": "PGM:STAR_TREK::PARA:0550-ADD-INST",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 326,
+          "is_loop": false,
+          "thru": "0550-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1000-MAINLINE",
+      "target": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 363,
+          "is_loop": false,
+          "thru": "4000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1000-MAINLINE",
+      "target": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 365,
+          "is_loop": true,
+          "thru": "2000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1000-MAINLINE",
+      "target": "PGM:STAR_TREK::PARA:8500-FINISH-GAME",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 367,
+          "is_loop": false,
+          "thru": "8500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1100-CHK-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1120-RESET",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 372,
+          "is_loop": false,
+          "thru": "1120-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1120-RESET",
+      "target": "PGM:STAR_TREK::PARA:5900-TRANS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 391,
+          "is_loop": false,
+          "thru": "5900-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1150-CK-TIME",
+      "target": "PGM:STAR_TREK::PARA:1145-CK-FLAG",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 407,
+          "is_loop": false,
+          "thru": "1145-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1150-CK-TIME",
+      "target": "PGM:STAR_TREK::PARA:1170-MOVE-ON-HQ",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 416,
+          "is_loop": true,
+          "thru": "1170-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1150-CK-TIME",
+      "target": "PGM:STAR_TREK::PARA:5900-TRANS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 416,
+          "is_loop": false,
+          "thru": "5900-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1150-CK-TIME",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 433,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1160-DBL-K",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 443,
+          "is_loop": false,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1170-MOVE-ON-HQ",
+      "target": "PGM:STAR_TREK::PARA:1160-DBL-K",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 451,
+          "is_loop": true,
+          "thru": "1160-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1230-MOVE-STARS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 471,
+          "is_loop": true,
+          "thru": "1230-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1240-MOVE-ROMULONS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 473,
+          "is_loop": true,
+          "thru": "1240-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1250-MOVE-KLINGONS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 475,
+          "is_loop": true,
+          "thru": "1250-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1260-MOVE-BASE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 477,
+          "is_loop": true,
+          "thru": "1260-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1270-MOVE-E",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 479,
+          "is_loop": false,
+          "thru": "1270-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1200-INITIALIZE-GALAXY",
+      "target": "PGM:STAR_TREK::PARA:1280-MOVE-HQ",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 480,
+          "is_loop": false,
+          "thru": "1280-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "target": "PGM:STAR_TREK::PARA:1220-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 490,
+          "is_loop": false,
+          "thru": "1220-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "target": "PGM:STAR_TREK::PARA:1220-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 492,
+          "is_loop": false,
+          "thru": "1220-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1230-MOVE-STARS",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 497,
+          "is_loop": false,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1240-MOVE-ROMULONS",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 502,
+          "is_loop": false,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1250-MOVE-KLINGONS",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 507,
+          "is_loop": true,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1260-MOVE-BASE",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 513,
+          "is_loop": true,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1270-MOVE-E",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 519,
+          "is_loop": true,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:1280-MOVE-HQ",
+      "target": "PGM:STAR_TREK::PARA:1225-DBL-ROLL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 527,
+          "is_loop": true,
+          "thru": "1225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:8400-GENERATE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 554,
+          "is_loop": false,
+          "thru": "8400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:1700-CK-VAR-WARP",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "1700-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:7100-NAV",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "7100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "4000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:7200-PHA",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "7200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:7300-TOR",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "7300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:7500-DEF",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "7500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:7600-DOC",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "7600-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:3000-COM-FUN",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "3000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:0500-PRT-INST",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "0500-E"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:1150-CK-TIME",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 559,
+          "is_loop": false,
+          "thru": "1150-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:2000-PROCESS",
+      "target": "PGM:STAR_TREK::PARA:1100-CHK-GALAXY",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 596,
+          "is_loop": false,
+          "thru": "1100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:3010-COM",
+      "target": "PGM:STAR_TREK::PARA:7400-STA",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 644,
+          "is_loop": false,
+          "thru": "7400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:3020-COM",
+      "target": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 648,
+          "is_loop": false,
+          "thru": "4000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:3030-COM",
+      "target": "PGM:STAR_TREK::PARA:7700-LRS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 652,
+          "is_loop": false,
+          "thru": "7700-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:3040-COM",
+      "target": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 662,
+          "is_loop": false,
+          "thru": "8100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:3050-COM",
+      "target": "PGM:STAR_TREK::PARA:7800-INT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 666,
+          "is_loop": false,
+          "thru": "7800-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:3060-COM",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 678,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "target": "PGM:STAR_TREK::PARA:5900-TRANS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 702,
+          "is_loop": false,
+          "thru": "5900-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "target": "PGM:STAR_TREK::PARA:4200-TEST-VAR",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 707,
+          "is_loop": false,
+          "thru": "4200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 707,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "target": "PGM:STAR_TREK::PARA:6500-DISPLAY-MT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 730,
+          "is_loop": true,
+          "thru": "6500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 733,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:4000-DISPLAY-G",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 734,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:5400-TRANS-BACK",
+      "target": "PGM:STAR_TREK::PARA:5500-TRANSFER-BACK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 754,
+          "is_loop": true,
+          "thru": "5500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:5900-TRANS",
+      "target": "PGM:STAR_TREK::PARA:6000-TRANSFER",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 766,
+          "is_loop": true,
+          "thru": "6000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:6500-DISPLAY-MT",
+      "target": "PGM:STAR_TREK::PARA:6600-MINI-DIS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 779,
+          "is_loop": true,
+          "thru": "6600-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:6600-MINI-DIS",
+      "target": "PGM:STAR_TREK::PARA:6700-MINI-MOD",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 785,
+          "is_loop": true,
+          "thru": "6700-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "target": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 796,
+          "is_loop": false,
+          "thru": "8100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "target": "PGM:STAR_TREK::PARA:8000-BOMB",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 805,
+          "is_loop": false,
+          "thru": "8000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7100-NAV",
+      "target": "PGM:STAR_TREK::PARA:8340-CK-FL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 820,
+          "is_loop": false,
+          "thru": "8340-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7110-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 847,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7120-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 852,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7130-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 857,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7140-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 862,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7150-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 867,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7160-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 872,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7170-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 877,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7180-NAV",
+      "target": "PGM:STAR_TREK::PARA:7000-NAV-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 882,
+          "is_loop": false,
+          "thru": "7000-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:8340-CK-FL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 891,
+          "is_loop": false,
+          "thru": "8340-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:7210-REP-BL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 897,
+          "is_loop": false,
+          "thru": "7210-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 898,
+          "is_loop": false,
+          "thru": "7220-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:8150-TEST-AGN",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 900,
+          "is_loop": false,
+          "thru": "8150-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 905,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 908,
+          "is_loop": false,
+          "thru": "7250-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:4700-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 915,
+          "is_loop": false,
+          "thru": "4700-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 915,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:7201-REPLACE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 915,
+          "is_loop": true,
+          "thru": "7201-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:5400-TRANS-BACK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 915,
+          "is_loop": false,
+          "thru": "5400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:8120-DAM-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 952,
+          "is_loop": false,
+          "thru": "8120-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 953,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7200-PHA",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 954,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "target": "PGM:STAR_TREK::PARA:7225-FIND-E",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 990,
+          "is_loop": true,
+          "thru": "7225-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "target": "PGM:STAR_TREK::PARA:7230-COMPUTE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 993,
+          "is_loop": true,
+          "thru": "7230-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "target": "PGM:STAR_TREK::PARA:7247-EST-NBR",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 996,
+          "is_loop": false,
+          "thru": "7247-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7230-COMPUTE",
+      "target": "PGM:STAR_TREK::PARA:7240-DIST-K",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1006,
+          "is_loop": false,
+          "thru": "7240-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7230-COMPUTE",
+      "target": "PGM:STAR_TREK::PARA:7243-DIST-R",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1014,
+          "is_loop": false,
+          "thru": "7243-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7230-COMPUTE",
+      "target": "PGM:STAR_TREK::PARA:7245-DIST-B",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1022,
+          "is_loop": false,
+          "thru": "7245-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7247-EST-NBR",
+      "target": "PGM:STAR_TREK::PARA:7248-EST-K",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1071,
+          "is_loop": true,
+          "thru": "7248-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7247-EST-NBR",
+      "target": "PGM:STAR_TREK::PARA:7249-EST-R",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1074,
+          "is_loop": true,
+          "thru": "7249-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1091,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8400-GENERATE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1091,
+          "is_loop": false,
+          "thru": "8400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1091,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:7202-REPLACE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1091,
+          "is_loop": true,
+          "thru": "7202-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:5400-TRANS-BACK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1091,
+          "is_loop": false,
+          "thru": "5400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1133,
+          "is_loop": false,
+          "thru": "8100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1134,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7250-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1135,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:8400-GENERATE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1142,
+          "is_loop": false,
+          "thru": "8400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:8150-TEST-AGN",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1144,
+          "is_loop": false,
+          "thru": "8150-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1145,
+          "is_loop": false,
+          "thru": "7220-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1149,
+          "is_loop": false,
+          "thru": "7350-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1156,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1156,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:8120-DAM-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1156,
+          "is_loop": false,
+          "thru": "8120-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:7201-REPLACE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1156,
+          "is_loop": true,
+          "thru": "7201-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:5400-TRANS-BACK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1156,
+          "is_loop": false,
+          "thru": "5400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1194,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7300-TOR",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1195,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1199,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8400-GENERATE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1199,
+          "is_loop": false,
+          "thru": "8400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1199,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:7202-REPLACE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1199,
+          "is_loop": true,
+          "thru": "7202-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:5400-TRANS-BACK",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1199,
+          "is_loop": false,
+          "thru": "5400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1231,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7350-ROMULON-CK",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1232,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7400-STA",
+      "target": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1253,
+          "is_loop": false,
+          "thru": "8100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7400-STA",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1254,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7400-STA",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1255,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7500-DEF",
+      "target": "PGM:STAR_TREK::PARA:7520-ASC",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1261,
+          "is_loop": false,
+          "thru": "7520-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7500-DEF",
+      "target": "PGM:STAR_TREK::PARA:7520-ASC",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1262,
+          "is_loop": false,
+          "thru": "7520-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7600-DOC",
+      "target": "PGM:STAR_TREK::PARA:8400-GENERATE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1295,
+          "is_loop": false,
+          "thru": "8400-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7600-DOC",
+      "target": "PGM:STAR_TREK::PARA:7220-COMPUTE-DIST",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1296,
+          "is_loop": false,
+          "thru": "7220-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7600-DOC",
+      "target": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1296,
+          "is_loop": false,
+          "thru": "8100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7600-DOC",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1296,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7600-DOC",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1316,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7650-TRANS-STAR",
+      "target": "PGM:STAR_TREK::PARA:7670-STRANS",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1336,
+          "is_loop": true,
+          "thru": "7670-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7700-LRS",
+      "target": "PGM:STAR_TREK::PARA:7650-TRANS-STAR",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1348,
+          "is_loop": false,
+          "thru": "7650-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7700-LRS",
+      "target": "PGM:STAR_TREK::PARA:7730-TRADE-TBL",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1371,
+          "is_loop": true,
+          "thru": "7730-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7700-LRS",
+      "target": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1395,
+          "is_loop": false,
+          "thru": "8100-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7700-LRS",
+      "target": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1396,
+          "is_loop": false,
+          "thru": "8300-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7700-LRS",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1397,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7730-TRADE-TBL",
+      "target": "PGM:STAR_TREK::PARA:7750-TRADE-ACT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1403,
+          "is_loop": true,
+          "thru": "7750-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7730-TRADE-TBL",
+      "target": "PGM:STAR_TREK::PARA:7770-INSPECT-SCAN",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1406,
+          "is_loop": false,
+          "thru": "7770-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:7800-INT",
+      "target": "PGM:STAR_TREK::PARA:7850-SEARCH",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1423,
+          "is_loop": true,
+          "thru": "7850-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8000-BOMB",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1455,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "target": "PGM:STAR_TREK::PARA:8150-TEST-AGN",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1466,
+          "is_loop": false,
+          "thru": "8150-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8100-DMG-COM",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1466,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8120-DAM-COM",
+      "target": "PGM:STAR_TREK::PARA:8160-TEST-AGN",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1477,
+          "is_loop": false,
+          "thru": "8160-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8120-DAM-COM",
+      "target": "PGM:STAR_TREK::PARA:4500-DISP-HIT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1477,
+          "is_loop": false,
+          "thru": "4500-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "target": "PGM:STAR_TREK::PARA:8350-CK-SHIFT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1514,
+          "is_loop": false,
+          "thru": "8350-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8300-CK-FUEL-DAMAGE",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1521,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8340-CK-FL",
+      "target": "PGM:STAR_TREK::PARA:8350-CK-SHIFT",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1532,
+          "is_loop": false,
+          "thru": "8350-EXIT"
+        }
+      ]
+    },
+    {
+      "source": "PGM:STAR_TREK::PARA:8350-CK-SHIFT",
+      "target": "PGM:STAR_TREK::PARA:8200-CK-DONE",
+      "type": "PERFORMS",
+      "evidence": [
+        {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "line": 1539,
+          "is_loop": false,
+          "thru": "8200-EXIT"
+        }
+      ]
+    }
+  ]
+}
