@@ -47,5 +47,5 @@ Behavioral equivalence is harder than translation. Solution: differential test h
 
 - Parse coverage >= 98% on IBM Enterprise COBOL
 - 560 passing tests across pipeline and reimplementations
-- 37 programs fully reimplemented with verified equivalence
+- 36 programs fully reimplemented with verified equivalence
 - 5 codebases validated (273 programs, 96K LOC)

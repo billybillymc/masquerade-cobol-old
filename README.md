@@ -191,11 +191,11 @@ Masquerade ships with 5 real COBOL codebases (273 programs, 96K lines of code) f
 
 ## Included Python Reimplementations
 
-37 COBOL programs have been fully reimplemented in Python with differential test suites in `pipeline/reimpl/`. These serve as reference examples for how to approach reimplementation:
+36 COBOL programs have been fully reimplemented in Python with differential test suites in `pipeline/reimpl/`. These serve as reference examples for how to approach reimplementation:
 
 | Codebase | Reimplemented | What's covered |
 |----------|--------------|----------------|
-| **AWS CardDemo** | All 31 programs | Sign-on, menus, accounts, cards, transactions, billing, reports, batch processing |
+| **AWS CardDemo** | All 31 core programs | Sign-on, menus, accounts, cards, transactions, billing, reports, batch processing |
 | **IBM CBSA** | DBCRFUN | Debit/credit engine |
 | **Star Trek** | Full game | Complete 1,615-line game logic |
 | **Taxe Fonciere** | EFITA3B8 | Full property tax fee calculation (669 lines) |
@@ -334,7 +334,7 @@ masquerade-cobol/
       embedder.py              # OpenAI embedding generation
       uploader.py              # Pinecone vector upload
     tests/                     # 502 pipeline tests
-    reimpl/                    # 37 reimplemented programs + 58 tests
+    reimpl/                    # 36 reimplemented programs + 58 tests
   test-codebases/              # 5 real COBOL systems (273 programs, 96K LOC)
   specs/                       # Feature specifications (agent-consumable contracts)
   docs/

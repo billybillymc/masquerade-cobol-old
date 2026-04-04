@@ -31,17 +31,21 @@ Summary of Masquerade's capabilities, each backed by dedicated test suites. See 
 
 ## Reimplementation Coverage
 
-37 COBOL programs reimplemented in Python with differential test suites:
+36 COBOL programs reimplemented in Python with differential test suites:
 
-| Codebase | Programs reimplemented | Tests |
-|----------|----------------------|-------|
-| AWS CardDemo | 31 (all programs) | 62 |
-| IBM CBSA | 1 (DBCRFUN) | 8 |
-| Star Trek | 1 (full game) | 10 |
-| Taxe Fonciere | 1 (EFITA3B8) | 9 |
-| CobolCraft | 2 (uuid, json-parse) | 7 |
+| Codebase | Programs reimplemented |
+|----------|----------------------|
+| AWS CardDemo | 31 (all core programs — sign-on, menus, accounts, cards, transactions, billing, reports, batch) |
+| IBM CBSA | 1 (DBCRFUN debit/credit engine) |
+| Star Trek | 1 (full game, 1,615 lines) |
+| Taxe Fonciere | 1 (EFITA3B8 property tax fee calculation) |
+| CobolCraft | 2 (uuid, json-parse) |
 
-**Total reimplementation tests**: 58
+Reimplementation tests live in two locations:
+- `pipeline/tests/test_*_reimpl.py` + `test_differential_*.py` — 104 tests (CardDemo 55, CBSA 16, CobolCraft 20, Star Trek 6, Taxe Fonciere 3, cross-codebase 4). These are counted in the 502 pipeline tests.
+- `pipeline/reimpl/test_*.py` — 58 tests (CobolCraft json-parse 45, CobolCraft uuid 13). These are the 58 reimpl tests.
+
+**Total reimplementation-related tests**: 162
 
 ## Validated Codebases
 
