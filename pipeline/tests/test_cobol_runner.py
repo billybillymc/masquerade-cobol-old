@@ -27,7 +27,7 @@ from record_io import (
     unpack_field,
 )
 from copybook_dict import CopybookDictionary, CopybookField
-from cobol_runner import compile_cobol, run_cobol, compile_and_run, is_cobc_available
+from cobol_runner import compile_cobol, run_cobol, compile_and_run, is_cobc_available, _build_cmd, _safe_export
 
 CARDDEMO = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "carddemo"
 COBC_AVAILABLE = is_cobc_available()
@@ -198,3 +198,68 @@ class TestCoblCompilation:
         result = compile_and_run(str(source))
         assert result.success, f"Failed: {result.stderr}"
         assert "HELLO-TEST-OUTPUT" in result.stdout
+
+
+class TestShellSafety:
+    """Verify shell-safe command construction helpers."""
+
+    def test_build_cmd_normal_path(self):
+        cmd = _build_cmd(["cobc", "-x", "/tmp/hello.cbl"])
+        assert cmd == "cobc -x /tmp/hello.cbl"
+
+    def test_build_cmd_quotes_spaces(self):
+        cmd = _build_cmd(["cobc", "-I", "/path with spaces/cpy"])
+        assert "'/path with spaces/cpy'" in cmd
+
+    def test_build_cmd_neutralises_semicolon(self):
+        cmd = _build_cmd(["cobc", "-o", "/tmp/out", "foo;rm -rf /"])
+        assert ";" not in cmd or cmd.count("'") >= 2
+
+    def test_build_cmd_neutralises_dollar(self):
+        cmd = _build_cmd(["cobc", "$(malicious)"])
+        assert "$" not in cmd or "'" in cmd
+
+    def test_build_cmd_neutralises_backtick(self):
+        cmd = _build_cmd(["cobc", "`malicious`"])
+        assert "`" not in cmd or "'" in cmd
+
+    def test_build_cmd_neutralises_pipe(self):
+        cmd = _build_cmd(["cobc", "foo|bar"])
+        assert "foo|bar" not in cmd.replace("'foo|bar'", "")
+
+    def test_safe_export_normal(self):
+        line = _safe_export("ACCTFILE", "/tmp/acct.dat")
+        assert line == "export ACCTFILE=/tmp/acct.dat"
+
+    def test_safe_export_quotes_dangerous_value(self):
+        line = _safe_export("MYVAR", "val;rm -rf /")
+        assert line == "export MYVAR='val;rm -rf /'"
+
+    def test_safe_export_quotes_dollar_in_value(self):
+        line = _safe_export("MYVAR", "$(whoami)")
+        assert "$(whoami)" not in line or "'" in line
+
+    def test_safe_export_rejects_semicolon_in_name(self):
+        with pytest.raises(ValueError, match="Invalid environment variable name"):
+            _safe_export("FOO;BAR", "value")
+
+    def test_safe_export_rejects_dollar_in_name(self):
+        with pytest.raises(ValueError, match="Invalid environment variable name"):
+            _safe_export("$FOO", "value")
+
+    def test_safe_export_rejects_empty_name(self):
+        with pytest.raises(ValueError, match="Invalid environment variable name"):
+            _safe_export("", "value")
+
+    def test_safe_export_rejects_name_starting_with_digit(self):
+        with pytest.raises(ValueError, match="Invalid environment variable name"):
+            _safe_export("1FOO", "value")
+
+    def test_safe_export_allows_underscore_prefix(self):
+        line = _safe_export("_FOO", "/tmp/data")
+        assert line.startswith("export _FOO=")
+
+    def test_safe_export_allows_dd_prefix(self):
+        """GnuCOBOL uses dd_FILENAME convention."""
+        line = _safe_export("dd_ACCTFILE", "/tmp/acct.dat")
+        assert line.startswith("export dd_ACCTFILE=")
