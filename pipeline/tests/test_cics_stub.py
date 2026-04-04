@@ -103,7 +103,6 @@ class TestStubCompilation:
     def test_stubbed_cosgn00c_compiles(self, tmp_path):
         """COSGN00C after preprocessing + symbolic maps compiles with GnuCOBOL."""
         import re
-        import shlex
         import subprocess
         from cobol_runner import _to_wsl_path, _build_cmd
         from bms_symbolic import generate_all_symbolic_maps

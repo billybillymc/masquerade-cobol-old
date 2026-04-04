@@ -147,7 +147,7 @@ def _seed_usrsec(tmp_path):
     src_wsl = _to_wsl_path(str(seed_src))
     dat_path = "/tmp/diff_usrsec.dat"
     compile_part = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_wsl, "-o", "/tmp/diff_seedusrsec", src_wsl])
-    cmd = f"{compile_part} && {_safe_export('USRSECFILE', dat_path)} && /tmp/diff_seedusrsec"
+    cmd = f"{compile_part} && {_safe_export('USRSECFILE', dat_path)} && {shlex.quote('/tmp/diff_seedusrsec')}"
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=30)
     assert r.returncode == 0, f"Seed failed: {r.stderr}"

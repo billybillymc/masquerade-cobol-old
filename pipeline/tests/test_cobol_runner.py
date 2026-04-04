@@ -263,3 +263,10 @@ class TestShellSafety:
         """GnuCOBOL uses dd_FILENAME convention."""
         line = _safe_export("dd_ACCTFILE", "/tmp/acct.dat")
         assert line.startswith("export dd_ACCTFILE=")
+
+    def test_safe_export_quotes_single_quote_in_value(self):
+        """Single quotes in values exercise shlex.quote's most complex path."""
+        line = _safe_export("MYVAR", "it's a path")
+        # shlex.quote wraps in single quotes, escaping inner single quotes
+        assert "it" in line and "s a path" in line
+        assert line.startswith("export MYVAR=")
