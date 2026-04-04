@@ -10,6 +10,8 @@ Handles:
 """
 
 import os
+import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -46,6 +48,21 @@ def _to_wsl_path(windows_path: str) -> str:
         drive = p[0].lower()
         return f"/mnt/{drive}{p[2:]}"
     return p
+
+
+def _build_cmd(parts: list[str]) -> str:
+    """Join command parts into a shell-safe command string."""
+    return " ".join(shlex.quote(p) for p in parts)
+
+
+def _safe_export(name: str, value: str) -> str:
+    """Generate a safe 'export NAME=VALUE' shell line.
+
+    Validates that name is a legal shell identifier and quotes the value.
+    """
+    if not re.match(r'^[A-Za-z_][A-Za-z0-9_]*$', name):
+        raise ValueError(f"Invalid environment variable name: {name!r}")
+    return f"export {name}={shlex.quote(value)}"
 
 
 def compile_cobol(
