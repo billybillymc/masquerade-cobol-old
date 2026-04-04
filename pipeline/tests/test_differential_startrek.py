@@ -14,7 +14,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd
 from differential_harness import DiffVector, run_vectors, render_report_text
 from reimpl.star_trek import (
     StarTrekGame,
@@ -29,7 +31,7 @@ COBC_AVAILABLE = is_cobc_available()
 
 def _compile_star_trek():
     src_wsl = _to_wsl_path(str(STARTREK / "ctrek.cob"))
-    cmd = f'cobc -free -x -o /tmp/ctrek_diff {src_wsl}'
+    cmd = _build_cmd(["cobc", "-free", "-x", "-o", "/tmp/ctrek_diff", src_wsl])
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=60)
     assert r.returncode == 0, f"Compile failed: {r.stderr}"
@@ -37,7 +39,7 @@ def _compile_star_trek():
 
 
 def _run_star_trek(binary, stdin_text):
-    cmd = f'printf "{stdin_text}" | timeout 5 {binary}'
+    cmd = f"printf {shlex.quote(stdin_text)} | timeout 5 {shlex.quote(binary)}"
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=15)
     return r.stdout

@@ -21,7 +21,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd
 from differential_harness import DiffVector, run_vectors, render_report_text
 
 # Point at the main workspace's test-codebases, which exist in either the main
@@ -49,6 +51,7 @@ def _wsl(path):
 
 
 def _run_wsl(cmd: str, timeout: int = 30) -> subprocess.CompletedProcess:
+    """Run a command in WSL. Caller must use shlex.quote() on interpolated values."""
     return subprocess.run(
         ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
         capture_output=True, text=True, timeout=timeout,
