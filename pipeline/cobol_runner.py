@@ -98,7 +98,7 @@ def compile_cobol(
 
     cmd_parts.extend(["-o", out_wsl, src_wsl])
 
-    cmd = " ".join(f'"{p}"' if " " in p else p for p in cmd_parts)
+    cmd = _build_cmd(cmd_parts)
 
     try:
         result = subprocess.run(
@@ -158,19 +158,19 @@ def run_cobol(
 
     for cobol_name, file_path in all_files.items():
         # GnuCOBOL file assignment: export dd_FILENAME=path
-        env_lines.append(f'export dd_{cobol_name}="{file_path}"')
+        env_lines.append(_safe_export(f"dd_{cobol_name}", file_path))
         # Also set the ASSIGN TO name directly
-        env_lines.append(f'export {cobol_name}="{file_path}"')
+        env_lines.append(_safe_export(cobol_name, file_path))
 
     for k, v in (env_vars or {}).items():
-        env_lines.append(f'export {k}="{v}"')
+        env_lines.append(_safe_export(k, v))
 
     # Create output files (touch them so they exist)
     for name, path in (output_files or {}).items():
-        env_lines.append(f'touch "{path}"')
+        env_lines.append(f"touch {shlex.quote(path)}")
 
     env_block = "\n".join(env_lines)
-    cmd = f"{env_block}\n{binary_path}"
+    cmd = f"{env_block}\n{shlex.quote(binary_path)}"
 
     try:
         result = subprocess.run(
