@@ -104,7 +104,7 @@ class TestStubCompilation:
         """COSGN00C after preprocessing + symbolic maps compiles with GnuCOBOL."""
         import re
         import subprocess
-        from cobol_runner import _to_wsl_path
+        from cobol_runner import _to_wsl_path, _build_cmd
         from bms_symbolic import generate_all_symbolic_maps
 
         # Generate symbolic maps
@@ -134,7 +134,7 @@ class TestStubCompilation:
         sym_wsl = _to_wsl_path(str(sym_dir))
         src_wsl = _to_wsl_path(str(stubbed))
 
-        cmd = f'cobc -x -std=ibm -I {cpy_dir} -I {sym_wsl} -o /tmp/cosgn00c_stub {src_wsl}'
+        cmd = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_dir, "-I", sym_wsl, "-o", "/tmp/cosgn00c_stub", src_wsl])
         compile_result = subprocess.run(
             ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
             capture_output=True, text=True, timeout=60,

@@ -13,7 +13,9 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd, _safe_export
 from golden_generator import (
     GoldenRunConfig,
     parse_display_output,
@@ -119,10 +121,10 @@ class TestEndToEndGoldenGeneration:
         src_wsl = _to_wsl_path(str(seed_src))
         acct_file = f"{work_dir}/acct_input.dat"
 
-        cmd = f'cobc -x -std=ibm -I {cpy_dir} -o {work_dir}/seedfile {src_wsl} && export ACCTFILE="{acct_file}" && {work_dir}/seedfile'
+        compile_part = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_dir, "-o", f"{work_dir}/seedfile", src_wsl])
+        cmd = f"mkdir -p {shlex.quote(work_dir)} && {compile_part} && {_safe_export('ACCTFILE', acct_file)} && {shlex.quote(work_dir + '/seedfile')}"
         result = subprocess.run(
-            ["wsl", "-d", "Ubuntu", "--", "bash", "-c",
-             f"mkdir -p {work_dir} && {cmd}"],
+            ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
             capture_output=True, text=True, timeout=30,
         )
         assert result.returncode == 0, f"Seed failed: {result.stderr}"

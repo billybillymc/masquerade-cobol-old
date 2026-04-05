@@ -19,7 +19,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd, _safe_export
 from cics_stub import preprocess_cics
 from bms_symbolic import generate_all_symbolic_maps
 from differential_harness import DiffVector, run_vectors, render_report_text
@@ -91,7 +93,7 @@ def _prepare_cobol(tmp_path):
     sym_wsl = _to_wsl_path(str(sym_dir))
     src_wsl = _to_wsl_path(str(stubbed))
     binary = "/tmp/diff_cosgn00c"
-    cmd = f'cobc -x -std=ibm -I {cpy_wsl} -I {sym_wsl} -o {binary} {src_wsl}'
+    cmd = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_wsl, "-I", sym_wsl, "-o", binary, src_wsl])
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=60)
     assert r.returncode == 0, f"Compile failed: {r.stderr}"
@@ -144,7 +146,8 @@ def _seed_usrsec(tmp_path):
     cpy_wsl = _to_wsl_path(str(CARDDEMO / "app" / "cpy"))
     src_wsl = _to_wsl_path(str(seed_src))
     dat_path = "/tmp/diff_usrsec.dat"
-    cmd = f'cobc -x -std=ibm -I {cpy_wsl} -o /tmp/diff_seedusrsec {src_wsl} && export USRSECFILE="{dat_path}" && /tmp/diff_seedusrsec'
+    compile_part = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_wsl, "-o", "/tmp/diff_seedusrsec", src_wsl])
+    cmd = f"{compile_part} && {_safe_export('USRSECFILE', dat_path)} && {shlex.quote('/tmp/diff_seedusrsec')}"
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=30)
     assert r.returncode == 0, f"Seed failed: {r.stderr}"
@@ -155,10 +158,10 @@ def _run_cobol_scenario(binary, usrsec_path, userid, passwd):
     screen = _build_screen_input(userid, passwd)
     screen_path = "/tmp/diff_screen.dat"
     subprocess.run(
-        ["wsl", "-d", "Ubuntu", "--", "bash", "-c", f"cat > {screen_path}"],
+        ["wsl", "-d", "Ubuntu", "--", "bash", "-c", f"cat > {shlex.quote(screen_path)}"],
         input=screen + b'\n', capture_output=True, timeout=10,
     )
-    cmd = f'export USRSECFILE="{usrsec_path}" && export SCREENIN="{screen_path}" && {binary}'
+    cmd = f"{_safe_export('USRSECFILE', usrsec_path)} && {_safe_export('SCREENIN', screen_path)} && {shlex.quote(binary)}"
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=15)
     return r.stdout

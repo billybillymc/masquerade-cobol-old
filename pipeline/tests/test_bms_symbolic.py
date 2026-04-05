@@ -17,7 +17,9 @@ from bms_symbolic import (
     generate_all_symbolic_maps,
 )
 from bms_parser import parse_bms_file
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd
 from cics_stub import preprocess_cics
 
 CARDDEMO = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "carddemo"
@@ -118,7 +120,7 @@ class TestCicsCompilationWithSymbolicMaps:
         sym_wsl = _to_wsl_path(str(sym_dir))
         src_wsl = _to_wsl_path(str(stubbed))
 
-        cmd = f'cobc -x -std=ibm -I {cpy_dir} -I {sym_wsl} -o /tmp/cosgn00c_stub {src_wsl}'
+        cmd = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_dir, "-I", sym_wsl, "-o", "/tmp/cosgn00c_stub", src_wsl])
         compile_result = subprocess.run(
             ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
             capture_output=True, text=True, timeout=60,

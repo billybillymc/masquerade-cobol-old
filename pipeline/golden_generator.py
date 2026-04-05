@@ -12,6 +12,7 @@ Orchestrates:
 
 import json
 import re
+import shlex
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -19,7 +20,7 @@ from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from cobol_runner import compile_cobol, run_cobol, _to_wsl_path
+from cobol_runner import compile_cobol, run_cobol, _to_wsl_path, _build_cmd, _safe_export
 from differential_harness import DiffVector, save_golden_vectors
 
 
@@ -102,7 +103,8 @@ def generate_golden_vectors(
         for cpd in config.copybook_dirs:
             cpy_args.extend(["-I", _to_wsl_path(cpd)])
 
-        cmd = f'cobc -std=ibm {" ".join(cpy_args)} -c -o {obj_path} {stub_wsl}'
+        cmd_parts = ["cobc", "-std=ibm"] + cpy_args + ["-c", "-o", obj_path, stub_wsl]
+        cmd = _build_cmd(cmd_parts)
         result = subprocess.run(
             ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
             capture_output=True, text=True, timeout=60,
@@ -119,8 +121,8 @@ def generate_golden_vectors(
     for cpd in config.copybook_dirs:
         cpy_args.extend(["-I", _to_wsl_path(cpd)])
 
-    obj_args = " ".join(stub_objects)
-    cmd = f'cobc -x -std=ibm {" ".join(cpy_args)} -o {binary_path} {src_wsl} {obj_args}'
+    cmd_parts = ["cobc", "-x", "-std=ibm"] + cpy_args + ["-o", binary_path, src_wsl] + stub_objects
+    cmd = _build_cmd(cmd_parts)
     result = subprocess.run(
         ["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
         capture_output=True, text=True, timeout=60,
@@ -131,15 +133,14 @@ def generate_golden_vectors(
     # Build environment and run
     env_lines = []
     for cobol_name, file_path in config.file_assignments.items():
-        env_lines.append(f'export {cobol_name}="{file_path}"')
+        env_lines.append(_safe_export(cobol_name, file_path))
 
-    # Touch output files
     for name in config.output_file_names:
         path = config.file_assignments.get(name, f"{work_dir}/{name.lower()}.dat")
-        env_lines.append(f'touch "{path}"')
+        env_lines.append(f"touch {shlex.quote(path)}")
 
     env_block = "\n".join(env_lines)
-    run_cmd = f"{env_block}\n{binary_path}"
+    run_cmd = f"{env_block}\n{shlex.quote(binary_path)}"
 
     result = subprocess.run(
         ["wsl", "-d", "Ubuntu", "--", "bash", "-c", run_cmd],

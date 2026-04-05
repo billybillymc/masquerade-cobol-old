@@ -13,7 +13,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd
 from differential_harness import DiffVector, run_vectors, render_report_text
 from reimpl.taxe_fonciere import CombatInput, OmZone, AllRates, calculate_tax_batie
 
@@ -97,11 +99,9 @@ def _compile_taxe(tmp_path):
     driver_wsl = _to_wsl_path(str(driver_src))
     workdir = "/tmp/taxe_diff"
 
-    cmd = (
-        f"mkdir -p {workdir} && "
-        f"cobc -std=ibm -I {src_wsl} -c -o {workdir}/EFITA3B8.o {src_wsl}/EFITA3B8.cob && "
-        f"cobc -x -std=ibm -I {src_wsl} -o {workdir}/taxedriver {driver_wsl} {workdir}/EFITA3B8.o"
-    )
+    obj_part = _build_cmd(["cobc", "-std=ibm", "-I", src_wsl, "-c", "-o", f"{workdir}/EFITA3B8.o", f"{src_wsl}/EFITA3B8.cob"])
+    link_part = _build_cmd(["cobc", "-x", "-std=ibm", "-I", src_wsl, "-o", f"{workdir}/taxedriver", driver_wsl, f"{workdir}/EFITA3B8.o"])
+    cmd = f"mkdir -p {shlex.quote(workdir)} && {obj_part} && {link_part}"
     r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                        capture_output=True, text=True, timeout=60)
     assert r.returncode == 0, f"Compile failed: {r.stderr}"
@@ -109,7 +109,7 @@ def _compile_taxe(tmp_path):
 
 
 def _run_taxe_driver(binary):
-    r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", binary],
+    r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", shlex.quote(binary)],
                        capture_output=True, text=True, timeout=15)
     return r.stdout
 

@@ -19,7 +19,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from cobol_runner import is_cobc_available, _to_wsl_path
+import shlex
+
+from cobol_runner import is_cobc_available, _to_wsl_path, _build_cmd, _safe_export
 from differential_harness import DiffVector, run_vectors, render_report_text
 
 CARDDEMO = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "carddemo"
@@ -186,11 +188,11 @@ class TestCosgn00cFullCommarea:
             screen = _build_screen_input(sc["userid"], sc["passwd"])
             screen_path = "/tmp/diff_full_screen.dat"
             subprocess.run(
-                ["wsl", "-d", "Ubuntu", "--", "bash", "-c", f"cat > {screen_path}"],
+                ["wsl", "-d", "Ubuntu", "--", "bash", "-c", f"cat > {shlex.quote(screen_path)}"],
                 input=screen + b'\n', capture_output=True, timeout=10,
             )
             usrsec = "/tmp/diff_usrsec.dat"
-            cmd = f'export USRSECFILE="{usrsec}" && export SCREENIN="{screen_path}" && {cobol_binary}'
+            cmd = f"{_safe_export('USRSECFILE', usrsec)} && {_safe_export('SCREENIN', screen_path)} && {shlex.quote(cobol_binary)}"
             r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                                capture_output=True, text=True, timeout=15)
             cobol_output = _parse_cobol_full(r.stdout)
@@ -247,11 +249,8 @@ class TestCbact01cOutputRecords:
         src_wsl = _to_wsl_path(str(seed_src))
         acct_file = f"{work_dir}/acct_input.dat"
 
-        cmd = (
-            f"mkdir -p {work_dir} && "
-            f"cobc -x -std=ibm -I {cpy_wsl} -o {work_dir}/seedfile {src_wsl} && "
-            f"export ACCTFILE='{acct_file}' && {work_dir}/seedfile"
-        )
+        compile_part = _build_cmd(["cobc", "-x", "-std=ibm", "-I", cpy_wsl, "-o", f"{work_dir}/seedfile", src_wsl])
+        cmd = f"mkdir -p {shlex.quote(work_dir)} && {compile_part} && {_safe_export('ACCTFILE', acct_file)} && {shlex.quote(work_dir + '/seedfile')}"
         r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                            capture_output=True, text=True, timeout=30)
         assert r.returncode == 0, f"Seed failed: {r.stderr}"
@@ -316,7 +315,7 @@ class TestStarTrekDeterministicInit:
         vectors = []
         for skill in [1, 2, 3, 4]:
             # COBOL: feed name + skill, capture klingon count from output
-            cmd = f'printf "KIRK\\n{skill}\\nn\\nq\\n" | timeout 5 /tmp/ctrek_diff'
+            cmd = f"printf {shlex.quote(f'KIRK\\n{skill}\\nn\\nq\\n')} | timeout 5 /tmp/ctrek_diff"
             r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                                capture_output=True, text=True, timeout=15)
             m = re.search(r'(\d+) Klingon ships', r.stdout)
@@ -398,12 +397,9 @@ class TestTaxeFonciereFullRetour:
         driver_wsl = _to_wsl_path(str(driver_src))
         workdir = "/tmp/taxe_full"
 
-        cmd = (
-            f"mkdir -p {workdir} && "
-            f"cobc -std=ibm -I {src_wsl} -c -o {workdir}/EFITA3B8.o {src_wsl}/EFITA3B8.cob && "
-            f"cobc -x -std=ibm -I {src_wsl} -o {workdir}/taxedrv2 {driver_wsl} {workdir}/EFITA3B8.o && "
-            f"{workdir}/taxedrv2"
-        )
+        obj_part = _build_cmd(["cobc", "-std=ibm", "-I", src_wsl, "-c", "-o", f"{workdir}/EFITA3B8.o", f"{src_wsl}/EFITA3B8.cob"])
+        link_part = _build_cmd(["cobc", "-x", "-std=ibm", "-I", src_wsl, "-o", f"{workdir}/taxedrv2", driver_wsl, f"{workdir}/EFITA3B8.o"])
+        cmd = f"mkdir -p {shlex.quote(workdir)} && {obj_part} && {link_part} && {shlex.quote(workdir + '/taxedrv2')}"
         r = subprocess.run(["wsl", "-d", "Ubuntu", "--", "bash", "-c", cmd],
                            capture_output=True, text=True, timeout=30)
 
