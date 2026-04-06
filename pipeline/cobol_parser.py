@@ -268,7 +268,28 @@ def _join_statements(code_lines: list[tuple[int, str]]) -> list[tuple[int, int, 
 _RE_PROGRAM_ID = re.compile(r'PROGRAM-ID\.\s+(\S+?)[\s.]', re.IGNORECASE)
 _RE_AUTHOR = re.compile(r'AUTHOR\.\s+(.+?)\.', re.IGNORECASE)
 _RE_COPY = re.compile(r'COPY\s+(\S+)', re.IGNORECASE)
-_RE_REPLACING = re.compile(r"REPLACING\s+'([^']+)'\s+BY\s+(\S+)", re.IGNORECASE)
+_RE_REPLACING_PAIR = re.compile(
+    r'(?:==([^=]+)==|\'([^\']+)\')\s+BY\s+(?:==([^=]+)==|\'([^\']+)\'|(\S+))',
+    re.IGNORECASE,
+)
+
+
+def _parse_replacing_pairs(text: str) -> list[tuple[str, str]]:
+    """Parse all old/new pairs from a COPY REPLACING clause.
+
+    Handles both ==pseudo-text== (IBM standard) and 'quoted' syntax,
+    and correctly extracts multiple pairs from a single REPLACING clause.
+    """
+    replacing_start = re.search(r'\bREPLACING\b', text, re.IGNORECASE)
+    if not replacing_start:
+        return []
+    pairs = []
+    for m in _RE_REPLACING_PAIR.finditer(text, replacing_start.end()):
+        old = (m.group(1) or m.group(2) or '').strip()
+        new = (m.group(3) or m.group(4) or m.group(5) or '').strip().rstrip('.')
+        if old and new:
+            pairs.append((old, new))
+    return pairs
 _RE_CALL = re.compile(r"CALL\s+'([^']+)'", re.IGNORECASE)
 _RE_PERFORM = re.compile(r'PERFORM\s+([A-Z0-9][\w-]*)', re.IGNORECASE)
 _RE_PERFORM_THRU = re.compile(r'PERFORM\s+([A-Z0-9][\w-]*)\s+THRU\s+([A-Z0-9][\w-]*)', re.IGNORECASE)
@@ -1037,7 +1058,7 @@ def parse_cobol_file(filepath: Path) -> CobolProgram:
                 if cb_name.upper() in _COBOL_RESERVED:
                     continue
                 rest = stmt[copy_m.end():]
-                replacings = _RE_REPLACING.findall(rest)
+                replacings = _parse_replacing_pairs(rest)
                 copy_stmts.append(CopyStatement(
                     copybook_name=cb_name,
                     replacing=replacings,

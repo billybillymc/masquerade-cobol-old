@@ -5,7 +5,7 @@ import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from copybook_dict import parse_copybook, CopybookField, CopybookDictionary
+from copybook_dict import parse_copybook, apply_replacing, CopybookField, CopybookDictionary
 
 
 def _write_cpy(tmp_dir, name, content):
@@ -118,3 +118,88 @@ class TestCopybookDictionary:
         detail = cbd.copybook_detail("CUST01")
         assert detail is not None
         assert detail["field_count"] == 3
+
+
+# Copybook using :PREF: placeholder — the idiomatic COBOL pattern for prefix substitution.
+# COPY MYCPY REPLACING ==:PREF:== BY ==WS-ACCT== makes :PREF:-NAME -> WS-ACCT-NAME.
+_SHARED_CPY = """
+       05  :PREF:-NAME            PIC X(40).
+       05  :PREF:-ID              PIC 9(10).
+       05  :PREF:-STATUS          PIC X(01).
+"""
+
+# Copybook using full token names for exact-match substitution.
+_EXACT_CPY = """
+       05  WS-CUST-NAME           PIC X(40).
+       05  WS-CUST-ID             PIC 9(10).
+       05  WS-CUST-STATUS         PIC X(01).
+"""
+
+
+class TestApplyReplacing:
+    def test_placeholder_prefix_substitution(self):
+        # :PREF: is not a valid COBOL identifier so it acts as a safe placeholder.
+        result = apply_replacing(_SHARED_CPY, [(":PREF:", "WS-ACCT")])
+        assert "WS-ACCT-NAME" in result
+        assert "WS-ACCT-ID" in result
+        assert "WS-ACCT-STATUS" in result
+        assert ":PREF:" not in result
+
+    def test_exact_token_substitution(self):
+        # Replacing a complete field name token leaves unrelated fields untouched.
+        result = apply_replacing(_EXACT_CPY, [
+            ("WS-CUST-NAME", "WS-ACCT-NAME"),
+            ("WS-CUST-ID", "WS-ACCT-ID"),
+            ("WS-CUST-STATUS", "WS-ACCT-STATUS"),
+        ])
+        assert "WS-ACCT-NAME" in result
+        assert "WS-ACCT-ID" in result
+        assert "WS-CUST-NAME" not in result
+
+    def test_no_partial_match(self):
+        # WS-CUST does NOT match inside WS-CUSTOMER-ID — they are different tokens.
+        src = "       05  WS-CUSTOMER-ID  PIC 9(10).\n"
+        result = apply_replacing(src, [("WS-CUST", "WS-ACCT")])
+        assert "WS-CUSTOMER-ID" in result
+
+    def test_multiple_pairs(self):
+        result = apply_replacing(_EXACT_CPY, [
+            ("WS-CUST-NAME", "WS-EMPLOYEE-NAME"),
+            ("WS-CUST-ID", "WS-EMPLOYEE-ID"),
+        ])
+        assert "WS-EMPLOYEE-NAME" in result
+        assert "WS-EMPLOYEE-ID" in result
+
+    def test_empty_replacements(self):
+        result = apply_replacing(_EXACT_CPY, [])
+        assert result == _EXACT_CPY
+
+    def test_case_insensitive(self):
+        result = apply_replacing(_EXACT_CPY, [("ws-cust-name", "WS-ACCT-NAME")])
+        assert "WS-ACCT-NAME" in result
+
+
+class TestResolveWithReplacing:
+    def test_resolve_applies_substitution(self, tmp_path):
+        _write_cpy(tmp_path, "CUSTCPY", _SHARED_CPY)
+        cbd = CopybookDictionary(str(tmp_path))
+
+        rec = cbd.resolve_with_replacing("CUSTCPY", [(":PREF:", "WS-ACCT")])
+        assert rec is not None
+        names = [f.name for f in rec.fields]
+        assert "WS-ACCT-NAME" in names
+        assert "WS-ACCT-ID" in names
+        assert not any(":PREF:" in n for n in names)
+
+    def test_resolve_no_replacing_returns_original(self, tmp_path):
+        _write_cpy(tmp_path, "CUSTCPY", _EXACT_CPY)
+        cbd = CopybookDictionary(str(tmp_path))
+
+        rec = cbd.resolve_with_replacing("CUSTCPY", [])
+        assert rec is not None
+        names = [f.name for f in rec.fields]
+        assert "WS-CUST-NAME" in names
+
+    def test_resolve_unknown_copybook_returns_none(self, tmp_path):
+        cbd = CopybookDictionary(str(tmp_path))
+        assert cbd.resolve_with_replacing("NONEXISTENT", [("A", "B")]) is None
