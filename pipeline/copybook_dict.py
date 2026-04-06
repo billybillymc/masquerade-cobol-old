@@ -76,6 +76,37 @@ class CopybookRecord:
         return len([f for f in self.fields if f.level == 88])
 
 
+_RE_COBOL_ID = re.compile(r'^[A-Z0-9][A-Z0-9-]*$', re.IGNORECASE)
+
+
+def apply_replacing(source_text: str, replacements: list[tuple[str, str]]) -> str:
+    """Apply COPY REPLACING substitutions to copybook source text.
+
+    Two replacement strategies are used depending on *old*:
+
+    - **Valid COBOL identifier** (only letters, digits, hyphens): token-boundary
+      replacement so that ``WS-CUST`` does not accidentally match inside the
+      longer token ``WS-CUST-NAME``.
+    - **Placeholder pattern** (contains non-identifier characters such as ``:``):
+      plain substring replacement.  The common ``==:PREF:== BY ==WS-ACCT==``
+      convention embeds the placeholder inside a longer name like ``:PREF:-NAME``
+      and relies on substring matching to produce ``WS-ACCT-NAME``.
+    """
+    for old, new in replacements:
+        old = old.strip()
+        new = new.strip()
+        if not old:
+            continue
+        if _RE_COBOL_ID.match(old):
+            # Pure COBOL identifier — respect token boundaries.
+            pattern = r'(?<![A-Z0-9-])' + re.escape(old) + r'(?![A-Z0-9-])'
+            source_text = re.sub(pattern, new, source_text, flags=re.IGNORECASE)
+        else:
+            # Placeholder (e.g. :PREF:) — plain substring, case-sensitive.
+            source_text = source_text.replace(old, new)
+    return source_text
+
+
 _RE_LEVEL = re.compile(r'^\s*(\d{2})\s+([A-Z0-9][\w-]*)', re.IGNORECASE)
 _RE_PIC = re.compile(r'PIC(?:TURE)?\s+IS\s+(\S+)|PIC(?:TURE)?\s+(\S+)', re.IGNORECASE)
 _RE_USAGE = re.compile(r'USAGE\s+IS\s+(\S+)|USAGE\s+(\S+)', re.IGNORECASE)
@@ -86,9 +117,13 @@ _RE_VALUE = re.compile(r"VALUE\s+'([^']*)'|VALUE\s+(\S+)", re.IGNORECASE)
 _RE_88_VALUE = re.compile(r"VALUE\s+'([^']*)'|VALUE\s+(\S+)", re.IGNORECASE)
 
 
-def parse_copybook(filepath: Path) -> CopybookRecord:
-    """Parse a single copybook file into a CopybookRecord."""
-    raw = filepath.read_text(encoding="utf-8", errors="replace")
+def parse_copybook(filepath: Path, source_text: Optional[str] = None) -> CopybookRecord:
+    """Parse a single copybook file into a CopybookRecord.
+
+    If *source_text* is provided it is used instead of reading the file,
+    which allows callers to pass COPY REPLACING-substituted text.
+    """
+    raw = source_text if source_text is not None else filepath.read_text(encoding="utf-8", errors="replace")
     lines = raw.splitlines()
     total_lines = len(lines)
     comment_lines = 0
@@ -167,15 +202,42 @@ class CopybookDictionary:
         self.codebase_dir = codebase_dir
         self.records: dict[str, CopybookRecord] = {}
         self._field_index: dict[str, list[tuple[str, CopybookField]]] = defaultdict(list)
+        self._source_texts: dict[str, str] = {}
 
         for cpy_file in Path(codebase_dir).rglob("*.cpy"):
             try:
-                rec = parse_copybook(cpy_file)
+                raw = cpy_file.read_text(encoding="utf-8", errors="replace")
+                rec = parse_copybook(cpy_file, source_text=raw)
                 self.records[rec.name] = rec
+                self._source_texts[rec.name] = raw
                 for f in rec.fields:
                     self._field_index[f.name.upper()].append((rec.name, f))
             except Exception:
                 continue
+
+    def resolve_with_replacing(
+        self,
+        copybook_name: str,
+        replacing: list[tuple[str, str]],
+    ) -> Optional[CopybookRecord]:
+        """Return a CopybookRecord with COPY REPLACING substitutions applied.
+
+        Field names in the returned record reflect the substituted names as they
+        appear in the including program — not the original names in the .cpy file.
+        Returns None if the copybook is not found or has no stored source text.
+        """
+        name = copybook_name.upper()
+        raw = self._source_texts.get(name)
+        if raw is None:
+            return None
+        if not replacing:
+            return self.records.get(name)
+        substituted = apply_replacing(raw, replacing)
+        rec = self.records.get(name)
+        if rec is None:
+            return None
+        source_path = Path(rec.source_file)
+        return parse_copybook(source_path, source_text=substituted)
 
     def lookup_field(self, field_name: str) -> list[dict]:
         """Find a field across all copybooks."""
