@@ -306,3 +306,92 @@ def parse_find_value(s: str, offset: int, key: str):
         flag, cur = parse_comma(s, cur)
         if flag == 1:
             return 1, offset
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_simple_object():
+    return '{"name":"Alice","age":30}'
+
+
+def _scenario_nested():
+    return '{"a":{"b":[1,2,3]},"c":true}'
+
+
+def _scenario_empty_object():
+    return '{}'
+
+
+_CC_JSON_SCENARIOS = {
+    "SIMPLE_OBJECT": _scenario_simple_object,
+    "NESTED": _scenario_nested,
+    "EMPTY_OBJECT": _scenario_empty_object,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "SIMPLE_OBJECT")).upper()
+    if scenario_name not in _CC_JSON_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    json_str = _CC_JSON_SCENARIOS[scenario_name]()
+    out: dict[str, str] = {"INPUT": json_str}
+
+    # Parse object start
+    flag, offset = parse_object_start(json_str, 1)
+    out["OBJ_START_FLAG"] = str(flag)
+    out["OBJ_START_OFFSET"] = str(offset)
+
+    # Try to parse first key if object opened successfully
+    if flag == 0:
+        kflag, koffset, key = parse_object_key(json_str, offset)
+        out["FIRST_KEY_FLAG"] = str(kflag)
+        out["FIRST_KEY_OFFSET"] = str(koffset)
+        out["FIRST_KEY"] = key
+
+        if kflag == 0:
+            # Try to parse string value
+            sflag, soffset, sval = parse_string(json_str, koffset)
+            if sflag == 0:
+                out["FIRST_VALUE_TYPE"] = "STRING"
+                out["FIRST_VALUE"] = sval
+                out["FIRST_VALUE_OFFSET"] = str(soffset)
+            else:
+                # Try integer
+                iflag, ioffset, ival = parse_integer(json_str, koffset)
+                if iflag == 0:
+                    out["FIRST_VALUE_TYPE"] = "INTEGER"
+                    out["FIRST_VALUE"] = str(ival)
+                    out["FIRST_VALUE_OFFSET"] = str(ioffset)
+                else:
+                    # Try object/array/bool via skip
+                    bflag, boffset, bval = parse_boolean(json_str, koffset)
+                    if bflag == 0:
+                        out["FIRST_VALUE_TYPE"] = "BOOLEAN"
+                        out["FIRST_VALUE"] = str(bval)
+                        out["FIRST_VALUE_OFFSET"] = str(boffset)
+                    else:
+                        # skip value
+                        skflag, skoffset = parse_skip_value(json_str, koffset)
+                        out["FIRST_VALUE_TYPE"] = "COMPLEX"
+                        out["FIRST_VALUE"] = json_str[koffset-1:skoffset-1]
+                        out["FIRST_VALUE_OFFSET"] = str(skoffset)
+
+    # find_value test: look for a key
+    if scenario_name == "SIMPLE_OBJECT":
+        fv_flag, fv_offset = parse_find_value(json_str, 2, "age")
+        out["FIND_AGE_FLAG"] = str(fv_flag)
+        out["FIND_AGE_OFFSET"] = str(fv_offset)
+        if fv_flag == 0:
+            af, ao, av = parse_integer(json_str, fv_offset)
+            out["FIND_AGE_VALUE"] = str(av)
+    elif scenario_name == "NESTED":
+        fv_flag, fv_offset = parse_find_value(json_str, 2, "c")
+        out["FIND_C_FLAG"] = str(fv_flag)
+        out["FIND_C_OFFSET"] = str(fv_offset)
+        if fv_flag == 0:
+            bf, bo, bv = parse_boolean(json_str, fv_offset)
+            out["FIND_C_VALUE"] = str(bv)
+
+    return out

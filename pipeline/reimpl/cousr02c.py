@@ -204,3 +204,96 @@ def _do_update(
     if commarea:
         result.commarea = commarea
     return result
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_USERS: dict[str, SecUserData] = {
+    "ADMIN001": SecUserData(sec_usr_id="ADMIN001", sec_usr_fname="John", sec_usr_lname="Admin", sec_usr_pwd="PASS1234", sec_usr_type="A"),
+    "USER0001": SecUserData(sec_usr_id="USER0001", sec_usr_fname="Jane", sec_usr_lname="User", sec_usr_pwd="MYPASSWD", sec_usr_type="U"),
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY    — context=0, preloaded user → display user
+      LOOKUP_USER    — ENTER with user ID → find user
+      UPDATE_USER    — PF5 with updated fields → save
+      USER_NOT_FOUND — ENTER with bad user ID → error
+      PF3_RETURN     — press PF3 → return to previous
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    import copy
+    repo = UserSecRepository(copy.deepcopy(_SEED_USERS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CA00",
+        cdemo_from_program="COUSR00C",
+        cdemo_user_id="ADMIN001",
+        cdemo_user_type="A",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_update_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=UpdateUserInput(), user_repo=repo,
+            preloaded_user_id="USER0001",
+        )
+    elif scenario == "LOOKUP_USER":
+        result = process_update_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=UpdateUserInput(user_id_input="USER0001"),
+            user_repo=repo,
+        )
+    elif scenario == "UPDATE_USER":
+        result = process_update_user(
+            eibcalen=100, eibaid="PF5", commarea=commarea,
+            user_input=UpdateUserInput(
+                user_id_input="USER0001", first_name="Janet",
+                last_name="Updated", password="NEWPASS1", user_type="A",
+            ),
+            user_repo=repo,
+        )
+    elif scenario == "USER_NOT_FOUND":
+        result = process_update_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=UpdateUserInput(user_id_input="NOSUCHID"),
+            user_repo=repo,
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_update_user(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            user_input=UpdateUserInput(user_id_input="USER0001"),
+            user_repo=repo,
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_update_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=UpdateUserInput(), user_repo=repo,
+            preloaded_user_id="USER0001",
+        )
+
+    user_id_out = ""
+    user_fname_out = ""
+    user_lname_out = ""
+    if result.user_found:
+        user_id_out = result.user_found.sec_usr_id
+        user_fname_out = result.user_found.sec_usr_fname
+        user_lname_out = result.user_found.sec_usr_lname
+
+    return {
+        "ERROR": "Y" if result.error else "N",
+        "SUCCESS": "Y" if result.success else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+        "USER_ID": user_id_out,
+        "USER_FNAME": user_fname_out,
+        "USER_LNAME": user_lname_out,
+    }

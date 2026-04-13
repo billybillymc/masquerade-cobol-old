@@ -142,3 +142,69 @@ class Cbstm03bFileManager:
             )
         except Exception:
             return TranRecord()
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    from decimal import Decimal
+    return [
+        TranRecord(
+            tran_id="TRN0000000000001", tran_type_cd="01", tran_cat_cd=1,
+            tran_source="ONLINE", tran_desc="Widget purchase",
+            tran_amt=Decimal("150.25"), tran_merchant_id=123456789,
+            tran_merchant_name="ACME WIDGETS", tran_merchant_city="NEW YORK",
+            tran_merchant_zip="10001", tran_card_num="4111000000001111",
+            tran_orig_ts="2026-04-01-12.00.00.000000",
+            tran_proc_ts="2026-04-01-12.00.00.000000",
+        ),
+    ]
+
+
+def _scenario_empty_input():
+    return []
+
+
+_CBSTM03B_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _CBSTM03B_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    trans = _CBSTM03B_SCENARIOS[scenario_name]()
+    mgr = Cbstm03bFileManager(trans)
+
+    # Exercise the file manager: OPEN, READ all, CLOSE
+    area = M03BArea(dd="TRNXFILE")
+    area.oper = OPER_OPEN
+    mgr.execute(area)
+    open_rc = area.rc
+
+    records_read = 0
+    fldt_records = []
+    while True:
+        area.oper = OPER_READ
+        mgr.execute(area)
+        if area.rc == "10":
+            break
+        records_read += 1
+        fldt_records.append(area.fldt)
+
+    area.oper = OPER_CLOSE
+    mgr.execute(area)
+    close_rc = area.rc
+
+    out: dict[str, str] = {
+        "OPEN_RC": open_rc,
+        "CLOSE_RC": close_rc,
+        "RECORDS_READ": str(records_read),
+    }
+    for i, fldt in enumerate(fldt_records):
+        out[f"FLDT_{i}"] = fldt
+    return out

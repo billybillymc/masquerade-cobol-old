@@ -46,3 +46,34 @@ def _format_customer_record(cust: CustomerRecord) -> str:
         f"FICO:{cust.cust_fico_credit_score:03d} "
         f"ZIP:{cust.cust_addr_zip}"
     )
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    customers = [
+        CustomerRecord(
+            cust_id=1,
+            cust_first_name="John",
+            cust_middle_name="A",
+            cust_last_name="Doe",
+            cust_ssn=123456789,
+            cust_dob_yyyy_mm_dd="1990-01-15",
+            cust_fico_credit_score=750,
+            cust_addr_zip="10001",
+        ),
+        CustomerRecord(
+            cust_id=2,
+            cust_first_name="Jane",
+            cust_middle_name="B",
+            cust_last_name="Smith",
+            cust_ssn=987654321,
+            cust_dob_yyyy_mm_dd="1985-07-22",
+            cust_fico_credit_score=680,
+            cust_addr_zip="90210",
+        ),
+    ]
+    result = process_customer_file(customers, logger=lambda _: None)
+    out: dict[str, str] = {"RECORDS_READ": str(result.records_read)}
+    for i, line in enumerate(result.display_lines):
+        out[f"DISPLAY_{i}"] = line
+    return out

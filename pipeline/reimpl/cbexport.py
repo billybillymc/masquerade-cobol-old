@@ -112,3 +112,65 @@ def run_export(
     )
     result.log.append("CBEXPORT: Export complete.")
     return result
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    from decimal import Decimal
+    customers = [
+        CustomerRecord(cust_id=1, cust_first_name="JOHN", cust_last_name="DOE"),
+    ]
+    accounts = [
+        AccountRecord(acct_id=100000001, acct_active_status="Y",
+                       acct_curr_bal=Decimal("5000.00")),
+    ]
+    xrefs = [
+        CardXrefRecord(xref_card_num="4111000000001111",
+                        xref_cust_id=1, xref_acct_id=100000001),
+    ]
+    transactions = [
+        TranRecord(tran_id="TRN0000000000001", tran_type_cd="01",
+                    tran_cat_cd=1, tran_amt=Decimal("150.25")),
+    ]
+    cards = [
+        CardRecord(card_num="4111000000001111", card_acct_id=100000001,
+                    card_cvv_cd=123, card_active_status="Y"),
+    ]
+    return customers, accounts, xrefs, transactions, cards
+
+
+def _scenario_empty_input():
+    return [], [], [], [], []
+
+
+_CBEXPORT_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _CBEXPORT_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    customers, accounts, xrefs, transactions, cards = _CBEXPORT_SCENARIOS[scenario_name]()
+    result = run_export(
+        customers, accounts, xrefs, transactions, cards,
+        export_timestamp="2026-04-08 12:00:00.00",
+    )
+
+    out: dict[str, str] = {
+        "TOTAL_RECORDS": str(result.stats.total),
+        "CUSTOMERS": str(result.stats.customers),
+        "ACCOUNTS": str(result.stats.accounts),
+        "XREFS": str(result.stats.xrefs),
+        "TRANSACTIONS": str(result.stats.transactions),
+        "CARDS": str(result.stats.cards),
+        "ABENDED": str(result.abended),
+    }
+    for i, line in enumerate(result.log):
+        out[f"LOG_{i}"] = line
+    return out

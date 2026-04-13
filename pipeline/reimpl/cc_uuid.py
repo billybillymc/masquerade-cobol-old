@@ -39,3 +39,45 @@ def uuid_from_string(s: str) -> bytes:
 
 def _decode_hex(c: str) -> int:
     return _HEX.index(c.lower())
+
+
+# ── Differential harness runner adapter ────────────────────────────────────
+#
+# `run_vector` exposes uuid_to_string and uuid_from_string through the
+# JSON contract. Binary data is carried as lowercase hex strings (2 hex
+# chars per byte, 32 chars for a 16-byte UUID).
+#
+# Inputs:
+#   op          — "to_string" | "from_string"
+#   HEX_BYTES   — 32-char hex string (for to_string)
+#   UUID_STRING — 36-char hyphenated UUID (for from_string)
+#
+# Outputs:
+#   UUID_STRING — 36-char hyphenated UUID (from to_string)
+#   HEX_BYTES   — 32-char lowercase hex string (from from_string)
+#   error       — "" on success, error message on failure
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness."""
+    op = str(inputs.get("op", "")).strip().lower()
+
+    try:
+        if op == "to_string":
+            hex_bytes = str(inputs.get("HEX_BYTES", ""))
+            if len(hex_bytes) != 32:
+                return {"UUID_STRING": "", "error": f"HEX_BYTES must be 32 chars, got {len(hex_bytes)}"}
+            buf = bytes.fromhex(hex_bytes)
+            return {"UUID_STRING": uuid_to_string(buf), "error": ""}
+
+        if op == "from_string":
+            uuid_str = str(inputs.get("UUID_STRING", ""))
+            if len(uuid_str) != 36:
+                return {"HEX_BYTES": "", "error": f"UUID_STRING must be 36 chars, got {len(uuid_str)}"}
+            buf = uuid_from_string(uuid_str)
+            return {"HEX_BYTES": buf.hex(), "error": ""}
+
+        return {"error": f"unknown op: {op!r}"}
+
+    except (ValueError, IndexError) as e:
+        return {"error": f"{type(e).__name__}: {e}"}

@@ -192,3 +192,96 @@ def _save_card(inp, repo, commarea, result):
     result.screen.errmsg = result.message
     result.commarea = commarea
     return result
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_CARDS: dict[str, CardRecord] = {
+    "4111111111110001": CardRecord(card_num="4111111111110001", card_acct_id=10000001, card_cvv_cd=123,
+                                   card_embossed_name="JANE USER", card_expiration_date="2028-12-31",
+                                   card_active_status="Y"),
+    "4111111111110002": CardRecord(card_num="4111111111110002", card_acct_id=10000001, card_cvv_cd=456,
+                                   card_embossed_name="BOB SMITH", card_expiration_date="2027-06-30",
+                                   card_active_status="Y"),
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY    — context=0, preloaded card → display card
+      LOOKUP_CARD    — ENTER with card number → find card
+      UPDATE_CARD    — PF5 with updated fields → save
+      CARD_NOT_FOUND — ENTER with bad card number → error
+      PF3_RETURN     — press PF3 → return to previous
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    import copy
+    repo = CardRepository(copy.deepcopy(_SEED_CARDS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CCLI",
+        cdemo_from_program="COCRDLIC",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_card_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_input=CardUpdateInput(), card_repo=repo,
+            preloaded_card_num="4111111111110001",
+        )
+    elif scenario == "LOOKUP_CARD":
+        result = process_card_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_input=CardUpdateInput(card_num="4111111111110001"),
+            card_repo=repo,
+        )
+    elif scenario == "UPDATE_CARD":
+        result = process_card_update(
+            eibcalen=100, eibaid="PF5", commarea=commarea,
+            card_input=CardUpdateInput(
+                card_num="4111111111110001", embossed_name="JANE UPDATED",
+                expiration_date="2029-12-31", active_status="Y", cvv_cd="999",
+            ),
+            card_repo=repo,
+        )
+    elif scenario == "CARD_NOT_FOUND":
+        result = process_card_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_input=CardUpdateInput(card_num="9999999999999999"),
+            card_repo=repo,
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_card_update(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            card_input=CardUpdateInput(), card_repo=repo,
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_card_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_input=CardUpdateInput(), card_repo=repo,
+            preloaded_card_num="4111111111110001",
+        )
+
+    card_num_out = ""
+    embossed_name_out = ""
+    if result.card_found:
+        card_num_out = result.card_found.card_num
+        embossed_name_out = result.card_found.card_embossed_name
+
+    return {
+        "ERROR": "Y" if result.error else "N",
+        "SUCCESS": "Y" if result.success else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+        "CARD_NUM": card_num_out,
+        "EMBOSSED_NAME": embossed_name_out,
+    }

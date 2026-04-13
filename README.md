@@ -1,6 +1,6 @@
-# Masquerade — COBOL-to-Python Reimplementation Engine
+# Masquerade — COBOL Reimplementation Engine (Python + Java)
 
-Masquerade parses legacy COBOL systems, uses LLM-powered analysis to extract their business logic, and helps you reimplement them in Python with verified behavioral equivalence.
+Masquerade parses legacy COBOL systems, uses LLM-powered analysis to extract their business logic, and helps you reimplement them in **Python or Java** with verified behavioral equivalence. Both targets share the same parser, the same IR, the same vector set, and the same differential harness — so a passing reimplementation in one language can be cross-checked against a passing reimplementation in the other.
 
 It combines **static analysis** (parsing, dependency graphs, typed skeleton generation) with **LLM-powered intelligence** (RAG-based Q&A, semantic business rule extraction, reimplementation spec generation) so you can understand what COBOL code does, generate typed Python skeletons, and **prove** your reimplementation matches the original through differential testing.
 
@@ -50,6 +50,20 @@ Masquerade gives you the tools to understand, reimplement, and verify — not ju
 | **Reimplementation Specs** | Full specification documents generated from structural analysis + RAG context: purpose, inputs/outputs, business rules, data contracts, control flow, and reimplementation notes. |
 | **Impact Analysis** | Change impact assessment using dependency graph + LLM interpretation. "If I change this copybook field, what breaks?" |
 | **Interactive CLI** | REPL with 20+ commands: `/spec`, `/rules`, `/impact`, `/hotspots`, `/isolated`, `/dict`, `/trace`, and more. |
+
+## Java Target (Parallel Track)
+
+Java is a first-class reimplementation target alongside Python. The Java side provides:
+
+- **`CobolDecimal.java`** — `BigDecimal`-backed faithful COBOL arithmetic with a 49-test JUnit 5 parity suite that mirrors `cobol_decimal.py` test-for-test
+- **`JavaRenderer.render_module(...)`** — emits buildable Maven modules with `pom.xml`, package layout, Spring Boot for CICS programs
+- **Spring Data repository emitter** for CICS file operations (`READ` → `findById`, `WRITE` → `save`, `BROWSE` → `Stream<T> streamAllByOrderById()`)
+- **Spring REST controller emitter** for BMS screen → API mapping with JSR-380 (`@NotNull`, `@Size`) DTOs
+- **JUnit 5 emitter** for the test_generator (1:1 scenario count parity with the pytest emitter)
+- **`masquerade-runner.jar`** — fat-jar dispatcher that lets the differential harness drive Java reimpls through the same JSON contract as Python ones
+- **End-to-end pilot:** Java COSGN00C reimplementation passes the differential harness at 100% confidence with cross-language Python↔Java parity verified per scenario
+
+See [`docs/JAVA_TARGET.md`](docs/JAVA_TARGET.md) for prerequisites (JDK 17, Maven 3.9.x), bootstrap (one-time `mvn install` of the cobol-decimal artifact), generation (`python pipeline/java_codegen.py --target java ...`), and the runner protocol.
 
 ## Quick Start
 

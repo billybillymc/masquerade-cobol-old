@@ -252,3 +252,75 @@ def _populate_header(applid: str, sysid: str) -> ScreenOutput:
         applid=applid,
         sysid=sysid,
     )
+
+
+# ── Differential harness runner adapter (W2) ───────────────────────────────
+#
+# `run_vector` is the canonical entry point used by the language-agnostic
+# vector runner in `pipeline/vector_runner.py`. It maps the harness JSON shape
+# (a flat dict of strings) to this program's native API and back, so the same
+# vectors can drive Python and Java reimplementations interchangeably.
+#
+# Inputs accepted:
+#   USERID  — required, the user ID being signed in
+#   PASSWD  — required, the password attempt
+#   EIBCALEN — optional (default "100"), nonzero = returning user
+#   EIBAID  — optional (default "ENTER"), AID key
+#
+# Outputs produced:
+#   XCTL_TARGET   — destination program on success ("" on no-transfer paths)
+#   HAS_COMMAREA  — "Y" if a commarea was set, otherwise "N"
+#   ERROR_MSG     — canonical short error label, or "" on success
+
+_DEFAULT_RUNNER_REPOSITORY = UserSecurityRepository({
+    "ADMIN001": SecUserData(
+        sec_usr_id="ADMIN001", sec_usr_fname="John", sec_usr_lname="Admin",
+        sec_usr_pwd="PASS1234", sec_usr_type="A",
+    ),
+    "USER0001": SecUserData(
+        sec_usr_id="USER0001", sec_usr_fname="Jane", sec_usr_lname="User",
+        sec_usr_pwd="MYPASSWD", sec_usr_type="U",
+    ),
+})
+
+
+def _classify_message(message: str) -> str:
+    """Reduce a free-text message to a stable canonical error label."""
+    if not message:
+        return ""
+    if "Wrong Password" in message:
+        return "Wrong Password"
+    if "User not found" in message:
+        return "User not found"
+    if "Unable to verify" in message:
+        return "Unable to verify"
+    if "Please enter User ID" in message:
+        return "Please enter User ID"
+    if "Please enter Password" in message:
+        return "Please enter Password"
+    return ""
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    See the section comment above for the input/output contract.
+    """
+    user_id = str(inputs.get("USERID", ""))
+    password = str(inputs.get("PASSWD", ""))
+    eibcalen = int(inputs.get("EIBCALEN", 100))
+    eibaid = str(inputs.get("EIBAID", "ENTER"))
+
+    result = process_signon(
+        user_id=user_id,
+        password=password,
+        eibcalen=eibcalen,
+        eibaid=eibaid,
+        repository=_DEFAULT_RUNNER_REPOSITORY,
+    )
+
+    return {
+        "XCTL_TARGET": result.xctl_program or "",
+        "HAS_COMMAREA": "Y" if result.commarea else "N",
+        "ERROR_MSG": _classify_message(result.message),
+    }

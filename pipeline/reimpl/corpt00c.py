@@ -180,3 +180,90 @@ def _submit_job(report_name, start_date, end_date, commarea, result):
     result.screen.errmsg = result.message
     result.commarea = commarea
     return result
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY    — context=0, first entry → show blank form
+      MONTHLY_REPORT — submit monthly report
+      YEARLY_REPORT  — submit yearly report
+      CUSTOM_REPORT  — submit custom date range report
+      INVALID_TYPE   — no report type selected → error
+      PF3_RETURN     — press PF3 → return to menu
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    from datetime import date as _date
+    fixed_today = _date(2025, 6, 15)
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CM00",
+        cdemo_from_program="COMEN01C",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_report_screen(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            report_type="", today=fixed_today,
+        )
+    elif scenario == "MONTHLY_REPORT":
+        result = process_report_screen(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            report_type="monthly", today=fixed_today,
+        )
+    elif scenario == "YEARLY_REPORT":
+        result = process_report_screen(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            report_type="yearly", today=fixed_today,
+        )
+    elif scenario == "CUSTOM_REPORT":
+        result = process_report_screen(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            report_type="custom",
+            start_mm="01", start_dd="01", start_yyyy="2025",
+            end_mm="06", end_dd="30", end_yyyy="2025",
+            today=fixed_today,
+        )
+    elif scenario == "INVALID_TYPE":
+        result = process_report_screen(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            report_type="", today=fixed_today,
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_report_screen(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            report_type="", today=fixed_today,
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_report_screen(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            report_type="", today=fixed_today,
+        )
+
+    job_name = ""
+    start_date = ""
+    end_date = ""
+    if result.job_request:
+        job_name = result.job_request.report_name
+        start_date = result.job_request.start_date
+        end_date = result.job_request.end_date
+
+    return {
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+        "JOB_NAME": job_name,
+        "START_DATE": start_date,
+        "END_DATE": end_date,
+    }

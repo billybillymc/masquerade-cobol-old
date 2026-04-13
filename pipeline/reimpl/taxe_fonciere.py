@@ -667,3 +667,94 @@ def _fill_retour_identity(
     retour.nnupro = combat.nnupro
     retour.ccobnb = combat.ccobnb
     return retour
+
+
+# ── Differential harness runner adapter ────────────────────────────────────
+
+
+def _scenario_happy_basic():
+    combat = CombatInput(
+        ccobnb="2", dan="2018", cc2dep="75", ccodir="2", ccocom="056",
+        dsrpar="A", cgroup="P", nnupro=12345,
+        mbacom=10000, mbadep=10000, mbasyn=5000, mbacu=5000,
+        mbage3=10000, mbata3=10000, mbbt13=[5000, 5000],
+    )
+    rates = AllRates(
+        taucom=Decimal("18.99"), taudep=Decimal("12.50"),
+        tausyn=Decimal("2.00"), taucu=Decimal("4.00"),
+        taugem=Decimal("0.50"), tautas=Decimal("1.00"),
+        tautsen=[Decimal("0.80"), Decimal("0.20")],
+    )
+    return combat, rates
+
+
+def _scenario_with_om():
+    combat = CombatInput(
+        ccobnb="2", dan="2018", cc2dep="75", ccodir="2", ccocom="056",
+        dsrpar="A", cgroup="P", nnupro=12345,
+        mbacom=10000, mbadep=10000, mbasyn=5000, mbacu=5000,
+        mbage3=10000, mbata3=10000, mbbt13=[5000, 5000],
+        abaom=[
+            OmZone(gtauom="P ", mbaom=10000),
+            OmZone(gtauom="RA", mbaom=8000),
+            OmZone(gtauom="RB", mbaom=6000),
+            OmZone(gtauom="  ", mbaom=0),
+            OmZone(gtauom="  ", mbaom=0),
+            OmZone(gtauom="  ", mbaom=0),
+        ],
+    )
+    rates = AllRates(
+        taucom=Decimal("18.99"), taudep=Decimal("12.50"),
+        tausyn=Decimal("2.00"), taucu=Decimal("4.00"),
+        taugem=Decimal("0.50"), tautas=Decimal("1.00"),
+        tautsen=[Decimal("0.80"), Decimal("0.20")],
+        tauom=[
+            Decimal("10.00"), Decimal("7.50"), Decimal("5.00"),
+            Decimal("3.00"), Decimal("2.00"), Decimal("1.00"),
+        ],
+    )
+    return combat, rates
+
+
+def _scenario_bad_ccobnb():
+    combat = CombatInput(ccobnb="1", dan="2018", cc2dep="75", ccodir="2",
+                         ccocom="056", dsrpar="A", cgroup="P", nnupro=12345)
+    return combat, AllRates()
+
+
+def _scenario_bad_year():
+    combat = CombatInput(ccobnb="2", dan="2017", cc2dep="75", ccodir="2",
+                         ccocom="056", dsrpar="A", cgroup="P", nnupro=12345)
+    return combat, AllRates()
+
+
+_TAXE_SCENARIOS = {
+    "HAPPY_BASIC": _scenario_happy_basic,
+    "WITH_OM": _scenario_with_om,
+    "BAD_CCOBNB": _scenario_bad_ccobnb,
+    "BAD_YEAR": _scenario_bad_year,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    scenario_name = str(inputs.get("SCENARIO", "")).upper()
+    if scenario_name not in _TAXE_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    combat, rates = _TAXE_SCENARIOS[scenario_name]()
+    retour, cr, rc = calculate_tax_batie(combat, rates=rates)
+
+    return {
+        "CR": str(cr), "RC": str(rc),
+        "MCTCOM": str(retour.mctcom), "MCTDEP": str(retour.mctdep),
+        "MCTSYN": str(retour.mctsyn), "MCTCU": str(retour.mctcu),
+        "MCOGE3": str(retour.mcoge3), "MCOTA3": str(retour.mcota3),
+        "MCBT13_0": str(retour.mcbt13[0]), "MCBT13_1": str(retour.mcbt13[1]),
+        "MCBTSA": str(retour.mcbtsa), "TCTOM": str(retour.tctom),
+        "TCTHFR": str(retour.tcthfr),
+        "MFA300": str(retour.mfa300), "MFN300": str(retour.mfn300),
+        "MFA800": str(retour.mfa800), "MFN800": str(retour.mfn800),
+        "MFA900": str(retour.mfa900), "MFN900": str(retour.mfn900),
+        "TCTFRA": str(retour.tctfra), "TCTDU": str(retour.tctdu),
+        "MVLTIM": str(retour.mvltim),
+    }

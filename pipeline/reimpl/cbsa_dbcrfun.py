@@ -377,3 +377,97 @@ def process_debit_credit(
     result.success = True
     result.fail_code = "0"
     return result
+
+
+# ── Differential harness runner adapter (W2 contract) ──────────────────────
+#
+# `run_vector` is the canonical entry point used by the language-agnostic
+# vector runner. The Java reimplementation under
+# pipeline/reimpl/java/runner/.../programs/Dbcrfun.java speaks the same
+# JSON contract.
+#
+# Each call creates a FRESH seeded repository (DBCRFUN mutates accounts on
+# success, so persistent state would make tests order-dependent).
+#
+# Inputs accepted:
+#   ACC_NO       — account number to operate on
+#   AMOUNT       — signed decimal as string (negative = debit, positive = credit)
+#   FACIL_TYPE   — int as string ("496" = PAYMENT, anything else = teller)
+#   ORIGIN       — optional payment origin (used for PROCTRAN desc on payments)
+#
+# Outputs produced:
+#   SUCCESS    — "Y" or "N"
+#   FAIL_CODE  — "0" (success), "1" (not found), "2" (SQL error),
+#                "3" (insufficient funds), "4" (restricted account)
+#   AVAIL_BAL  — new available balance as decimal string ("0.00" if failed
+#                before any update)
+#   ACTUAL_BAL — new actual balance as decimal string
+#   SORTCODE   — always "987654" (the bank sort code constant)
+
+
+def _seeded_repository() -> "InMemoryAccountRepository":
+    """Build the standard seeded account set used by run_vector tests.
+
+    Each scenario gets a fresh copy so successful debits/credits don't
+    contaminate later vectors.
+    """
+    repo = InMemoryAccountRepository()
+    repo.add(Account(
+        cust_no="0000000001", sortcode=SORTCODE, acc_no="ACC00001",
+        acc_type="CHECKING", avail_bal=Decimal("1000.00"), actual_bal=Decimal("1000.00"),
+    ))
+    repo.add(Account(
+        cust_no="0000000002", sortcode=SORTCODE, acc_no="ACC00002",
+        acc_type="CHECKING", avail_bal=Decimal("10.00"), actual_bal=Decimal("10.00"),
+    ))
+    repo.add(Account(
+        cust_no="0000000003", sortcode=SORTCODE, acc_no="ACC00003",
+        acc_type="MORTGAGE", avail_bal=Decimal("5000.00"), actual_bal=Decimal("5000.00"),
+    ))
+    repo.add(Account(
+        cust_no="0000000004", sortcode=SORTCODE, acc_no="ACC00004",
+        acc_type="LOAN", avail_bal=Decimal("500.00"), actual_bal=Decimal("500.00"),
+    ))
+    repo.add(Account(
+        cust_no="0000000005", sortcode=SORTCODE, acc_no="ACC00005",
+        acc_type="SAVING", avail_bal=Decimal("2000.00"), actual_bal=Decimal("2000.00"),
+    ))
+    return repo
+
+
+def _format_balance(bal: Decimal) -> str:
+    """Format a balance as a fixed-scale 2 decimal string for the runner contract.
+
+    Forces scale=2 so that 1000 and 1000.00 produce identical strings, matching
+    how the Java side will format CobolDecimal(10, 2, true) values.
+    """
+    quantized = bal.quantize(Decimal("0.01"))
+    return f"{quantized:.2f}"
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness."""
+    acc_no = str(inputs.get("ACC_NO", ""))
+    amount_str = str(inputs.get("AMOUNT", "0.00"))
+    facil_type_str = str(inputs.get("FACIL_TYPE", "0"))
+    origin = str(inputs.get("ORIGIN", ""))
+
+    request = DebitCreditRequest(
+        sortcode=SORTCODE,
+        acc_no=acc_no,
+        amount=Decimal(amount_str),
+        facil_type=int(facil_type_str),
+        origin=origin,
+    )
+
+    account_repo = _seeded_repository()
+    proctran_repo = InMemoryProcTranRepository()
+    result = process_debit_credit(request, account_repo, proctran_repo)
+
+    return {
+        "SUCCESS": "Y" if result.success else "N",
+        "FAIL_CODE": result.fail_code,
+        "AVAIL_BAL": _format_balance(result.avail_bal),
+        "ACTUAL_BAL": _format_balance(result.actual_bal),
+        "SORTCODE": result.sortcode,
+    }

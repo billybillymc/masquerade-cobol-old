@@ -45,3 +45,30 @@ def _format_card_record(card: CardRecord) -> str:
         f"EXP:{card.card_expiration_date} "
         f"STATUS:{card.card_active_status}"
     )
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    cards = [
+        CardRecord(
+            card_num="4111111111111111",
+            card_acct_id=100000001,
+            card_cvv_cd=123,
+            card_embossed_name="JOHN DOE",
+            card_expiration_date="2029-12-31",
+            card_active_status="Y",
+        ),
+        CardRecord(
+            card_num="4222222222222222",
+            card_acct_id=100000002,
+            card_cvv_cd=456,
+            card_embossed_name="JANE SMITH",
+            card_expiration_date="2028-06-30",
+            card_active_status="Y",
+        ),
+    ]
+    result = process_card_file(cards, logger=lambda _: None)
+    out: dict[str, str] = {"RECORDS_READ": str(result.records_read)}
+    for i, line in enumerate(result.display_lines):
+        out[f"DISPLAY_{i}"] = line
+    return out

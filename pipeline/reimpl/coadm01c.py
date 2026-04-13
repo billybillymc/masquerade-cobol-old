@@ -144,3 +144,65 @@ def _build_menu_options() -> list[str]:
     for num, name, pgm in MENU_ADMIN_OPTIONS:
         lines.append(f"{num:02d}. {name:<35}")
     return lines
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      VALID_OPTION_1  — select option 1 (User List) → COUSR00C
+      VALID_OPTION_5  — select option 5 (Tran Type List) → COTRTLIC
+      INVALID_OPTION  — select option 99 → error
+      INVALID_KEY     — press PF9 → invalid key error
+      PF3_RETURN      — press PF3 → return to sign-on
+      FIRST_ENTRY     — first entry (context=0) → send menu
+    """
+    scenario = inputs.get("SCENARIO", "VALID_OPTION_1")
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CC00",
+        cdemo_from_program="COSGN00C",
+        cdemo_user_id="ADMIN001",
+        cdemo_user_type="A",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_admin_menu(
+            eibcalen=100, eibaid="ENTER", commarea_bytes=commarea, option_input="",
+        )
+    elif scenario == "VALID_OPTION_1":
+        result = process_admin_menu(
+            eibcalen=100, eibaid="ENTER", commarea_bytes=commarea, option_input="1",
+        )
+    elif scenario == "VALID_OPTION_5":
+        result = process_admin_menu(
+            eibcalen=100, eibaid="ENTER", commarea_bytes=commarea, option_input="5",
+        )
+    elif scenario == "INVALID_OPTION":
+        result = process_admin_menu(
+            eibcalen=100, eibaid="ENTER", commarea_bytes=commarea, option_input="99",
+        )
+    elif scenario == "INVALID_KEY":
+        result = process_admin_menu(
+            eibcalen=100, eibaid="PF9", commarea_bytes=commarea, option_input="",
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_admin_menu(
+            eibcalen=100, eibaid="PF3", commarea_bytes=commarea, option_input="",
+        )
+    else:
+        result = process_admin_menu(
+            eibcalen=100, eibaid="ENTER", commarea_bytes=commarea, option_input="1",
+        )
+
+    return {
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "RETURN_TO_SIGNON": "Y" if result.return_to_signon else "N",
+        "SELECTED_OPTION": str(result.selected_option),
+    }

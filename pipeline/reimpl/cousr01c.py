@@ -181,3 +181,89 @@ def _process_enter(
 
     result.commarea = commarea
     return result
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_USERS: dict[str, SecUserData] = {
+    "ADMIN001": SecUserData(sec_usr_id="ADMIN001", sec_usr_fname="John", sec_usr_lname="Admin", sec_usr_pwd="PASS1234", sec_usr_type="A"),
+    "USER0001": SecUserData(sec_usr_id="USER0001", sec_usr_fname="Jane", sec_usr_lname="User", sec_usr_pwd="MYPASSWD", sec_usr_type="U"),
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY    — context=0, first entry → show blank form
+      VALID_INPUT    — add a new user successfully
+      DUPLICATE_USER — attempt to add existing user → error
+      MISSING_FIELD  — missing first name → validation error
+      PF3_RETURN     — press PF3 → return to admin menu
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    import copy
+    repo = UserSecRepository(copy.deepcopy(_SEED_USERS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CA00",
+        cdemo_from_program="COADM01C",
+        cdemo_user_id="ADMIN001",
+        cdemo_user_type="A",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_add_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=AddUserInput(), user_repo=repo,
+        )
+    elif scenario == "VALID_INPUT":
+        result = process_add_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=AddUserInput(
+                first_name="Charlie", last_name="Brown",
+                user_id="USER0099", password="NEWPASS1", user_type="R",
+            ),
+            user_repo=repo,
+        )
+    elif scenario == "DUPLICATE_USER":
+        result = process_add_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=AddUserInput(
+                first_name="Jane", last_name="User",
+                user_id="USER0001", password="MYPASSWD", user_type="U",
+            ),
+            user_repo=repo,
+        )
+    elif scenario == "MISSING_FIELD":
+        result = process_add_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=AddUserInput(
+                first_name="", last_name="Brown",
+                user_id="USER0099", password="NEWPASS1", user_type="R",
+            ),
+            user_repo=repo,
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_add_user(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            user_input=AddUserInput(), user_repo=repo,
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_add_user(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_input=AddUserInput(), user_repo=repo,
+        )
+
+    return {
+        "ERROR": "Y" if result.error else "N",
+        "SUCCESS": "Y" if result.success else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+        "CLEARED": "Y" if result.cleared else "N",
+    }

@@ -220,3 +220,70 @@ def _build_vb_records(acct: AccountRecord) -> tuple[VbRec1, VbRec2]:
         acct_reissue_yyyy=reissue_yyyy,
     )
     return vb1, vb2
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    return [
+        AccountRecord(
+            acct_id=100000001,
+            acct_active_status="Y",
+            acct_curr_bal=Decimal("5000.00"),
+            acct_credit_limit=Decimal("10000.00"),
+            acct_cash_credit_limit=Decimal("3000.00"),
+            acct_open_date="2020-03-15",
+            acct_expiration_date="2029-12-31",
+            acct_reissue_date="2025-03-15",
+            acct_curr_cyc_credit=Decimal("1500.00"),
+            acct_curr_cyc_debit=Decimal("0.00"),
+            acct_group_id="GOLD",
+        ),
+        AccountRecord(
+            acct_id=100000002,
+            acct_active_status="Y",
+            acct_curr_bal=Decimal("2500.50"),
+            acct_credit_limit=Decimal("5000.00"),
+            acct_cash_credit_limit=Decimal("1500.00"),
+            acct_open_date="2021-07-01",
+            acct_expiration_date="2028-06-30",
+            acct_reissue_date="2024-07-01",
+            acct_curr_cyc_credit=Decimal("800.00"),
+            acct_curr_cyc_debit=Decimal("200.00"),
+            acct_group_id="PLAT",
+        ),
+    ]
+
+
+def _scenario_empty_input():
+    return []
+
+
+_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    accounts = _SCENARIOS[scenario_name]()
+    result = process_account_file(accounts, logger=lambda _: None)
+
+    out: dict[str, str] = {
+        "RECORDS_READ": str(result.records_read),
+        "OUT_RECORDS": str(len(result.out_records)),
+        "ARR_RECORDS": str(len(result.arr_records)),
+        "VB1_RECORDS": str(len(result.vb1_records)),
+        "VB2_RECORDS": str(len(result.vb2_records)),
+    }
+    for i, line in enumerate(result.display_lines):
+        out[f"DISPLAY_{i}"] = line
+    for i, orec in enumerate(result.out_records):
+        cyc_debit_str = f"{orec.acct_curr_cyc_debit:.2f}"
+        out[f"OUT_CYC_DEBIT_{i}"] = cyc_debit_str
+    return out

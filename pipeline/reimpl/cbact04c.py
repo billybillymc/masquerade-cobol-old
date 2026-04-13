@@ -158,6 +158,109 @@ def _update_account(
     return acct
 
 
+def _format_bal(d: Decimal) -> str:
+    """Scale-2 decimal string for runner output parity."""
+    return f"{d.quantize(Decimal('0.01')):.2f}"
+
+
+# ── Differential harness runner adapter ────────────────────────────────────
+#
+# `run_vector` dispatches to one of several hardcoded scenarios. Each scenario
+# builds its own repositories + catbal list so the test is fully deterministic
+# (no datetime, no external state).
+#
+# Inputs:
+#   SCENARIO — one of "SINGLE", "MULTI_CAT", "TWO_ACCOUNTS", "ZERO_RATE"
+#
+# Outputs:
+#   RECORDS_PROCESSED, TOTAL_INTEREST, TRANSACTIONS_WRITTEN, FINAL_BAL_<id>
+
+
+def _scenario_single():
+    acct = AccountRecord(acct_id=1, acct_group_id="GOLD", acct_curr_bal=Decimal("5000.00"))
+    catbals = [TranCatBalRecord(trancat_acct_id=1, trancat_type_cd="01", trancat_cd=1, tran_cat_bal=Decimal("1000.00"))]
+    xrefs = {1: CardXrefRecord(xref_card_num="4111111111111111", xref_acct_id=1)}
+    rates = {("GOLD", "01", 1): DisGroupRecord(dis_acct_group_id="GOLD", dis_tran_type_cd="01", dis_tran_cat_cd=1, dis_int_rate=Decimal("18.99"))}
+    return {1: acct}, catbals, xrefs, rates
+
+
+def _scenario_multi_cat():
+    acct = AccountRecord(acct_id=1, acct_group_id="PLAT", acct_curr_bal=Decimal("10000.00"))
+    catbals = [
+        TranCatBalRecord(trancat_acct_id=1, trancat_type_cd="01", trancat_cd=1, tran_cat_bal=Decimal("5000.00")),
+        TranCatBalRecord(trancat_acct_id=1, trancat_type_cd="01", trancat_cd=2, tran_cat_bal=Decimal("3000.00")),
+        TranCatBalRecord(trancat_acct_id=1, trancat_type_cd="02", trancat_cd=1, tran_cat_bal=Decimal("2000.00")),
+    ]
+    xrefs = {1: CardXrefRecord(xref_card_num="4222222222222222", xref_acct_id=1)}
+    rates = {
+        ("PLAT", "01", 1): DisGroupRecord(dis_acct_group_id="PLAT", dis_tran_type_cd="01", dis_tran_cat_cd=1, dis_int_rate=Decimal("18.99")),
+        ("PLAT", "01", 2): DisGroupRecord(dis_acct_group_id="PLAT", dis_tran_type_cd="01", dis_tran_cat_cd=2, dis_int_rate=Decimal("22.49")),
+        ("PLAT", "02", 1): DisGroupRecord(dis_acct_group_id="PLAT", dis_tran_type_cd="02", dis_tran_cat_cd=1, dis_int_rate=Decimal("24.99")),
+    }
+    return {1: acct}, catbals, xrefs, rates
+
+
+def _scenario_two_accounts():
+    accts = {
+        1: AccountRecord(acct_id=1, acct_group_id="GOLD", acct_curr_bal=Decimal("1000.00")),
+        2: AccountRecord(acct_id=2, acct_group_id="GOLD", acct_curr_bal=Decimal("2000.00")),
+    }
+    catbals = [
+        TranCatBalRecord(trancat_acct_id=1, trancat_type_cd="01", trancat_cd=1, tran_cat_bal=Decimal("500.00")),
+        TranCatBalRecord(trancat_acct_id=2, trancat_type_cd="01", trancat_cd=1, tran_cat_bal=Decimal("800.00")),
+    ]
+    xrefs = {
+        1: CardXrefRecord(xref_card_num="4111111111111111", xref_acct_id=1),
+        2: CardXrefRecord(xref_card_num="4333333333333333", xref_acct_id=2),
+    }
+    rates = {("GOLD", "01", 1): DisGroupRecord(dis_acct_group_id="GOLD", dis_tran_type_cd="01", dis_tran_cat_cd=1, dis_int_rate=Decimal("15.00"))}
+    return accts, catbals, xrefs, rates
+
+
+def _scenario_zero_rate():
+    acct = AccountRecord(acct_id=1, acct_group_id="GOLD", acct_curr_bal=Decimal("5000.00"))
+    catbals = [TranCatBalRecord(trancat_acct_id=1, trancat_type_cd="01", trancat_cd=1, tran_cat_bal=Decimal("1000.00"))]
+    xrefs = {1: CardXrefRecord(xref_card_num="4111111111111111", xref_acct_id=1)}
+    rates = {("GOLD", "01", 1): DisGroupRecord(dis_acct_group_id="GOLD", dis_tran_type_cd="01", dis_tran_cat_cd=1, dis_int_rate=Decimal("0.00"))}
+    return {1: acct}, catbals, xrefs, rates
+
+
+_SCENARIOS = {
+    "SINGLE": _scenario_single,
+    "MULTI_CAT": _scenario_multi_cat,
+    "TWO_ACCOUNTS": _scenario_two_accounts,
+    "ZERO_RATE": _scenario_zero_rate,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness."""
+    scenario_name = str(inputs.get("SCENARIO", "SINGLE")).upper()
+    if scenario_name not in _SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    accts, catbals, xrefs, rates = _SCENARIOS[scenario_name]()
+    acct_repo = AccountRepository(dict(accts))
+    xref_repo = XrefRepository(xrefs)
+    discgrp_repo = DiscGrpRepository(rates)
+
+    result = compute_interest(
+        catbals, acct_repo, xref_repo, discgrp_repo,
+        parm_date="2026-04-08", logger=lambda _: None,
+    )
+
+    out = {
+        "RECORDS_PROCESSED": str(result.records_processed),
+        "TOTAL_INTEREST": _format_bal(result.total_interest),
+        "TRANSACTIONS_WRITTEN": str(len(result.transactions_written)),
+    }
+    # Per-account final balances
+    for acct_id, acct in sorted(accts.items()):
+        out[f"FINAL_BAL_{acct_id}"] = _format_bal(acct.acct_curr_bal)
+
+    return out
+
+
 def _build_interest_transaction(
     cat_bal: TranCatBalRecord,
     xref: CardXrefRecord | None,

@@ -154,3 +154,37 @@ def call_csutldtc(ls_date: str, ls_date_format: str) -> tuple[int, str]:
     """
     result = validate_date(ls_date, ls_date_format)
     return result.severity, result.raw_message
+
+
+# ── Differential harness runner adapter (W2 contract) ──────────────────────
+#
+# `run_vector` is the canonical entry point used by the language-agnostic
+# vector runner in `pipeline/vector_runner.py`. Java's Csutldtc reimplementation
+# (registered in pipeline/reimpl/java/runner ProgramRegistry) speaks the same
+# JSON contract so the differential harness can drive both targets with the
+# same vectors.
+#
+# Inputs accepted:
+#   LS_DATE         — required, the date string to validate
+#   LS_DATE_FORMAT  — required, the format mask (e.g., "YYYY-MM-DD")
+#
+# Outputs produced:
+#   SEVERITY     — "0" on success, "3" on any validation error
+#   RESULT_TEXT  — 15-char classification (e.g., "Date is valid  ")
+#   LILLIAN      — Lilian day count as string ("0" if invalid)
+#   RAW_MESSAGE  — full 80-char message identical to LS-RESULT in COBOL
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness."""
+    ls_date = str(inputs.get("LS_DATE", ""))
+    ls_date_format = str(inputs.get("LS_DATE_FORMAT", ""))
+
+    result = validate_date(ls_date, ls_date_format)
+
+    return {
+        "SEVERITY": str(result.severity),
+        "RESULT_TEXT": result.result_text,
+        "LILLIAN": str(result.lillian),
+        "RAW_MESSAGE": result.raw_message,
+    }

@@ -65,3 +65,17 @@ def main(argv: list[str] | None = None) -> None:
     """CLI shim: reads one line from stdin (SYSIN), runs wait, exits."""
     line = sys.stdin.readline() if argv is None else (argv[0] if argv else "")
     run(line[:8])
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract.
+
+    DO NOT SLEEP — just compute the coercion and derived values.
+    """
+    parm_value = inputs.get("PARM_VALUE", "")
+    cs = coerce_parm(parm_value)
+    seconds = cs / 100.0
+    return {
+        "REQUESTED_CS": str(cs),
+        "COMPUTED_SECONDS": f"{seconds:.2f}",
+    }

@@ -165,3 +165,95 @@ def _process_enter(
 
     # No selection — refresh page
     return _load_page(page_num, user_repo, commarea, result)
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_USERS = [
+    SecUserData(sec_usr_id="ADMIN001", sec_usr_fname="John", sec_usr_lname="Admin", sec_usr_pwd="PASS1234", sec_usr_type="A"),
+    SecUserData(sec_usr_id="USER0001", sec_usr_fname="Jane", sec_usr_lname="User", sec_usr_pwd="MYPASSWD", sec_usr_type="U"),
+    SecUserData(sec_usr_id="USER0002", sec_usr_fname="Bob", sec_usr_lname="Smith", sec_usr_pwd="BOBPASS1", sec_usr_type="U"),
+    SecUserData(sec_usr_id="USER0003", sec_usr_fname="Alice", sec_usr_lname="Jones", sec_usr_pwd="ALICEPASS", sec_usr_type="U"),
+]
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY   — context=0, first entry → load page 1
+      LIST_PAGE_1   — display page 1
+      SELECT_UPDATE — select user for update → COUSR02C
+      SELECT_DELETE — select user for delete → COUSR03C
+      PF3_RETURN    — press PF3 → return to admin menu
+      INVALID_KEY   — press PF9 → invalid key error
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    repo = UserSecRepository(list(_SEED_USERS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CA00",
+        cdemo_from_program="COADM01C",
+        cdemo_user_id="ADMIN001",
+        cdemo_user_type="A",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_user_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "LIST_PAGE_1":
+        result = process_user_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "SELECT_UPDATE":
+        result = process_user_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_repo=repo, page_num=1,
+            selected_rows=[("U", "USER0001")],
+        )
+    elif scenario == "SELECT_DELETE":
+        result = process_user_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_repo=repo, page_num=1,
+            selected_rows=[("D", "USER0002")],
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_user_list(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            user_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "INVALID_KEY":
+        result = process_user_list(
+            eibcalen=100, eibaid="PF9", commarea=commarea,
+            user_repo=repo, page_num=1, selected_rows=[],
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_user_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            user_repo=repo, page_num=1, selected_rows=[],
+        )
+
+    out: dict[str, str] = {
+        "PAGE_NUM": str(result.page_num),
+        "ROW_COUNT": str(len(result.rows)),
+        "HAS_NEXT": "Y" if result.has_next_page else "N",
+        "HAS_PREV": "Y" if result.has_prev_page else "N",
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "SELECTED_USER_ID": result.selected_user_id,
+        "SELECTED_ACTION": result.selected_action,
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+    }
+    for i, row in enumerate(result.rows):
+        out[f"ROW_{i}_USER_ID"] = row.user_id
+        out[f"ROW_{i}_USER_NAME"] = row.user_name
+        out[f"ROW_{i}_USER_TYPE"] = row.user_type
+    return out
