@@ -9,7 +9,7 @@ verified against the Python reimplementation.
 """
 
 import pytest
-from reimpl.blocks_parse_state import (
+from reimpl.python.blocks_parse_state import (
     BlockStateResult,
     parse_block_state,
     parse_block_states,

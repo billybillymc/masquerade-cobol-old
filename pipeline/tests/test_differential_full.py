@@ -113,7 +113,7 @@ def _parse_cobol_full(stdout: str) -> dict:
 
 def _run_python_cosgn00c(userid, passwd, repo):
     """Run Python reimplementation and return full field dict."""
-    from reimpl.cosgn00c import process_signon
+    from reimpl.python.cosgn00c import process_signon
     result = process_signon(
         user_id=userid, password=passwd, eibcalen=100,
         eibaid="ENTER", repository=repo,
@@ -169,7 +169,7 @@ class TestCosgn00cFullCommarea:
 
     @pytest.fixture(scope="class")
     def python_repo(self):
-        from reimpl.cosgn00c import UserSecurityRepository, SecUserData
+        from reimpl.python.cosgn00c import UserSecurityRepository, SecUserData
         return UserSecurityRepository({
             "ADMIN001": SecUserData(sec_usr_id="ADMIN001", sec_usr_fname="John",
                                     sec_usr_lname="Admin", sec_usr_pwd="PASS1234",
@@ -311,7 +311,7 @@ class TestStarTrekDeterministicInit:
 
     def test_klingon_count_matches_for_skill_levels(self):
         """Compare klingon count for each skill level between COBOL and Python."""
-        from reimpl.star_trek import StarTrekGame
+        from reimpl.python.star_trek import StarTrekGame
 
         vectors = []
         for skill in [1, 2, 3, 4]:
@@ -418,7 +418,7 @@ class TestTaxeFonciereFullRetour:
 
         # Python with same input — use a failing rate_fetcher to match
         # COBOL's ON EXCEPTION when EFITAUX2/FMSTAU2 are not available
-        from reimpl.taxe_fonciere import CombatInput, calculate_tax_batie
+        from reimpl.python.taxe_fonciere import CombatInput, calculate_tax_batie
 
         def _failing_rate_fetcher(*args):
             raise Exception("Rate program not available")

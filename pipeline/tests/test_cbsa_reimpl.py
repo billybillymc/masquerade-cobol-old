@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
 from differential_harness import DiffVector, run_vectors, render_report_text
-from reimpl.cbsa_dbcrfun import (
+from reimpl.python.cbsa_dbcrfun import (
     Account,
     DebitCreditRequest,
     DebitCreditResult,

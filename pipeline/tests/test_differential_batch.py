@@ -83,7 +83,7 @@ class TestDifferentialCsutldtc:
     ]
 
     def test_all_date_scenarios(self):
-        from reimpl.csutldtc import call_csutldtc
+        from reimpl.python.csutldtc import call_csutldtc
 
         vectors = []
         for case_id, date_str, fmt_str, exp_sev, exp_class_frag in self._cases:
@@ -109,14 +109,14 @@ class TestDifferentialCsutldtc:
 
     def test_valid_date_lilian_number_positive(self):
         """Lilian day number must be positive for valid dates."""
-        from reimpl.csutldtc import validate_date
+        from reimpl.python.csutldtc import validate_date
         result = validate_date("2024-03-15", "YYYY-MM-DD")
         assert result.severity == 0
         assert result.lillian > 0
 
     def test_invalid_date_lilian_zero(self):
         """Lilian day number must be zero for invalid dates."""
-        from reimpl.csutldtc import validate_date
+        from reimpl.python.csutldtc import validate_date
         result = validate_date("2024-13-01", "YYYY-MM-DD")
         assert result.severity != 0
         assert result.lillian == 0
@@ -135,7 +135,7 @@ class TestDifferentialCbact02c:
     """
 
     def _sample_cards(self):
-        from reimpl.carddemo_data import CardRecord
+        from reimpl.python.carddemo_data import CardRecord
         return [
             CardRecord(card_num="1234567890123456", card_acct_id=1001, card_cvv_cd=123,
                        card_embossed_name="JOHN DOE", card_expiration_date="2027-12-31",
@@ -147,7 +147,7 @@ class TestDifferentialCbact02c:
 
     def test_start_message_emitted(self):
         """CBACT02C emits 'START OF EXECUTION' on launch."""
-        from reimpl.cbact02c import process_card_file
+        from reimpl.python.cbact02c import process_card_file
         log_lines = []
         process_card_file([], logger=log_lines.append)
         assert any("START OF EXECUTION" in line for line in log_lines)
@@ -163,14 +163,14 @@ class TestDifferentialCbact02c:
 
     def test_end_message_emitted(self):
         """CBACT02C emits 'END OF EXECUTION' on completion."""
-        from reimpl.cbact02c import process_card_file
+        from reimpl.python.cbact02c import process_card_file
         log_lines = []
         process_card_file([], logger=log_lines.append)
         assert any("END OF EXECUTION" in line for line in log_lines)
 
     def test_records_read_count(self):
         """records_read matches the number of cards supplied."""
-        from reimpl.cbact02c import process_card_file
+        from reimpl.python.cbact02c import process_card_file
         result = process_card_file(self._sample_cards())
         assert result.records_read == 2
 
@@ -185,7 +185,7 @@ class TestDifferentialCbact02c:
 
     def test_card_number_appears_in_output(self):
         """Card number appears in display output (mirrors COBOL DISPLAY CARD-RECORD)."""
-        from reimpl.cbact02c import process_card_file
+        from reimpl.python.cbact02c import process_card_file
         log_lines = []
         process_card_file(self._sample_cards(), logger=log_lines.append)
         output = "\n".join(log_lines)
@@ -202,7 +202,7 @@ class TestDifferentialCbact02c:
 
     def test_empty_file_still_prints_markers(self):
         """Empty input still produces START and END markers."""
-        from reimpl.cbact02c import process_card_file
+        from reimpl.python.cbact02c import process_card_file
         log_lines = []
         result = process_card_file([], logger=log_lines.append)
         output = "\n".join(log_lines)
@@ -229,7 +229,7 @@ class TestDifferentialCbtrn02c:
     """
 
     def _make_tran(self, card_num="1234567890123456", amt="100.00"):
-        from reimpl.cbtrn01c import DalyTranRecord
+        from reimpl.python.cbtrn01c import DalyTranRecord
         return DalyTranRecord(
             tran_id="0000000000000001",
             tran_type_cd="01", tran_cat_cd=1,
@@ -242,8 +242,8 @@ class TestDifferentialCbtrn02c:
         )
 
     def _repos(self, xref=None, acct=None):
-        from reimpl.cbtrn02c import XrefRepository, AccountRepository, TcatbalRepository
-        from reimpl.carddemo_data import CardXrefRecord, AccountRecord
+        from reimpl.python.cbtrn02c import XrefRepository, AccountRepository, TcatbalRepository
+        from reimpl.python.carddemo_data import CardXrefRecord, AccountRecord
         if xref is None:
             xref_d = {}
         else:
@@ -256,8 +256,8 @@ class TestDifferentialCbtrn02c:
 
     def test_over_limit_reject_code(self):
         """Over-limit transactions must set reject code 102."""
-        from reimpl.cbtrn02c import post_daily_transactions
-        from reimpl.carddemo_data import CardXrefRecord, AccountRecord
+        from reimpl.python.cbtrn02c import post_daily_transactions
+        from reimpl.python.carddemo_data import CardXrefRecord, AccountRecord
 
         xref = CardXrefRecord(xref_card_num="1234567890123456", xref_cust_id=9001, xref_acct_id=1001)
         # The limit check is: credit_limit < (cyc_credit - cyc_debit + tran_amt)
@@ -296,7 +296,7 @@ class TestDifferentialCbtrn02c:
 
     def test_unknown_card_reject_code(self):
         """Unknown card number must set reject code 100."""
-        from reimpl.cbtrn02c import post_daily_transactions
+        from reimpl.python.cbtrn02c import post_daily_transactions
 
         xref_repo, acct_repo, tcat_repo = self._repos()
         result = post_daily_transactions(
@@ -318,8 +318,8 @@ class TestDifferentialCbtrn02c:
 
     def test_valid_transaction_posts_and_updates_balance(self):
         """Valid transaction within limit posts and updates account balance."""
-        from reimpl.cbtrn02c import post_daily_transactions
-        from reimpl.carddemo_data import CardXrefRecord, AccountRecord
+        from reimpl.python.cbtrn02c import post_daily_transactions
+        from reimpl.python.carddemo_data import CardXrefRecord, AccountRecord
 
         xref = CardXrefRecord(xref_card_num="1234567890123456", xref_cust_id=9001, xref_acct_id=1001)
         acct = AccountRecord(
@@ -355,8 +355,8 @@ class TestDifferentialCbtrn02c:
 
     def test_expired_account_reject_code(self):
         """Transactions against expired accounts must set reject code 103."""
-        from reimpl.cbtrn02c import post_daily_transactions
-        from reimpl.carddemo_data import CardXrefRecord, AccountRecord
+        from reimpl.python.cbtrn02c import post_daily_transactions
+        from reimpl.python.carddemo_data import CardXrefRecord, AccountRecord
 
         xref = CardXrefRecord(xref_card_num="1234567890123456", xref_cust_id=9001, xref_acct_id=1001)
         acct = AccountRecord(

@@ -23,7 +23,7 @@ from cobol_runner import is_cobc_available, _to_wsl_path
 from cics_stub import preprocess_cics
 from bms_symbolic import generate_all_symbolic_maps
 from differential_harness import DiffVector, run_vectors, render_report_text
-from reimpl.cosgn00c import (
+from reimpl.python.cosgn00c import (
     process_signon,
     UserSecurityRepository,
     SecUserData,

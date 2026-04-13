@@ -20,7 +20,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from reimpl.carddemo_data import (
+from reimpl.python.carddemo_data import (
     CarddemoCommarea, AccountRecord, CustomerRecord,
     CardRecord, CardXrefRecord, TranRecord,
     DFHENTER, DFHPF3, DFHPF4, DFHPF5, DFHPF7, DFHPF8, DFHPF12,
@@ -79,7 +79,7 @@ def _tran(tran_id="0000000000000001", amt="99.99", card="1234567890123456"):
 
 class TestCocrdslc:
     def _setup(self):
-        from reimpl.cocrdslc import (
+        from reimpl.python.cocrdslc import (
             CardRepository, AccountRepository, XrefRepository,
             CustomerRepository, process_card_view,
         )
@@ -129,7 +129,7 @@ class TestCocrdslc:
 
 class TestCocrdupc:
     def _setup(self):
-        from reimpl.cocrdupc import CardRepository, process_card_update, CardUpdateInput
+        from reimpl.python.cocrdupc import CardRepository, process_card_update, CardUpdateInput
         card = _card()
         repo = CardRepository({"1234567890123456": card})
         return process_card_update, repo, CardUpdateInput
@@ -170,7 +170,7 @@ class TestCocrdupc:
 
 class TestCotrn00c:
     def _setup(self):
-        from reimpl.cotrn00c import TranRepository, process_tran_list
+        from reimpl.python.cotrn00c import TranRepository, process_tran_list
         trans = [_tran(f"{i:016d}") for i in range(1, 16)]
         repo = TranRepository(trans)
         return process_tran_list, repo
@@ -220,7 +220,7 @@ class TestCotrn00c:
 
 class TestCotrn01c:
     def _setup(self):
-        from reimpl.cotrn01c import TranRepository, process_tran_view
+        from reimpl.python.cotrn01c import TranRepository, process_tran_view
         tran = _tran()
         repo = TranRepository({"0000000000000001": tran})
         return process_tran_view, repo
@@ -257,7 +257,7 @@ class TestCotrn01c:
 
 class TestCotrn02c:
     def _setup(self):
-        from reimpl.cotrn02c import (
+        from reimpl.python.cotrn02c import (
             TranRepository, XrefRepository, process_tran_add, TranAddInput,
         )
         xref = _xref()
@@ -332,7 +332,7 @@ class TestCotrn02c:
 
 class TestCobil00c:
     def _setup(self):
-        from reimpl.cobil00c import (
+        from reimpl.python.cobil00c import (
             AccountRepository, XrefRepository, TranRepository, process_bill_pay,
         )
         acct = _acct()
@@ -378,7 +378,7 @@ class TestCobil00c:
 
 class TestCorpt00c:
     def _setup(self):
-        from reimpl.corpt00c import process_report_screen
+        from reimpl.python.corpt00c import process_report_screen
         return process_report_screen
 
     def test_monthly_report_calculates_dates(self):
@@ -429,7 +429,7 @@ class TestCorpt00c:
 
 class TestCoactupc:
     def _setup(self):
-        from reimpl.coactupc import (
+        from reimpl.python.coactupc import (
             AccountRepository, CustomerRepository, XrefRepository,
             process_account_update, AccountUpdateInput,
         )
@@ -502,7 +502,7 @@ class TestCbexportImport:
         return customers, accounts, xrefs, trans, cards
 
     def test_export_counts_match_input(self):
-        from reimpl.cbexport import run_export
+        from reimpl.python.cbexport import run_export
         custs, accts, xrefs, trans, cards = self._build_data()
         result = run_export(custs, accts, xrefs, trans, cards)
         assert result.stats.customers == 2
@@ -514,15 +514,15 @@ class TestCbexportImport:
         assert not result.abended
 
     def test_export_records_have_sequence_numbers(self):
-        from reimpl.cbexport import run_export
+        from reimpl.python.cbexport import run_export
         custs, accts, xrefs, trans, cards = self._build_data()
         result = run_export(custs, accts, xrefs, trans, cards)
         seq_nums = [r.seq_num for r in result.records]
         assert seq_nums == list(range(1, 11))
 
     def test_import_round_trip_preserves_all_records(self):
-        from reimpl.cbexport import run_export
-        from reimpl.cbimport import run_import
+        from reimpl.python.cbexport import run_export
+        from reimpl.python.cbimport import run_import
         custs, accts, xrefs, trans, cards = self._build_data()
         export_result = run_export(custs, accts, xrefs, trans, cards)
         import_result = run_import(export_result.records)
@@ -534,15 +534,15 @@ class TestCbexportImport:
         assert import_result.stats.errors == 0
 
     def test_import_unknown_type_logged_as_error(self):
-        from reimpl.cbexport import ExportRecord
-        from reimpl.cbimport import run_import
+        from reimpl.python.cbexport import ExportRecord
+        from reimpl.python.cbimport import run_import
         bad = ExportRecord(seq_num=1, rec_type="Z", timestamp="", data=None)
         result = run_import([bad])
         assert result.stats.errors == 1
         assert len(result.errors) == 1
 
     def test_export_log_contains_summary(self):
-        from reimpl.cbexport import run_export
+        from reimpl.python.cbexport import run_export
         custs, accts, xrefs, trans, cards = self._build_data()
         result = run_export(custs, accts, xrefs, trans, cards)
         full_log = "\n".join(result.log)
@@ -554,7 +554,7 @@ class TestCbexportImport:
 
 class TestCocrdlic:
     def _setup(self):
-        from reimpl.cocrdlic import CardRepository, process_card_list
+        from reimpl.python.cocrdlic import CardRepository, process_card_list
         cards = [_card(f"{i:016d}", 1001) for i in range(1, 10)]
         repo = CardRepository(cards)
         return process_card_list, repo
@@ -599,7 +599,7 @@ class TestCocrdlic:
 
 class TestEdgeCases:
     def test_bill_pay_nonexistent_account(self):
-        from reimpl.cobil00c import (
+        from reimpl.python.cobil00c import (
             AccountRepository, XrefRepository, TranRepository, process_bill_pay,
         )
         ar = AccountRepository({})
@@ -609,17 +609,17 @@ class TestEdgeCases:
         assert result.error
 
     def test_tran_add_increments_id(self):
-        from reimpl.cotrn02c import TranRepository
+        from reimpl.python.cotrn02c import TranRepository
         repo = TranRepository([_tran("0000000000000005")])
         assert repo.next_id() == "0000000000000006"
 
     def test_tran_add_empty_repo_starts_at_1(self):
-        from reimpl.cotrn02c import TranRepository
+        from reimpl.python.cotrn02c import TranRepository
         repo = TranRepository([])
         assert repo.next_id() == "0000000000000001"
 
     def test_card_update_pf12_routes_to_list(self):
-        from reimpl.cocrdupc import CardRepository, process_card_update, CardUpdateInput
+        from reimpl.python.cocrdupc import CardRepository, process_card_update, CardUpdateInput
         repo = CardRepository({"1234567890123456": _card()})
         ca = _commarea()
         ca.cdemo_pgm_context = 1

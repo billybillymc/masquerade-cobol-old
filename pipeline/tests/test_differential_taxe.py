@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
 from cobol_runner import is_cobc_available, _to_wsl_path
 from differential_harness import DiffVector, run_vectors, render_report_text
-from reimpl.taxe_fonciere import CombatInput, OmZone, AllRates, calculate_tax_batie
+from reimpl.python.taxe_fonciere import CombatInput, OmZone, AllRates, calculate_tax_batie
 
 TAXE = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "taxe-fonciere"
 COBC_AVAILABLE = is_cobc_available()

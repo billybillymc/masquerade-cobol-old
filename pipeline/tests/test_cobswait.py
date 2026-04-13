@@ -14,7 +14,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from reimpl.cobswait import coerce_parm, wait_centiseconds, run
+from reimpl.python.cobswait import coerce_parm, wait_centiseconds, run
 from differential_harness import DiffVector, run_vectors, render_report_text
 
 
@@ -51,31 +51,31 @@ class TestCoerceParm:
 
 class TestWaitCentiseconds:
     def test_sleeps_correct_fraction(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             result = wait_centiseconds(100)
         mock_sleep.assert_called_once_with(1.0)
         assert result.requested_cs == 100
         assert result.actual_seconds == 1.0
 
     def test_zero_centiseconds_no_sleep(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             result = wait_centiseconds(0)
         mock_sleep.assert_called_once_with(0.0)
         assert result.requested_cs == 0
 
     def test_one_centisecond_is_ten_milliseconds(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             wait_centiseconds(1)
         mock_sleep.assert_called_once_with(0.01)
 
     def test_negative_clamped_to_zero(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             result = wait_centiseconds(-50)
         mock_sleep.assert_called_once_with(0.0)
         assert result.requested_cs == 0
 
     def test_large_value_clamped_to_pic_ceiling(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             result = wait_centiseconds(200_000_000)
         assert result.requested_cs == 99_999_999
         mock_sleep.assert_called_once_with(999_999.99)
@@ -85,19 +85,19 @@ class TestWaitCentiseconds:
 
 class TestRun:
     def test_run_delegates_correctly(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             result = run("200     ")
         mock_sleep.assert_called_once_with(2.0)
         assert result.requested_cs == 200
 
     def test_run_blank_parm_no_wait(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             result = run("        ")
         mock_sleep.assert_called_once_with(0.0)
         assert result.requested_cs == 0
 
     def test_run_invalid_parm_no_wait(self):
-        with patch("reimpl.cobswait.time.sleep") as mock_sleep:
+        with patch("reimpl.python.cobswait.time.sleep") as mock_sleep:
             run("INVALID ")
         mock_sleep.assert_called_once_with(0.0)
 
@@ -129,7 +129,7 @@ class TestDifferentialCobswait:
     def test_all_scenarios_match_spec(self):
         vectors = []
         for case_id, parm, expected_cs, expected_sec in self._cases:
-            with patch("reimpl.cobswait.time.sleep"):
+            with patch("reimpl.python.cobswait.time.sleep"):
                 result = run(parm)
 
             vectors.append(DiffVector(

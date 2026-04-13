@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
 from cobol_runner import is_cobc_available, _to_wsl_path
 from differential_harness import DiffVector, run_vectors, render_report_text
-from reimpl.star_trek import (
+from reimpl.python.star_trek import (
     StarTrekGame,
     validate_skill_level,
     TITLE,
