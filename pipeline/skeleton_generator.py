@@ -380,16 +380,24 @@ def _generate_dataclass_for_copybook(
 
 def _cobol_name_to_python(name: str) -> str:
     """Convert COBOL name (HYPHEN-CASE) to python_snake_case."""
-    result = name.lower().replace("-", "_").replace("(", "").replace(")", "")
+    result = name.lower().replace("-", "_").replace(".", "_").replace("(", "").replace(")", "")
     if result and result[0].isdigit():
         result = "p_" + result
     return result
 
 
 def _cobol_name_to_class(name: str) -> str:
-    """Convert COBOL name to PascalCase class name."""
-    parts = name.split("-")
-    return "".join(p.capitalize() for p in parts if p)
+    """Convert COBOL name to PascalCase class name.
+
+    Splits on hyphens and dots so source names like ``callback.tpl`` become
+    ``CallbackTpl`` (dots are illegal in Java class names).
+    """
+    import re
+    parts = re.split(r"[-.]", name)
+    cleaned = "".join("".join(c for c in p if c.isalnum()).capitalize() for p in parts if p)
+    if cleaned and cleaned[0].isdigit():
+        cleaned = "P" + cleaned
+    return cleaned
 
 
 def _generate_method_for_paragraph(para) -> str:

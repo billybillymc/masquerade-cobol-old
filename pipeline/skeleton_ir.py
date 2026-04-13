@@ -445,10 +445,28 @@ class PythonRenderer:
 # ── Java Renderer ───────────────────────────────────────────────────────────
 
 
+_JAVA_RESERVED = frozenset({
+    "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char",
+    "class", "const", "continue", "default", "do", "double", "else", "enum",
+    "extends", "final", "finally", "float", "for", "goto", "if", "implements",
+    "import", "instanceof", "int", "interface", "long", "native", "new",
+    "package", "private", "protected", "public", "return", "short", "static",
+    "strictfp", "super", "switch", "synchronized", "this", "throw", "throws",
+    "transient", "try", "void", "volatile", "while", "true", "false", "null",
+    "yield", "record", "sealed", "permits", "var",
+})
+
+
+def _escape_java_reserved(ident: str) -> str:
+    """Append an underscore to a Java reserved word so it can be used as an identifier."""
+    return ident + "_" if ident in _JAVA_RESERVED else ident
+
+
 def _to_camel_case(snake: str) -> str:
-    """Convert snake_case to camelCase."""
+    """Convert snake_case to camelCase, escaping Java reserved words."""
     parts = snake.split("_")
-    return parts[0] + "".join(p.capitalize() for p in parts[1:])
+    camel = parts[0] + "".join(p.capitalize() for p in parts[1:])
+    return _escape_java_reserved(camel)
 
 
 def _to_pascal_case(snake: str) -> str:
