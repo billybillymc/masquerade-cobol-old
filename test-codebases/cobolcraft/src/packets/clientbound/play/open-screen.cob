@@ -1,0 +1,54 @@
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SendPacket-OpenScreen.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+    COPY DD-PACKET REPLACING IDENTIFIER BY "play/clientbound/minecraft:open_screen".
+    *> buffer used to store the packet data
+    01 PAYLOAD          PIC X(1024).
+    01 PAYLOADPOS       BINARY-LONG UNSIGNED.
+    01 PAYLOADLEN       BINARY-LONG UNSIGNED.
+    *> text component encoding
+    COPY DD-NBT-ENCODER.
+    01 STR              PIC X(256).
+    01 LEN              BINARY-LONG UNSIGNED.
+LINKAGE SECTION.
+    01 LK-CLIENT        BINARY-LONG UNSIGNED.
+    01 LK-WINDOW-ID     BINARY-LONG.
+    01 LK-WINDOW-TYPE   BINARY-LONG.
+
+PROCEDURE DIVISION USING LK-CLIENT LK-WINDOW-ID LK-WINDOW-TYPE.
+    COPY PROC-PACKET-INIT.
+
+    MOVE 1 TO PAYLOADPOS
+
+    CALL "Encode-VarInt" USING LK-WINDOW-ID PAYLOAD PAYLOADPOS
+    CALL "Encode-VarInt" USING LK-WINDOW-TYPE PAYLOAD PAYLOADPOS
+    PERFORM EncodeWindowTitle
+
+    COMPUTE PAYLOADLEN = PAYLOADPOS - 1
+    CALL "SendPacket" USING LK-CLIENT PACKET-ID PAYLOAD PAYLOADLEN
+    GOBACK.
+
+EncodeWindowTitle.
+    MOVE PAYLOADPOS TO NBTENC-OFFSET
+    CALL "NbtEncode-Compound" USING NBTENC PAYLOAD OMITTED
+
+    MOVE "translatable" TO STR
+    MOVE 12 TO LEN
+    CALL "NbtEncode-String" USING NBTENC PAYLOAD "type" STR LEN
+
+    *> TODO add more window types
+    EVALUATE LK-WINDOW-TYPE
+        WHEN 12
+            MOVE "container.crafting" TO STR
+            MOVE 18 TO LEN
+    END-EVALUATE
+
+    CALL "NbtEncode-String" USING NBTENC PAYLOAD "translate" STR LEN
+
+    CALL "NbtEncode-EndCompound" USING NBTENC PAYLOAD
+    MOVE NBTENC-OFFSET TO PAYLOADPOS
+    .
+
+END PROGRAM SendPacket-OpenScreen.

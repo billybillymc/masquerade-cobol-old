@@ -1618,3 +1618,112 @@ class StarTrekGame:
             "     6  To terminate program execution ",
             "      ",
         ]
+
+    def galaxy_fingerprint(self) -> dict:
+        """Return a digest of the galaxy state for parity testing."""
+        counts = {"K": 0, "R": 0, "B": 0, "E": 0, "H": 0, "*": 0, " ": 0}
+        for r in range(1, 127):
+            for c in range(1, 127):
+                ch = self.master_tbl[r][c]
+                if ch in counts:
+                    counts[ch] += 1
+                else:
+                    counts[ch] = counts.get(ch, 0) + 1
+        return {
+            "MRCTR": str(self.mrctr),
+            "MKCTR": str(self.mkctr),
+            "HQ1": str(self.hq1),
+            "HQ2": str(self.hq2),
+            "K_OR": str(self.k_or),
+            "KLINGONS": str(self.klingons),
+            "VAB1": str(self.vab1),
+            "VAB2": str(self.vab2),
+            "S_DATE": str(self.s_date),
+            "DS_DATE": str(self.ds_date),
+            "SEED_X": f"{self.seed_x:.12f}",
+            "FUEL": str(self.fuel_count),
+            "TORPS": str(self.torps),
+            "COUNT_K": str(counts.get("K", 0)),
+            "COUNT_R": str(counts.get("R", 0)),
+            "COUNT_B": str(counts.get("B", 0)),
+            "COUNT_STAR": str(counts.get("*", 0)),
+            "COUNT_E": str(counts.get("E", 0)),
+            "COUNT_H": str(counts.get("H", 0)),
+        }
+
+
+# ── Differential harness runner adapter ────────────────────────────────────
+
+
+def _status_to_strings(status: dict) -> dict:
+    """Convert a status dict to flat string dict matching Java formatting."""
+    out = {}
+    for k, v in status.items():
+        if k == "seed_x":
+            out[str(k)] = f"{v:.12f}"
+        elif isinstance(v, tuple):
+            out[str(k)] = f"({v[0]}, {v[1]})"
+        elif isinstance(v, bool):
+            out[str(k)] = "True" if v else "False"
+        else:
+            out[str(k)] = str(v)
+    return out
+
+
+def run_vector(inputs: dict) -> dict:
+    scenario = str(inputs.get("SCENARIO", "")).upper()
+
+    if scenario == "INIT_STATE":
+        seed = int(inputs.get("SEED", "12345678"))
+        skill = int(inputs.get("SKILL_LEVEL", "1"))
+        name = str(inputs.get("CAPTAIN_NAME", "KIRK"))
+        game = StarTrekGame(seed=seed, captain_name=name, skill_level=skill)
+        return game.galaxy_fingerprint()
+
+    if scenario == "MISSION_PARAMS":
+        skill = int(inputs.get("SKILL_LEVEL", "1"))
+        params = get_mission_params(skill)
+        return {k.upper(): str(v) for k, v in params.items()}
+
+    if scenario == "SKILL_VALIDATION":
+        level = str(inputs.get("LEVEL", "1"))
+        valid, msg = validate_skill_level(level)
+        return {"VALID": "Y" if valid else "N", "MESSAGE": msg}
+
+    if scenario == "GAME_STATUS":
+        seed = int(inputs.get("SEED", "12345678"))
+        skill = int(inputs.get("SKILL_LEVEL", "1"))
+        name = str(inputs.get("CAPTAIN_NAME", "KIRK"))
+        game = StarTrekGame(seed=seed, captain_name=name, skill_level=skill)
+        status = game.get_status()
+        return _status_to_strings(status)
+
+    if scenario == "PROCESS_COMMANDS":
+        seed = int(inputs.get("SEED", "12345678"))
+        skill = int(inputs.get("SKILL_LEVEL", "1"))
+        name = str(inputs.get("CAPTAIN_NAME", "KIRK"))
+        game = StarTrekGame(seed=seed, captain_name=name, skill_level=skill)
+        # Flush initial output
+        game.get_initial_output()
+        cmds = str(inputs.get("COMMANDS", ""))
+        if cmds:
+            for cmd in cmds.split(";"):
+                cmd = cmd.strip()
+                if cmd:
+                    game.process_command(cmd)
+        status = game.get_status()
+        return _status_to_strings(status)
+
+    if scenario == "INITIAL_OUTPUT":
+        seed = int(inputs.get("SEED", "12345678"))
+        skill = int(inputs.get("SKILL_LEVEL", "1"))
+        name = str(inputs.get("CAPTAIN_NAME", "KIRK"))
+        game = StarTrekGame(seed=seed, captain_name=name, skill_level=skill)
+        lines = game.get_initial_output()
+        return {
+            "LINE_COUNT": str(len(lines)),
+            "FIRST_LINE": lines[0] if lines else "",
+            "LAST_LINE": lines[-1] if lines else "",
+        }
+
+    return {"error": f"unknown scenario: {scenario!r}"}

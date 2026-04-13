@@ -14,7 +14,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from differential_harness import (
-    TestVector,
+    DiffVector,
     FieldMismatch,
     DiffReport,
     compare_fields,
@@ -32,8 +32,8 @@ def _make_vector(
     expected=None,
     actual=None,
     field_types=None,
-) -> TestVector:
-    return TestVector(
+) -> DiffVector:
+    return DiffVector(
         vector_id=vector_id,
         program="TESTPGM",
         inputs=inputs or {},
@@ -196,7 +196,7 @@ class TestGoldenVectorIO:
     def test_round_trip(self, tmp_path):
         """save then load produces identical vectors."""
         vectors = [
-            TestVector(
+            DiffVector(
                 vector_id="V001",
                 program="CODATE01",
                 inputs={"WS-DATE-IN": "20260315"},

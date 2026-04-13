@@ -228,3 +228,91 @@ def _format_html(stmt: StatementData) -> list[str]:
     lines.append(f"<tr><td colspan='2'><b>TOTAL</b></td><td>${float(stmt.total_amount):.2f}</td></tr>")
     lines.append("</table></body></html>")
     return lines
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    from .carddemo_data import TranRecord as TR, CardXrefRecord as CXR
+    trans = [
+        TR(tran_id="TRN0000000000001", tran_type_cd="01", tran_cat_cd=1,
+           tran_desc="Widget purchase", tran_amt=Decimal("150.25"),
+           tran_card_num="4111000000001111",
+           tran_orig_ts="2026-04-01-12.00.00.000000",
+           tran_proc_ts="2026-04-01-12.00.00.000000"),
+        TR(tran_id="TRN0000000000002", tran_type_cd="01", tran_cat_cd=1,
+           tran_desc="Gadget purchase", tran_amt=Decimal("75.50"),
+           tran_card_num="4111000000001111",
+           tran_orig_ts="2026-04-05-14.30.00.000000",
+           tran_proc_ts="2026-04-05-14.30.00.000000"),
+    ]
+    xrefs = {
+        "4111000000001111": CXR(xref_card_num="4111000000001111",
+                                xref_cust_id=1, xref_acct_id=100000001),
+    }
+    accounts = {
+        100000001: AccountRecord(
+            acct_id=100000001, acct_active_status="Y",
+            acct_curr_bal=Decimal("5000.00"), acct_credit_limit=Decimal("10000.00"),
+        ),
+    }
+    customers = {
+        1: CustomerRecord(
+            cust_id=1, cust_first_name="JOHN", cust_last_name="DOE",
+            cust_addr_line_1="123 MAIN ST", cust_addr_line_2="APT 4B",
+            cust_addr_state_cd="NY", cust_addr_zip="10001",
+            cust_fico_credit_score=750,
+        ),
+    }
+    return trans, xrefs, accounts, customers
+
+
+def _scenario_empty_input():
+    return [], {}, {}, {}
+
+
+_CBSTM03A_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _CBSTM03A_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    trans, xrefs, accounts, customers = _CBSTM03A_SCENARIOS[scenario_name]()
+    file_mgr = Cbstm03bFileManager([
+        TranRecord(
+            tran_id=t.tran_id, tran_type_cd=t.tran_type_cd,
+            tran_cat_cd=t.tran_cat_cd, tran_source=t.tran_source,
+            tran_desc=t.tran_desc, tran_amt=t.tran_amt,
+            tran_merchant_id=t.tran_merchant_id,
+            tran_merchant_name=t.tran_merchant_name,
+            tran_merchant_city=t.tran_merchant_city,
+            tran_merchant_zip=t.tran_merchant_zip,
+            tran_card_num=t.tran_card_num,
+            tran_orig_ts=t.tran_orig_ts,
+            tran_proc_ts=t.tran_proc_ts,
+        ) for t in trans
+    ])
+    xref_repo = XrefRepository(xrefs)
+    account_repo = AccountRepository(accounts)
+    customer_repo = CustomerRepository(customers)
+
+    result = generate_statements(file_mgr, xref_repo, account_repo, customer_repo,
+                                  logger=lambda _: None)
+
+    out: dict[str, str] = {
+        "STATEMENTS_PRODUCED": str(result.statements_produced),
+        "TOTAL_RECORDS_READ": str(result.total_records_read),
+        "PLAIN_TEXT_LINE_COUNT": str(len(result.plain_text_lines)),
+        "HTML_LINE_COUNT": str(len(result.html_lines)),
+    }
+    for i, line in enumerate(result.plain_text_lines):
+        out[f"PLAIN_{i}"] = line
+    for i, line in enumerate(result.html_lines):
+        out[f"HTML_{i}"] = line
+    return out

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masquerade — COBOL Intelligence Engine</title>
+<title>Masquerade — COBOL to Python Reimplementation Engine</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -73,17 +73,6 @@ a{color:inherit;text-decoration:none}
 .iq-id{font-size:.75rem;font-weight:600;color:var(--muted);font-family:'JetBrains Mono',monospace}
 .iq-name{font-weight:600;font-size:.92rem}.iq-tests{color:var(--muted);font-size:.78rem;margin-top:.2rem}
 
-/* ── NIST ── */
-.nist-bars{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;align-items:end;height:220px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1rem .75rem;margin-bottom:1rem}
-.nist-col{display:flex;flex-direction:column;align-items:center;gap:2px}
-.nist-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height .8s ease}
-.nist-bar.pass{background:var(--green)}.nist-bar.fail{background:var(--red)}
-.nist-label{font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:4px}
-.nist-note{text-align:center;color:var(--muted);font-size:.88rem;max-width:700px;margin:1rem auto 0;line-height:1.6}
-.nist-big{text-align:center;margin-bottom:1.5rem;font-size:1.8rem;font-weight:700}
-.nist-big .pass-num{color:var(--green)}.nist-big .fail-num{color:var(--red)}
-.nist-big .slash{color:var(--muted);margin:0 .5rem}
-
 /* ── Proof ── */
 .proof-bg{background:linear-gradient(180deg,transparent,rgba(99,102,241,.06),transparent);padding:5rem 0}
 .tabs{display:flex;justify-content:center;gap:.5rem;margin-bottom:2rem}
@@ -96,10 +85,6 @@ a{color:inherit;text-decoration:none}
 .proof-meta span{font-size:.78rem;padding:4px 10px;background:rgba(99,102,241,.1);border-radius:6px;color:#a5b4fc}
 .reimpl{display:inline-block;padding:6px 14px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:8px;color:var(--green);font-size:.82rem;font-family:'JetBrains Mono',monospace;margin-bottom:1.5rem}
 
-/* Ring */
-.ring-wrap{text-align:center}
-.ring-wrap svg{width:120px;height:120px}
-.ring-label{color:var(--muted);font-size:.78rem;margin-top:.25rem}
 
 /* Scenario Table */
 .sc-table{margin-bottom:2rem}
@@ -140,7 +125,6 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 @media(max-width:768px){
   .sc-head,.sc-row{grid-template-columns:1fr 1fr 36px}.sc-exp,.sc-head span:nth-child(3){display:none}
   .proof-top{flex-direction:column}.final-nums{gap:2rem}
-  .nist-bars{grid-template-columns:repeat(6,1fr);height:160px}
 }
 </style>
 </head>
@@ -148,19 +132,19 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 
 <!-- ── Hero ── -->
 <header class="hero">
-  <div class="hero-badge">COBOL Intelligence Engine</div>
+  <div class="hero-badge">Open Source COBOL to Python Engine</div>
   <h1><span class="grad">Masquerade</span></h1>
-  <p>Analyze. Reimplement. Verify. &mdash; End-to-end COBOL modernization with proven behavioral equivalence.</p>
+  <p>Analyze. Reimplement. Verify. &mdash; Open-source COBOL to Python reimplementation with proven behavioral equivalence.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><strong>494</strong> programs</div>
+    <div class="hero-stat"><strong>273</strong> programs</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>149K</strong> lines</div>
+    <div class="hero-stat"><strong>96K</strong> lines</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>463</strong> tests</div>
+    <div class="hero-stat"><strong>560</strong> tests</div>
     <div class="hero-div"></div>
     <div class="hero-stat"><strong>5</strong> codebases</div>
     <div class="hero-div"></div>
-    <div class="hero-stat"><strong>34</strong> reimplementations</div>
+    <div class="hero-stat"><strong>36</strong> reimplementations</div>
   </div>
   <div class="scroll-hint">&darr;</div>
 </header>
@@ -168,7 +152,7 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── Stats ── -->
 <div class="stats">
   <div class="stat anim"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg><div class="val grad">5</div><div class="lbl">Codebases Tested</div></div>
-  <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">16</div><div class="lbl">Pipeline Modules</div></div>
+  <div class="stat anim anim-delay-1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><div class="val grad">19</div><div class="lbl">Pipeline Modules</div></div>
   <div class="stat anim anim-delay-2"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><div class="val grad">10/10</div><div class="lbl">IQ Items Complete</div></div>
   <div class="stat anim anim-delay-3"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><div class="val grad">3</div><div class="lbl">Target Languages</div></div>
 </div>
@@ -176,24 +160,15 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
 <!-- ── Pipeline ── -->
 <section class="section">
   <h2>Pipeline Architecture</h2>
-  <p class="sub">16 modules that transform raw COBOL into verified modern code</p>
+  <p class="sub">19 modules that transform raw COBOL into verified modern code</p>
   <div class="pipe-grid" id="pipeline"></div>
 </section>
 
 <!-- ── IQ ── -->
 <section class="section">
   <h2>Implementation Quality</h2>
-  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 463 tests across all modules</p>
+  <p class="sub">10 spec-driven, test-driven improvements &mdash; all complete &bull; 560 tests across all modules</p>
   <div class="iq-grid" id="iq-grid"></div>
-</section>
-
-<!-- ── NIST ── -->
-<section class="section">
-  <h2>NIST COBOL-85 Validation</h2>
-  <p class="sub">414 programs &bull; 89,427 lines &bull; Official compiler validation suite</p>
-  <div class="nist-big"><span class="pass-num">7,757</span><span class="slash">/</span><span class="fail-num">111</span> &nbsp; <span style="color:var(--muted);font-size:1rem;font-weight:400">98.6% pass rate</span></div>
-  <div class="nist-bars" id="nist-chart"></div>
-  <p class="nist-note">All 111 failures: debugging declaratives (obsolete), implementor-defined switches, file status edge cases. <strong>Zero failures</strong> in arithmetic, control flow, data movement, string handling, sort/merge, or inter-program calls.</p>
 </section>
 
 <!-- ── CardDemo Callout ── -->
@@ -208,11 +183,11 @@ footer{text-align:center;padding:3rem 2rem;color:var(--muted);font-size:.82rem;b
         <div style="color:var(--muted);font-size:.82rem;margin-top:.2rem">COBOL programs</div>
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
-        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">34</div>
+        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">35</div>
         <div style="color:var(--muted);font-size:.82rem;margin-top:.2rem">Python modules</div>
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
-        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">55</div>
+        <div style="font-size:2rem;font-weight:800;background:linear-gradient(135deg,#4ade80,#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent">84</div>
         <div style="color:var(--muted);font-size:.82rem;margin-top:.2rem">new tests</div>
       </div>
       <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
@@ -286,20 +261,48 @@ class CdemoGeneralInfo:
   </div>
 </section>
 
+<!-- ── Agent-First ── -->
+<section class="section" style="padding-bottom:2rem">
+  <div style="background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(74,222,128,.12));border:1px solid rgba(74,222,128,.25);border-radius:16px;padding:3rem;max-width:960px;margin:0 auto;text-align:center">
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);color:#4ade80;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.5rem">Built for AI Coding Agents</div>
+    <h3 style="font-size:1.8rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem">Point Your Agent. Follow the Guide. Verify the Result.</h3>
+    <p style="color:var(--muted);max-width:640px;margin:0 auto 2rem;line-height:1.6">Masquerade produces structured JSON artifacts, spec-driven contracts, and a step-by-step workflow guide that coding agents (Claude Code, Cursor, Copilot) follow natively. LLM-powered RAG answers questions about the code. 560 deterministic tests verify every change. You bring domain judgment &mdash; the agent handles volume.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;text-align:left;max-width:800px;margin:0 auto">
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        <div style="font-size:.85rem;font-weight:600;margin-bottom:.3rem">Structured Artifacts</div>
+        <div style="color:var(--muted);font-size:.8rem;line-height:1.4">programs.json + graph.json &mdash; agents parse natively, no scraping needed</div>
+      </div>
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        <div style="font-size:.85rem;font-weight:600;margin-bottom:.3rem">RAG Intelligence</div>
+        <div style="color:var(--muted);font-size:.8rem;line-height:1.4">Gemini + Pinecone &mdash; ask questions, get answers grounded in source citations</div>
+      </div>
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        <div style="font-size:.85rem;font-weight:600;margin-bottom:.3rem">Spec Contracts</div>
+        <div style="color:var(--muted);font-size:.8rem;line-height:1.4">Every feature in specs/ &mdash; agents follow as implementation contracts</div>
+      </div>
+      <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        <div style="font-size:.85rem;font-weight:600;margin-bottom:.3rem">Deterministic Tests</div>
+        <div style="color:var(--muted);font-size:.8rem;line-height:1.4">560 tests &mdash; agent runs after every change, catches regressions instantly</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── Final ── -->
 <section class="final">
   <div class="final-badge">&#x2714; Proven Behavioral Equivalence</div>
   <h2>Every reimplementation is <span class="grad">verified</span> against the original COBOL &mdash; field by field, deterministically.</h2>
   <div class="final-nums">
-    <div class="final-num"><div class="v grad-green">65</div><div class="l">fields compared</div></div>
-    <div class="final-num"><div class="v grad-green">463</div><div class="l">passing tests</div></div>
+    <div class="final-num"><div class="v grad-green">273</div><div class="l">programs ingested</div></div>
+    <div class="final-num"><div class="v grad-green">96K</div><div class="l">lines analyzed</div></div>
+    <div class="final-num"><div class="v grad-green">560</div><div class="l">passing tests</div></div>
     <div class="final-num"><div class="v grad-green">0</div><div class="l">mismatches</div></div>
-    <div class="final-num"><div class="v grad-green">34</div><div class="l">Python modules</div></div>
+    <div class="final-num"><div class="v grad-green">36</div><div class="l">Python modules</div></div>
   </div>
   <a href="https://github.com/billybillymc/masquerade-cobol" target="_blank" class="gh-btn">&#x2197; View on GitHub</a>
 </section>
 
-<footer>Masquerade COBOL Intelligence Engine &mdash; MIT License</footer>
+<footer>Masquerade &mdash; Open Source COBOL to Python Engine &mdash; MIT License</footer>
 
 <script>
 // ── Data ──
@@ -320,26 +323,22 @@ const pipeline = [
   {name:'Record I/O',desc:'Pack/unpack COBOL fixed-width records',color:'#818cf8',ico:'&#x1F4E6;'},
   {name:'COBOL Runner',desc:'Compile + execute via GnuCOBOL in WSL',color:'#67e8f9',ico:'&#x1F680;'},
   {name:'Golden Generator',desc:'Automated golden vector creation',color:'#86efac',ico:'&#x1F3AF;'},
+  {name:'CLI Graph',desc:'Impact, deps, hotspots, and dead-code commands',color:'#7c3aed',ico:'&#x1F578;'},
+  {name:'CLI Data',desc:'Dict, screens, jobs, trace, and xref commands',color:'#0d9488',ico:'&#x1F4CA;'},
+  {name:'CLI Generate',desc:'Spec, rules, skeleton, test-gen, and export commands',color:'#b45309',ico:'&#x2699;'},
 ];
 
 const iq = [
   {id:'IQ-01',name:'Conditional Logic',tests:22},{id:'IQ-02',name:'Copybook Wiring',tests:12},
-  {id:'IQ-03',name:'Numeric Semantics',tests:49},{id:'IQ-04',name:'Business Rules',tests:15},
+  {id:'IQ-03',name:'Numeric Semantics',tests:66},{id:'IQ-04',name:'Business Rules',tests:15},
   {id:'IQ-05',name:'Behavioral Tests',tests:10},{id:'IQ-06',name:'Repository Mapping',tests:14},
   {id:'IQ-07',name:'API Contracts',tests:15},{id:'IQ-08',name:'Multi-Language',tests:27},
-  {id:'IQ-09',name:'Diff Harness',tests:15},{id:'IQ-10',name:'Symbol Table',tests:12},
-];
-
-const nist = [
-  {mod:'NC',pass:4532,fail:35},{mod:'IF',pass:797,fail:0},{mod:'ST',pass:239,fail:0},
-  {mod:'IC',pass:175,fail:1},{mod:'SQ',pass:587,fail:5},{mod:'IX',pass:458,fail:21},
-  {mod:'RL',pass:235,fail:0},{mod:'SM',pass:282,fail:1},{mod:'SG',pass:325,fail:0},
-  {mod:'DB',pass:56,fail:47},{mod:'OB',pass:27,fail:1},{mod:'RW',pass:44,fail:0},
+  {id:'IQ-09',name:'Diff Harness',tests:27},{id:'IQ-10',name:'Symbol Table',tests:12},
 ];
 
 const codebases = [
   {name:'AWS CardDemo',desc:'Credit card management \u2014 fully reimplemented: all 31 programs across CICS online + batch',programs:31,lines:'30K',type:'CICS + Batch',
-   reimpl:'31 programs \u2192 34 Python modules: sign-on, menus, accounts, cards, transactions, billing, reports, batch export/import',fields:29,confidence:100,
+   reimpl:'31 programs \u2192 34 Python modules: sign-on, menus, accounts, cards, transactions, billing, reports, batch export/import',
    scenarios:[
      {name:'Admin Login (COSGN00C)',input:'ADMIN001 + PASS1234',exp:'XCTL \u2192 COADM01C'},
      {name:'Account Update (COACTUPC)',input:'Account 1001, new credit limit',exp:'Changes committed to database'},
@@ -348,7 +347,7 @@ const codebases = [
      {name:'Batch Export\u2192Import (CBEXPORT/CBIMPORT)',input:'5 entity types, 10 records',exp:'Round-trip lossless, 0 errors'},
    ]},
   {name:'IBM CBSA Banking',desc:'Banking system \u2014 accounts, customers, debit/credit, transfers',programs:29,lines:'25K',type:'CICS + DB2',
-   reimpl:'DBCRFUN debit/credit \u2192 cbsa_dbcrfun.py (379 lines)',fields:16,confidence:100,
+   reimpl:'DBCRFUN debit/credit \u2192 cbsa_dbcrfun.py (379 lines)',
    scenarios:[
      {name:'Credit to Savings',input:'Amount +500.00',exp:'Balance updated, type=CRE'},
      {name:'Debit Sufficient Funds',input:'Amount -200.00',exp:'Balance updated, type=DEB'},
@@ -357,7 +356,7 @@ const codebases = [
      {name:'Account Not Found',input:'Invalid account',exp:'Fail code 1'},
    ]},
   {name:'Star Trek',desc:'1979 game \u2014 1,615-line full reimplementation with deterministic seed',programs:1,lines:'1.6K',type:'Interactive',
-   reimpl:'ctrek.cob \u2192 star_trek.py (1,615 lines)',fields:12,confidence:100,
+   reimpl:'ctrek.cob \u2192 star_trek.py (1,615 lines)',
    scenarios:[
      {name:'Title Screen',input:'Any input',exp:'*STAR TREK* displayed'},
      {name:'Invalid Skill',input:'Level 9',exp:'INVALID SKILL LEVEL'},
@@ -367,12 +366,21 @@ const codebases = [
      {name:'Terminate',input:'com 6',exp:'Game over + stranded'},
    ]},
   {name:'Taxe Fonci\u00e8re',desc:'French property tax \u2014 669-line reimplementation with full fee calculation',programs:6,lines:'3K',type:'Subroutine',
-   reimpl:'EFITA3B8 \u2192 taxe_fonciere.py (669 lines)',fields:8,confidence:100,
+   reimpl:'EFITA3B8 \u2192 taxe_fonciere.py (669 lines)',
    scenarios:[
      {name:'Valid Input (no rates)',input:'ccobnb=2, dan=2018',exp:'CR=24 RC=01'},
      {name:'Wrong Article Code',input:'ccobnb=1',exp:'CR=12 RC=01'},
      {name:'Wrong Year',input:'dan=2019',exp:'CR=12 RC=02'},
      {name:'Empty Input',input:'All blank',exp:'CR=12'},
+   ]},
+  {name:'CobolCraft',desc:'A full Minecraft 1.21.4 server written entirely in COBOL \u2014 terrain, multiplayer, crafting, physics',programs:206,lines:'30K',type:'Network Server',
+   reimpl:'uuid.cob \u2192 cc_uuid.py (35 lines) &bull; json-parse.cob \u2192 cc_json_parse.py (210 lines)',
+   scenarios:[
+     {name:'UUID-ToString (nil)',input:'\\x00 \u00d7 16',exp:'00000000-0000-0000-0000-000000000000'},
+     {name:'UUID-FromString round-trip',input:'550e8400-e29b-41d4-a716-446655440000',exp:'16-byte binary, lossless'},
+     {name:'JSON string + escapes',input:'"say \\"hi\\""',exp:'say "hi"'},
+     {name:'JSON integer negative',input:'-42',exp:'-42'},
+     {name:'JSON FindValue',input:'"name":"Alice","age":30 \u2192 key=age',exp:'offset points to 30'},
    ]},
 ];
 
@@ -391,32 +399,12 @@ document.getElementById('iq-grid').innerHTML = iq.map((item,i) =>
     <div class="iq-tests">${item.tests} tests</div>
   </div>`).join('');
 
-// ── Render NIST Chart ──
-const maxNist = Math.max(...nist.map(n=>n.pass));
-document.getElementById('nist-chart').innerHTML = nist.map(n => {
-  const ph = Math.max(2, (n.pass/maxNist)*180);
-  const fh = n.fail > 0 ? Math.max(2, (n.fail/maxNist)*180) : 0;
-  return `<div class="nist-col">
-    <div class="nist-bar pass" style="height:${ph}px" title="${n.pass} PASS"></div>
-    ${fh > 0 ? `<div class="nist-bar fail" style="height:${fh}px" title="${n.fail} FAIL"></div>` : ''}
-    <div class="nist-label">${n.mod}</div>
-  </div>`;
-}).join('');
-
 // ── Render Proof Tabs ──
 let activeTab = 0;
 function renderProof(idx) {
   activeTab = idx;
   const cb = codebases[idx];
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  const ring = `<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="#1e293b" stroke-width="10"/>
-    <circle cx="60" cy="60" r="50" fill="none" stroke="#4ade80" stroke-width="10" stroke-linecap="round"
-      stroke-dasharray="${cb.confidence*3.14} 314" transform="rotate(-90 60 60)">
-      <animate attributeName="stroke-dasharray" from="0 314" to="${cb.confidence*3.14} 314" dur="1.2s" fill="freeze"/>
-    </circle>
-    <text x="60" y="55" text-anchor="middle" fill="white" font-size="22" font-weight="bold">${cb.confidence}%</text>
-    <text x="60" y="73" text-anchor="middle" fill="#94a3b8" font-size="10">confidence</text></svg>`;
-
   document.getElementById('proof-box').innerHTML = `
     <div class="proof-top">
       <div>
@@ -426,7 +414,6 @@ function renderProof(idx) {
           <span>${cb.programs} programs</span><span>${cb.lines} lines</span><span>${cb.type}</span>
         </div>
       </div>
-      <div class="ring-wrap">${ring}<div class="ring-label">${cb.fields} fields compared</div></div>
     </div>
     <div class="reimpl">${cb.reimpl}</div>
     <div class="sc-table">

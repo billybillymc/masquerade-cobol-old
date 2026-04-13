@@ -284,6 +284,59 @@ def cmd_test_gen(arg, active, known_codebases, get_graph_fn, suggest_similar_fn)
         print(f"  \033[38;5;40mGenerated {len(results)} test files ({total} test cases) in:\033[0m {tests_dir}\n")
 
 
+# ── /java-gen ────────────────────────────────────────────────────────────────
+
+def cmd_java_gen(arg, active, known_codebases, get_graph_fn, suggest_similar_fn):
+    """Generate Java Maven module(s) with typed DTOs, repositories, and controllers."""
+    info = known_codebases.get(active, {})
+    codebase_dir = info.get("dir", "")
+    if not codebase_dir:
+        print(f"  \033[38;5;196mCodebase directory not found for {active}.\033[0m")
+        return
+
+    from java_codegen import generate_java_for_program, generate_java_for_codebase
+    from skeleton_generator import _cobol_name_to_python
+    analysis_dir = os.path.join(codebase_dir, "_analysis")
+    output_dir = os.path.join(analysis_dir, "java")
+
+    if arg:
+        target = arg.upper()
+        graph = get_graph_fn(active)
+        if not graph:
+            print(f"  \033[38;5;196mNo analysis graph found for {active}.\033[0m")
+            return
+        if target not in graph.program_names():
+            print(f"  \033[38;5;196mProgram '{target}' not found.\033[0m")
+            suggest_similar_fn(target, graph)
+            return
+        print(f"  \033[38;5;214mGenerating Java module for {target}...\033[0m\n")
+        try:
+            result = generate_java_for_program(
+                target, Path(codebase_dir), Path(output_dir),
+                codebase_name=active,
+            )
+            print(f"  \033[38;5;40mJava module written to:\033[0m {result.module_root}")
+            print(f"  \033[38;5;245m{len(result.files_written)} files (pom.xml + Main.java + DTOs + repos + controllers)\033[0m\n")
+        except Exception as e:
+            print(f"  \033[38;5;196mError: {e}\033[0m")
+    else:
+        print(f"  \033[38;5;214mGenerating Java modules for all programs in {active}...\033[0m")
+        try:
+            summary = generate_java_for_codebase(
+                Path(codebase_dir), Path(output_dir), codebase_name=active,
+            )
+            successes = summary["results"]
+            failures = summary["failures"]
+            print(f"  \033[38;5;40mGenerated {len(successes)} Java modules in:\033[0m {output_dir}")
+            if failures:
+                print(f"  \033[38;5;196m{len(failures)} failures:\033[0m")
+                for pgm, err in list(failures.items())[:5]:
+                    print(f"    {pgm}: {err}")
+            print(f"  \033[38;5;245mEach module has pom.xml, Main.java, typed DTOs, Spring repos/controllers.\033[0m\n")
+        except Exception as e:
+            print(f"  \033[38;5;196mError: {e}\033[0m")
+
+
 # ── /export ───────────────────────────────────────────────────────────────────
 
 def cmd_export(active, known_codebases):

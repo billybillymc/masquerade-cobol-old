@@ -1,0 +1,26 @@
+{
+  "node_counts": {
+    "PROGRAM": 183,
+    "COPYBOOK": 45,
+    "PARAGRAPH": 1
+  },
+  "edge_counts": {
+    "COPIES": 969
+  },
+  "total_programs": 183,
+  "total_loc": 26789,
+  "total_code_lines": 21464,
+  "total_comment_lines": 0,
+  "total_paragraphs": 13,
+  "total_copybook_refs": 909,
+  "total_inter_program_calls": 0,
+  "total_cics_operations": 0,
+  "programs_online_cics": 0,
+  "programs_batch": 183,
+  "total_data_flows": 8,
+  "unresolved_copybooks": [
+    "ONLY",
+    "THE"
+  ],
+  "unresolved_calls": []
+}

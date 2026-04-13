@@ -120,3 +120,70 @@ def _handle_card(rec: ExportRecord):
     if isinstance(rec.data, CardRecord):
         return rec.data, None
     return None, "data is not a CardRecord"
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    from decimal import Decimal
+    return [
+        ExportRecord(seq_num=1, rec_type="C", timestamp="2026-04-08 12:00:00.00",
+                      data=CustomerRecord(cust_id=1, cust_first_name="JOHN",
+                                           cust_last_name="DOE")),
+        ExportRecord(seq_num=2, rec_type="A", timestamp="2026-04-08 12:00:00.00",
+                      data=AccountRecord(acct_id=100000001, acct_active_status="Y",
+                                          acct_curr_bal=Decimal("5000.00"))),
+        ExportRecord(seq_num=3, rec_type="X", timestamp="2026-04-08 12:00:00.00",
+                      data=CardXrefRecord(xref_card_num="4111000000001111",
+                                           xref_cust_id=1, xref_acct_id=100000001)),
+        ExportRecord(seq_num=4, rec_type="T", timestamp="2026-04-08 12:00:00.00",
+                      data=TranRecord(tran_id="TRN0000000000001", tran_type_cd="01",
+                                       tran_cat_cd=1, tran_amt=Decimal("150.25"))),
+        ExportRecord(seq_num=5, rec_type="D", timestamp="2026-04-08 12:00:00.00",
+                      data=CardRecord(card_num="4111000000001111",
+                                       card_acct_id=100000001, card_cvv_cd=123,
+                                       card_active_status="Y")),
+    ]
+
+
+def _scenario_empty_input():
+    return []
+
+
+def _scenario_bad_type():
+    return [
+        ExportRecord(seq_num=1, rec_type="Z", timestamp="2026-04-08 12:00:00.00",
+                      data="INVALID"),
+    ]
+
+
+_CBIMPORT_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+    "BAD_TYPE": _scenario_bad_type,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _CBIMPORT_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    export_records = _CBIMPORT_SCENARIOS[scenario_name]()
+    result = run_import(export_records)
+
+    out: dict[str, str] = {
+        "TOTAL_IMPORTED": str(result.stats.total_imported),
+        "CUSTOMERS": str(result.stats.customers),
+        "ACCOUNTS": str(result.stats.accounts),
+        "XREFS": str(result.stats.xrefs),
+        "TRANSACTIONS": str(result.stats.transactions),
+        "CARDS": str(result.stats.cards),
+        "ERRORS": str(result.stats.errors),
+    }
+    for i, line in enumerate(result.log):
+        out[f"LOG_{i}"] = line
+    for i, err in enumerate(result.errors):
+        out[f"ERROR_{i}"] = err
+    return out

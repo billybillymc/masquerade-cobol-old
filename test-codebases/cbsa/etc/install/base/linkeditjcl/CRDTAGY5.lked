@@ -1,0 +1,6 @@
+*
+* Copyright IBM Corp. 2023
+*
+    INCLUDE CBSAMOD(CRDTAGY5)
+    ENTRY CRDTAGY5
+    NAME CRDTAGY5(R)

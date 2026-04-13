@@ -1,0 +1,52 @@
+{
+  "node_counts": {
+    "PROGRAM": 36,
+    "COPYBOOK": 32,
+    "FILE": 3,
+    "PARAGRAPH": 436,
+    "MAP": 10
+  },
+  "edge_counts": {
+    "COPIES": 114,
+    "CICS_IO": 60,
+    "PERFORMS": 445,
+    "CALL": 2,
+    "READS_FILE": 1,
+    "DATA_PASSES": 16,
+    "LINK": 140
+  },
+  "total_programs": 29,
+  "total_loc": 25651,
+  "total_code_lines": 16899,
+  "total_comment_lines": 4000,
+  "total_paragraphs": 436,
+  "total_copybook_refs": 114,
+  "total_inter_program_calls": 142,
+  "total_cics_operations": 746,
+  "programs_online_cics": 28,
+  "programs_batch": 1,
+  "total_data_flows": 1275,
+  "unresolved_copybooks": [
+    "BNK1ACC",
+    "BNK1CAM",
+    "BNK1CCM",
+    "BNK1CDM",
+    "BNK1DAM",
+    "BNK1DCM",
+    "BNK1MAI",
+    "BNK1TFM",
+    "BNK1UAM",
+    "CEEIGZCT",
+    "DFHAID",
+    "DFHBMSCA"
+  ],
+  "unresolved_calls": [
+    "CEEDATM",
+    "CEEGMT",
+    "DELACC  ",
+    "INQACCCU-PROGRAM",
+    "INQCUST ",
+    "INQCUST-PROGRAM",
+    "WS-ABEND-PGM"
+  ]
+}

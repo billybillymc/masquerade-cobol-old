@@ -1,0 +1,31 @@
+"""Auto-generated Python skeletons for cbsa COBOL programs."""
+
+# from .abndproc import Abndproc
+# from .bankdata import Bankdata
+# from .bnk1cac import Bnk1cac
+# from .bnk1cca import Bnk1cca
+# from .bnk1ccs import Bnk1ccs
+# from .bnk1cra import Bnk1cra
+# from .bnk1dac import Bnk1dac
+# from .bnk1dcs import Bnk1dcs
+# from .bnk1tfn import Bnk1tfn
+# from .bnk1uac import Bnk1uac
+# from .bnkmenu import Bnkmenu
+# from .crdtagy1 import Crdtagy1
+# from .crdtagy2 import Crdtagy2
+# from .crdtagy3 import Crdtagy3
+# from .crdtagy4 import Crdtagy4
+# from .crdtagy5 import Crdtagy5
+# from .creacc import Creacc
+# from .crecust import Crecust
+# from .dbcrfun import Dbcrfun
+# from .delacc import Delacc
+# from .delcus import Delcus
+# from .getcompy import Getcompy
+# from .getscode import Getscode
+# from .inqacc import Inqacc
+# from .inqacccu import Inqacccu
+# from .inqcust import Inqcust
+# from .updacc import Updacc
+# from .updcust import Updcust
+# from .xfrfun import Xfrfun

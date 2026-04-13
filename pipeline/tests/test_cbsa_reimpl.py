@@ -14,7 +14,7 @@ matching the COBOL business logic for all decision paths:
   - PROCTRAN insert failure triggers rollback (fail code 2)
   - Transaction type classification: DEB / CRE / PDR / PCR
 
-Uses the differential harness (TestVector / run_vectors) for
+Uses the differential harness (DiffVector / run_vectors) for
 field-by-field equivalence checking.
 """
 
@@ -27,7 +27,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
-from differential_harness import TestVector, run_vectors, render_report_text
+from differential_harness import DiffVector, run_vectors, render_report_text
 from reimpl.cbsa_dbcrfun import (
     Account,
     DebitCreditRequest,
@@ -428,7 +428,7 @@ class TestTransactionTypeClassification:
 class TestDifferentialHarness:
     """Run all core scenarios through the differential harness framework.
 
-    This uses the same TestVector / run_vectors / render_report_text
+    This uses the same DiffVector / run_vectors / render_report_text
     pattern as the COSGN00C differential tests.  The 'expected' values
     are the golden reference derived from reading the COBOL source.
     """
@@ -523,7 +523,7 @@ class TestDifferentialHarness:
             )
             actual = _run_scenario(request, s_acct_repo, s_pt_repo)
 
-            vectors.append(TestVector(
+            vectors.append(DiffVector(
                 vector_id=scenario["id"],
                 program="DBCRFUN",
                 inputs={

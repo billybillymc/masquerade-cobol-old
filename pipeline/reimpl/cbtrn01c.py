@@ -142,3 +142,56 @@ def process_daily_transactions(
 
     logger("END OF EXECUTION OF PROGRAM CBTRN01C")
     return result
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    xrefs = {
+        "4111000000001111": CardXrefRecord(
+            xref_card_num="4111000000001111", xref_cust_id=1, xref_acct_id=100000001,
+        ),
+    }
+    accounts = {
+        100000001: AccountRecord(acct_id=100000001, acct_active_status="Y"),
+    }
+    trans = [
+        DalyTranRecord(tran_id="TRN0000000000001", tran_card_num="4111000000001111",
+                        tran_type_cd="01", tran_cat_cd=1, tran_amt=150.25),
+        DalyTranRecord(tran_id="TRN0000000000002", tran_card_num="9999999999999999",
+                        tran_type_cd="01", tran_cat_cd=1, tran_amt=50.00),
+    ]
+    return trans, xrefs, accounts
+
+
+def _scenario_empty_input():
+    return [], {}, {}
+
+
+_CBTRN01C_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _CBTRN01C_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    trans, xrefs, accounts = _CBTRN01C_SCENARIOS[scenario_name]()
+    xref_repo = XrefRepository(xrefs)
+    account_repo = AccountRepository(accounts)
+
+    result = process_daily_transactions(trans, xref_repo, account_repo, logger=lambda _: None)
+
+    out: dict[str, str] = {
+        "RECORDS_READ": str(result.records_read),
+        "SUCCESSFUL_LOOKUPS": str(result.successful_lookups),
+        "FAILED_XREF": str(result.failed_xref),
+        "FAILED_ACCOUNT": str(result.failed_account),
+    }
+    for i, line in enumerate(result.display_lines):
+        out[f"DISPLAY_{i}"] = line
+    return out

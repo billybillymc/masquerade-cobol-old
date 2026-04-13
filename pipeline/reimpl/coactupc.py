@@ -394,3 +394,166 @@ def _apply_cust_input(inp, old: Optional[CustomerRecord]) -> CustomerRecord:
         except ValueError:
             pass
     return cust
+
+
+# ─── Seed data ──────────────────────────────────────────────────────────────
+
+_SEED_ACCOUNTS: dict[int, AccountRecord] = {
+    100000001: AccountRecord(
+        acct_id=100000001,
+        acct_active_status="Y",
+        acct_curr_bal=Decimal("5000.00"),
+        acct_credit_limit=Decimal("10000.00"),
+        acct_cash_credit_limit=Decimal("5000.00"),
+        acct_open_date="2020-01-15",
+        acct_expiration_date="2030-12-31",
+    ),
+}
+
+_SEED_CUSTOMERS: dict[int, CustomerRecord] = {
+    1: CustomerRecord(
+        cust_id=1,
+        cust_first_name="John",
+        cust_middle_name="A",
+        cust_last_name="Doe",
+        cust_addr_zip="10001",
+        cust_ssn=123456789,
+        cust_fico_credit_score=750,
+        cust_dob_yyyy_mm_dd="1990-01-15",
+    ),
+}
+
+_SEED_XREFS: list[CardXrefRecord] = [
+    CardXrefRecord(xref_card_num="4111111111111111", xref_cust_id=1, xref_acct_id=100000001),
+]
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY       — eibcalen=0 → xctl to COSGN00C
+      LOOKUP_ACCOUNT    — enter valid acct ID → action=S, show details
+      ACCT_NOT_FOUND    — enter invalid acct ID → error message
+      VALIDATE_OK       — action=S, valid edits → action=N, "Press F5 to save"
+      VALIDATION_ERROR  — action=S, bad active_status → error, action=E
+      COMMIT_CHANGES    — action=N, PF5 → commit, action=C, success
+      PF3_RETURN        — PF3 → return to menu
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    acct_repo = AccountRepository(dict(_SEED_ACCOUNTS))
+    cust_repo = CustomerRepository(dict(_SEED_CUSTOMERS))
+    xref_repo = XrefRepository(list(_SEED_XREFS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CM00",
+        cdemo_from_program="COMEN01C",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        result = process_account_update(
+            eibcalen=0, eibaid="ENTER", commarea=commarea,
+            inp=AccountUpdateInput(),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+        )
+    elif scenario == "LOOKUP_ACCOUNT":
+        result = process_account_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=AccountUpdateInput(acct_id="100000001"),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+            current_action="",
+        )
+    elif scenario == "ACCT_NOT_FOUND":
+        result = process_account_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=AccountUpdateInput(acct_id="999999999"),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+            current_action="",
+        )
+    elif scenario == "VALIDATE_OK":
+        old_acct = acct_repo.find(100000001)
+        old_cust = cust_repo.find(1)
+        result = process_account_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=AccountUpdateInput(
+                acct_id="100000001",
+                active_status="Y",
+                credit_limit="15000.00",
+                cash_credit_limit="7500.00",
+                last_name="Doe Updated",
+            ),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+            current_action="S",
+            old_acct=old_acct,
+            old_cust=old_cust,
+        )
+    elif scenario == "VALIDATION_ERROR":
+        old_acct = acct_repo.find(100000001)
+        old_cust = cust_repo.find(1)
+        result = process_account_update(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=AccountUpdateInput(
+                acct_id="100000001",
+                active_status="X",
+                credit_limit="15000.00",
+                cash_credit_limit="7500.00",
+                last_name="Doe Updated",
+            ),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+            current_action="S",
+            old_acct=old_acct,
+            old_cust=old_cust,
+        )
+    elif scenario == "COMMIT_CHANGES":
+        old_acct = acct_repo.find(100000001)
+        old_cust = cust_repo.find(1)
+        result = process_account_update(
+            eibcalen=100, eibaid="PF5", commarea=commarea,
+            inp=AccountUpdateInput(
+                acct_id="100000001",
+                active_status="Y",
+                credit_limit="15000.00",
+                cash_credit_limit="7500.00",
+                last_name="Doe Updated",
+            ),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+            current_action="N",
+            old_acct=old_acct,
+            old_cust=old_cust,
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_account_update(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            inp=AccountUpdateInput(),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+        )
+    else:
+        result = process_account_update(
+            eibcalen=0, eibaid="ENTER", commarea=commarea,
+            inp=AccountUpdateInput(),
+            acct_repo=acct_repo, cust_repo=cust_repo, xref_repo=xref_repo,
+        )
+
+    acct_id_out = ""
+    acct_status_out = ""
+    acct_bal_out = ""
+    if result.acct_record:
+        acct_id_out = str(result.acct_record.acct_id)
+        acct_status_out = result.acct_record.acct_active_status
+        acct_bal_out = str(result.acct_record.acct_curr_bal)
+
+    return {
+        "ACTION": result.action,
+        "ERROR": "Y" if result.error else "N",
+        "SUCCESS": "Y" if result.success else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+        "ACCT_ID": acct_id_out,
+        "ACCT_STATUS": acct_status_out,
+        "ACCT_BAL": acct_bal_out,
+    }

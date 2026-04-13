@@ -2,7 +2,6 @@ existing_codebases.md
 .env
 pipeline/.env
 **/.env
-test-codebases/
 spec-kit/
 .claude/
 __pycache__/
@@ -11,3 +10,9 @@ __pycache__/
 .pytest_cache/
 .venv/
 scripts/.runtime/
+.cursor/
+.specify/
+PRD/
+engineering/
+specs/
+target/

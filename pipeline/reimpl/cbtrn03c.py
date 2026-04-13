@@ -181,3 +181,72 @@ def generate_transaction_report(
     logger(f"WS-PAGE-TOTAL {page_total}")
     logger("END OF EXECUTION OF PROGRAM CBTRN03C")
     return result
+
+
+# ── run_vector adapter ───────────────────────────────────────────────────────
+
+def _scenario_process_records():
+    from .carddemo_data import CardXrefRecord as CXR
+    xrefs = {
+        "4111000000001111": CXR(xref_card_num="4111000000001111",
+                                xref_cust_id=1, xref_acct_id=100000001),
+    }
+    tran_types = {
+        "01": TranTypeRecord(tran_type="01", tran_type_desc="Purchase"),
+    }
+    tran_catgs = {
+        ("01", 1): TranCatgRecord(tran_type_cd="01", tran_cat_cd=1,
+                                   tran_catg_desc="Retail"),
+    }
+    trans = [
+        TranRecord(
+            tran_id="TRN0000000000001", tran_type_cd="01", tran_cat_cd=1,
+            tran_desc="Widget purchase",
+            tran_amt=Decimal("150.25"), tran_card_num="4111000000001111",
+            tran_proc_ts="2026-04-01-12.00.00.000000",
+        ),
+        TranRecord(
+            tran_id="TRN0000000000002", tran_type_cd="01", tran_cat_cd=1,
+            tran_desc="Gadget purchase",
+            tran_amt=Decimal("75.50"), tran_card_num="4111000000001111",
+            tran_proc_ts="2026-04-05-14.30.00.000000",
+        ),
+    ]
+    return trans, xrefs, tran_types, tran_catgs, "2026-04-01", "2026-04-30"
+
+
+def _scenario_empty_input():
+    return [], {}, {}, {}, "2026-04-01", "2026-04-30"
+
+
+_CBTRN03C_SCENARIOS = {
+    "PROCESS_RECORDS": _scenario_process_records,
+    "EMPTY_INPUT": _scenario_empty_input,
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    scenario_name = str(inputs.get("SCENARIO", "PROCESS_RECORDS")).upper()
+    if scenario_name not in _CBTRN03C_SCENARIOS:
+        return {"error": f"unknown scenario: {scenario_name!r}"}
+
+    trans, xrefs, tran_types, tran_catgs, start_d, end_d = _CBTRN03C_SCENARIOS[scenario_name]()
+    xref_repo = XrefRepository(xrefs)
+    trantype_repo = TranTypeRepository(tran_types)
+    trancatg_repo = TranCatgRepository(tran_catgs)
+
+    result = generate_transaction_report(
+        trans, xref_repo, trantype_repo, trancatg_repo,
+        start_d, end_d, logger=lambda _: None,
+    )
+
+    out: dict[str, str] = {
+        "RECORDS_READ": str(result.records_read),
+        "RECORDS_REPORTED": str(result.records_reported),
+        "GRAND_TOTAL": f"{result.grand_total:.2f}",
+        "PAGE_COUNT": str(result.page_count),
+    }
+    for i, rl in enumerate(result.report_lines):
+        out[f"REPORT_LINE_{i}"] = rl.content
+    return out

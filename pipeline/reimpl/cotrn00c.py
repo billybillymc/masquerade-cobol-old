@@ -136,3 +136,86 @@ def _process_enter(selected_rows, page_num, repo, commarea, result):
             result.commarea = commarea
             return result
     return _load_page(page_num, repo, commarea, result)
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_TRANS = [
+    TranRecord(tran_id=f"{i:016d}", tran_type_cd="01", tran_cat_cd=1,
+               tran_source="ONLINE", tran_desc=f"PURCHASE {i:04d}",
+               tran_amt=Decimal(f"{i * 10}.00"),
+               tran_card_num="4111111111111111",
+               tran_proc_ts="2025-01-15-10.30.00.000000")
+    for i in range(1, 13)
+]
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      LIST_PAGE_1   — load first page (10 rows)
+      LIST_PAGE_2   — load second page (2 rows)
+      SELECT_TRAN   — select a transaction from list → COTRN01C
+      INVALID_KEY   — press PF9 → invalid key error
+      PF3_RETURN    — press PF3 → return to calling program
+    """
+    scenario = inputs.get("SCENARIO", "LIST_PAGE_1")
+
+    repo = TranRepository(list(_SEED_TRANS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CM00",
+        cdemo_from_program="COMEN01C",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "LIST_PAGE_1":
+        result = process_tran_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            tran_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "LIST_PAGE_2":
+        result = process_tran_list(
+            eibcalen=100, eibaid="PF8", commarea=commarea,
+            tran_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "SELECT_TRAN":
+        result = process_tran_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            tran_repo=repo, page_num=1,
+            selected_rows=[("S", "0000000000000003")],
+        )
+    elif scenario == "INVALID_KEY":
+        result = process_tran_list(
+            eibcalen=100, eibaid="PF9", commarea=commarea,
+            tran_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_tran_list(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            tran_repo=repo, page_num=1, selected_rows=[],
+        )
+    else:
+        result = process_tran_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            tran_repo=repo, page_num=1, selected_rows=[],
+        )
+
+    out: dict[str, str] = {
+        "PAGE_NUM": str(result.page_num),
+        "ROW_COUNT": str(len(result.rows)),
+        "HAS_NEXT": "Y" if result.has_next_page else "N",
+        "HAS_PREV": "Y" if result.has_prev_page else "N",
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "SELECTED_TRAN_ID": result.selected_tran_id,
+    }
+    for i, row in enumerate(result.rows):
+        out[f"ROW_{i}_TRAN_ID"] = row.tran_id
+        out[f"ROW_{i}_AMT"] = f"{row.tran_amt:.2f}"
+        out[f"ROW_{i}_DESC"] = row.tran_desc
+    return out

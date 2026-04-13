@@ -1,117 +1,91 @@
-# Masquerade COBOL Intelligence Engine
+# Masquerade — COBOL Reimplementation Engine (Python + Java)
 
-A comprehensive COBOL analysis and modernization pipeline that parses legacy COBOL systems, extracts business logic, and generates reimplementable modern-language skeletons with typed data contracts, repository interfaces, API schemas, and behavioral test suites.
+Masquerade parses legacy COBOL systems, uses LLM-powered analysis to extract their business logic, and helps you reimplement them in **Python or Java** with verified behavioral equivalence. Both targets share the same parser, the same IR, the same vector set, and the same differential harness — so a passing reimplementation in one language can be cross-checked against a passing reimplementation in the other.
 
-## What It Does
+It combines **static analysis** (parsing, dependency graphs, typed skeleton generation) with **LLM-powered intelligence** (RAG-based Q&A, semantic business rule extraction, reimplementation spec generation) so you can understand what COBOL code does, generate typed Python skeletons, and **prove** your reimplementation matches the original through differential testing.
 
-Masquerade takes a COBOL codebase (programs, copybooks, BMS screen maps, JCL) and produces:
+## Designed for AI Coding Agents
 
-- **Structural analysis** (`programs.json`, `graph.json`) — full AST with paragraphs, data flows, conditional logic, CICS operations, and a dependency graph across all programs
-- **Program specifications** — per-program markdown specs with complexity metrics, readiness scores, migration wave assignments, and effort estimates
-- **Python/Java/C# skeletons** — typed class stubs with copybook dataclasses, repository interfaces, API contracts, and method bodies derived from paragraph structure
-- **Behavioral test suites** — pytest files with scenario-based tests generated from the COBOL decision tree, not just `hasattr` stubs
-- **Business rule catalogs** — structured, evidence-anchored rules extracted from conditional blocks with classification (ACCESS_CONTROL, ROUTING, VALIDATION, etc.)
-- **Differential test harness** — field-by-field equivalence checking between COBOL golden outputs and modern reimplementations with CobolDecimal-aware numeric comparison
+Masquerade is built to be operated by a coding agent (Claude Code, Cursor, Copilot, etc.) as much as by a human. The entire pipeline produces structured, machine-readable artifacts that agents consume naturally:
 
-## Architecture
+- **`programs.json`** — full structural AST that an agent can query to understand any program
+- **`graph.json`** — dependency graph an agent uses to trace impact and find reimplementation targets
+- **Spec-driven workflow** — every feature has a specification in `specs/` that an agent follows as a contract
+- **`READ_THIS_LAST.md`** — a step-by-step workflow guide that works as an agent prompt: analyze → explore → pick target → generate skeleton → reimplement → test → verify
+- **Deterministic test suites** — 560 tests that an agent runs after every change to catch regressions immediately
+- **Evidence contract** — every claim is anchored to source line spans, giving agents grounded context instead of hallucination-prone summaries
 
-```
-COBOL Source (.cbl, .cpy, .bms, .jcl)
-    |
-    v
-[cobol_parser.py] -----> CobolProgram AST (paragraphs, data flows, conditionals)
-    |
-    v
-[analyze.py] -----------> programs.json + graph.json
-    |
-    +---> [graph_builder.py] ------> dependency graph (call, copy, file edges)
-    +---> [graph_context.py] ------> GraphIndex + DataFlowIndex (fast lookups)
-    +---> [copybook_dict.py] ------> CopybookDictionary (typed field catalog)
-    +---> [bms_parser.py] ---------> BmsMapset (screen layouts, field attributes)
-    |
-    v
-[spec_generator.py] ----> ProgramSpec (complexity, readiness, patterns)
-    |
-    +---> [skeleton_generator.py] -> Python skeletons with typed copybook fields
-    +---> [skeleton_ir.py] --------> Language-neutral IR -> Python/Java/C# renderers
-    +---> [test_generator.py] -----> Structural + behavioral pytest suites
-    +---> [business_rules.py] -----> BusinessRule extraction (structural + LLM tiers)
-    +---> [repository_mapper.py] --> CICS file ops -> typed repository interfaces
-    +---> [api_contract_mapper.py] > BMS screens -> Pydantic request/response + FastAPI routes
-    +---> [symbol_table.py] -------> Hierarchical field resolution with qualified names
-    +---> [cobol_decimal.py] ------> CobolDecimal with PIC precision enforcement
-    +---> [differential_harness.py] > Golden vector comparison with confidence scoring
-    |
-    v
-[synthesis/chain.py] ---> RAG pipeline (Pinecone + Gemini + Cohere reranking)
-[web_dashboard.py] -----> Flask dashboard for interactive exploration
-```
+The typical workflow: point your coding agent at a COBOL codebase, tell it to follow the guide, and it will analyze the system, pick reimplementation targets, generate skeletons, write Python reimplementations, and verify them — with you reviewing at each step.
 
-## Pipeline Modules
+## Why This Exists
 
-### Core Analysis
+There are 220 billion lines of COBOL still running in production — at banks, insurers, and government agencies. Most of it is undocumented, untested, and written by people who have long since retired.
 
-| Module | Purpose |
-|--------|---------|
-| `cobol_parser.py` | Recursive descent parser for COBOL-85/2002. Extracts paragraphs, PERFORM/CALL/CICS targets, data flows (MOVE/COMPUTE/ADD/etc.), and full conditional logic (IF/EVALUATE/GO TO/inline PERFORM with structured predicates). |
-| `analyze.py` | Orchestrates parsing across a codebase. Produces `programs.json` (per-program AST) and `graph.json` (dependency graph). |
-| `graph_builder.py` | Builds the dependency graph with CALL, COPY, FILE, CICS_IO edges between programs, copybooks, and files. |
-| `graph_context.py` | `GraphIndex` for fast dependency lookups (callers, callees, transitive dependencies, readiness scores, dead code detection). `DataFlowIndex` for field-level tracing across programs. |
-| `copybook_dict.py` | Parses all `.cpy` files into a searchable `CopybookDictionary` with typed fields (PIC, USAGE, OCCURS, REDEFINES, level-88 conditions). |
-| `bms_parser.py` | Parses BMS map definitions into `BmsMapset` with fields, attributes (PROT/UNPROT/BRT/DRK), and screen flow graph from XCTL/LINK/RETURN TRANSID references. |
-| `complexity.py` | Cyclomatic complexity, nesting depth, and complexity grading (LOW/MODERATE/HIGH/VERY HIGH). |
-| `jcl_parser.py` | JCL job/step/DD statement parser for batch orchestration analysis. |
+The hard problem isn't generating modern code. LLMs can do that passably. The hard problem is **proving the modern code does the same thing**. COBOL arithmetic is weird (silent overflow, implicit decimal points, left-truncation). Control flow is weird (PERFORM THRU, GO TO, fall-through paragraphs). Data is weird (REDEFINES unions, OCCURS DEPENDING ON, packed decimal).
 
-### Code Generation (IQ-01 through IQ-10)
+Masquerade gives you the tools to understand, reimplement, and verify — not just translate.
 
-| Module | IQ | Purpose |
-|--------|----|---------|
-| `skeleton_generator.py` | IQ-02 | Generates Python skeletons from ProgramSpec. Copybook dataclasses have typed fields with enforced metadata (max_length, max_digits, scale, signed, usage) instead of empty `pass` bodies. Nested groups become nested dataclasses, OCCURS becomes `list[T]`, REDEFINES becomes `Optional[T]`, level-88 becomes `ClassVar`. |
-| `cobol_decimal.py` | IQ-03 | `CobolDecimal` class with faithful COBOL arithmetic: silent left-truncation on overflow, truncate/ROUND_HALF_UP rounding, COBOL-standard intermediate precision for ADD/SUB/MUL/DIV, SPACES-to-zero coercion, COMP/COMP-3/DISPLAY storage byte sizes. |
-| `business_rules.py` | IQ-04 | Two-tier business rule extraction. **Structural tier** (deterministic): walks conditional blocks, classifies rules by field-name patterns (PWD->ACCESS_CONTROL, RESP->ROUTING, ERR->VALIDATION). **LLM tier** (optional): parses `RULES_PROMPT_TEMPLATE` output into the same `BusinessRule` schema. Anti-hallucination via evidence span validation. |
-| `test_generator.py` | IQ-05 | Generates pytest suites with **behavioral tests** from the COBOL decision tree. Each leaf branch in an EVALUATE/IF produces a test scenario with setup (field values), assertions (MOVE targets, XCTL programs), and category (happy_path, error_path, decision_branch). |
-| `repository_mapper.py` | IQ-06 | Maps CICS file operations to typed repository interfaces: READ->find_by_id, WRITE->save, REWRITE->update, DELETE->delete, STARTBR/READNEXT/ENDBR->browse. Extracts INTO/RIDFLD from source lines for typed record returns. Sequential files map to context manager readers/writers. |
-| `api_contract_mapper.py` | IQ-07 | Maps BMS SEND MAP/RECEIVE MAP to Pydantic request/response schemas and FastAPI route stubs. Input fields (UNPROT) become request fields, output fields (PROT) become response fields. BMS attributes map to validation annotations (DRK->write_only, IC->primary_input, BRT->display_emphasis). |
-| `skeleton_ir.py` | IQ-08 | Language-neutral `IRModule` intermediate representation with pluggable renderers. `PythonRenderer` emits @dataclass/typing, `JavaRenderer` emits Spring Boot with @RestController, `CSharpRenderer` emits .NET with [ApiController] and record types. |
-| `differential_harness.py` | IQ-09 | Field-by-field equivalence checking between COBOL golden outputs and reimplementations. CobolDecimal-aware numeric comparison (same PIC = same stored value), trailing-space trimming for strings, confidence scoring (pass_rate * 100). JSON + human-readable diff reports. |
-| `symbol_table.py` | IQ-10 | Hierarchical symbol table from copybook fields. Qualified name resolution (`FIELD OF GROUP OF RECORD`), REDEFINES tracking, section scope tags (WORKING-STORAGE, LINKAGE), ambiguous reference detection with `AmbiguousReferenceError`. |
+## What You Get
 
-### RAG and Synthesis
+### Offline Analysis (no API keys needed)
 
-| Module | Purpose |
-|--------|---------|
-| `synthesis/chain.py` | LCEL RAG pipeline: embed query -> Pinecone vector search -> graph expansion (1-hop neighbors) -> dedup -> Cohere reranking -> copybook resolution -> Gemini LLM generation. Streaming support. |
-| `synthesis/prompts.py` | Prompt templates for RAG Q&A, impact analysis, business rule extraction, and reimplementation spec generation. |
-| `spec_generator.py` | Generates `ProgramSpec` with complexity metrics, readiness scores, modern pattern inference (REST API for CICS, event-driven for batch), migration wave assignment, and effort estimation. |
+| Capability | What it does |
+|-----------|-------------|
+| **COBOL Parser** | Recursive-descent parser for COBOL-85/2002. Extracts paragraphs, conditionals, data flows, CICS operations, copybook references — the full structural AST. |
+| **Dependency Graph** | Cross-program CALL/COPY/FILE dependency graph with readiness scores, hub detection, dead code analysis. |
+| **Python Skeletons** | Typed `@dataclass` stubs generated from copybook definitions. PIC clauses become `str`, `int`, or `Decimal` fields with enforced metadata. |
+| **Structural Business Rules** | Deterministic rule extraction from conditional blocks using field-name pattern matching. No LLM needed. |
+| **Behavioral Tests** | pytest suites generated from the COBOL decision tree — one test per branch, not `hasattr` stubs. |
+| **CobolDecimal** | A Python type that faithfully reproduces COBOL numeric semantics: PIC precision, silent overflow, left-truncation, COMP-3 storage. The most common source of reimplementation bugs, solved. |
+| **Differential Harness** | Field-by-field equivalence checking between COBOL outputs and your Python reimplementation, with CobolDecimal-aware comparison and confidence scoring. |
+| **Repository Mapping** | CICS file operations (READ/WRITE/DELETE/BROWSE) mapped to typed Python repository interfaces. |
+| **API Contracts** | BMS screen maps converted to Pydantic request/response schemas with FastAPI route stubs. |
 
-### Presentation
+### LLM-Powered Intelligence (requires API keys)
 
-| Module | Purpose |
-|--------|---------|
-| `web_dashboard.py` | Flask web dashboard for interactive codebase exploration. |
-| `render_html.py` | HTML report generation. |
-| `render_report.py` | Markdown/text report rendering. |
-| `export.py` | Export analysis artifacts. |
-| `cli.py` | Command-line interface for all pipeline operations. |
+| Capability | What it does |
+|-----------|-------------|
+| **RAG Q&A** | Ask natural-language questions about any COBOL codebase. Uses Pinecone vector search + Cohere reranking + Google Gemini to answer with source citations. "Where do we calculate late fees?" → grounded answer with file:line evidence. |
+| **Semantic Business Rules** | LLM-assisted extraction that goes beyond pattern matching — identifies authentication flows, routing logic, and domain constraints with evidence validation and anti-hallucination guards. |
+| **Reimplementation Specs** | Full specification documents generated from structural analysis + RAG context: purpose, inputs/outputs, business rules, data contracts, control flow, and reimplementation notes. |
+| **Impact Analysis** | Change impact assessment using dependency graph + LLM interpretation. "If I change this copybook field, what breaks?" |
+| **Interactive CLI** | REPL with 20+ commands: `/spec`, `/rules`, `/impact`, `/hotspots`, `/isolated`, `/dict`, `/trace`, and more. |
 
-## Test Codebases
+## Java Target (Parallel Track)
 
-The pipeline is tested against three real COBOL codebases:
+Java is a first-class reimplementation target alongside Python. The Java side provides:
 
-| Codebase | Description | Programs | Copybooks |
-|----------|-------------|----------|-----------|
-| **carddemo** | AWS CardDemo — credit card management system with CICS online programs, batch processing, BMS screens, VSAM files | 44 programs | 29 copybooks, 21 BMS maps |
-| **star-trek** | Classic Star Trek game in COBOL — deep nesting, GO TO, PERFORM VARYING | 1 program | - |
-| **taxe-fonciere** | French property tax calculation — EVALUATE ALSO, complex computation | 1 program | - |
+- **`CobolDecimal.java`** — `BigDecimal`-backed faithful COBOL arithmetic with a 49-test JUnit 5 parity suite that mirrors `cobol_decimal.py` test-for-test
+- **`JavaRenderer.render_module(...)`** — emits buildable Maven modules with `pom.xml`, package layout, Spring Boot for CICS programs
+- **Spring Data repository emitter** for CICS file operations (`READ` → `findById`, `WRITE` → `save`, `BROWSE` → `Stream<T> streamAllByOrderById()`)
+- **Spring REST controller emitter** for BMS screen → API mapping with JSR-380 (`@NotNull`, `@Size`) DTOs
+- **JUnit 5 emitter** for the test_generator (1:1 scenario count parity with the pytest emitter)
+- **`masquerade-runner.jar`** — fat-jar dispatcher that lets the differential harness drive Java reimpls through the same JSON contract as Python ones
+- **End-to-end pilot:** Java COSGN00C reimplementation passes the differential harness at 100% confidence with cross-language Python↔Java parity verified per scenario
+
+See [`docs/JAVA_TARGET.md`](docs/JAVA_TARGET.md) for prerequisites (JDK 17, Maven 3.9.x), bootstrap (one-time `mvn install` of the cobol-decimal artifact), generation (`python pipeline/java_codegen.py --target java ...`), and the runner protocol.
 
 ## Quick Start
 
-### Prerequisites
+### Install
 
-- Python 3.11+
-- Dependencies: `pip install -r pipeline/requirements.txt`
+```bash
+git clone https://github.com/billybillymc/masquerade-cobol.git
+cd masquerade-cobol
+pip install -r pipeline/requirements.txt
+```
 
-### Analyze a COBOL Codebase
+Requires Python 3.11+. Parsing, graph building, skeleton generation, and differential testing work offline. For LLM-powered features (RAG Q&A, semantic rules, specs), configure API keys in a `.env` file:
+
+```bash
+# pipeline/.env
+GOOGLE_API_KEY=...        # Google Gemini (primary LLM — gemini-2.5-flash)
+OPENAI_API_KEY=...        # OpenAI (embeddings — text-embedding-3-small)
+PINECONE_API_KEY=...      # Pinecone (vector database for RAG retrieval)
+COHERE_API_KEY=...        # Cohere (optional — reranking, degrades gracefully)
+```
+
+### 1. Analyze a COBOL Codebase
 
 ```bash
 cd pipeline
@@ -119,40 +93,55 @@ python analyze.py ../test-codebases/carddemo
 ```
 
 This produces `_analysis/` with:
-- `programs.json` — per-program structural AST (44 programs)
-- `graph.json` — full dependency graph (1059 nodes, 2146 edges)
+- `programs.json` — per-program structural AST
+- `graph.json` — full dependency graph
 - `stats.json` — summary statistics
 - `call_graph.dot` — Graphviz visualization
 
-### Generate Skeletons
+### 2. Explore the Dependency Graph
 
 ```python
-from skeleton_generator import generate_all_skeletons
-results = generate_all_skeletons("../test-codebases/carddemo")
-# Produces _analysis/skeletons/*.py with typed copybook fields
+from graph_context import GraphIndex
+
+idx = GraphIndex("../test-codebases/carddemo/_analysis")
+
+# Find safe reimplementation targets (leaf programs, no downstream callers)
+for name in idx.leaf_programs()[:10]:
+    print(name)
+
+# Check readiness scores (higher = easier to reimplement)
+for name, score in sorted(
+    [(p, idx.readiness_score(p)) for p in idx.leaf_programs()],
+    key=lambda x: x[1], reverse=True
+)[:10]:
+    print(f"  {score:.0f}  {name}")
 ```
 
-### Generate Multi-Language Skeletons
+### 3. Generate a Python Skeleton
 
 ```python
-from skeleton_ir import spec_to_ir, PythonRenderer, JavaRenderer, CSharpRenderer
 from spec_generator import generate_program_spec
+from skeleton_generator import generate_skeleton
+from copybook_dict import CopybookDictionary
 
-spec = generate_program_spec("COSGN00C", graph, program_data, codebase_dir)
-ir = spec_to_ir(spec)
+idx = GraphIndex("../test-codebases/carddemo/_analysis")
+programs = json.loads(open("../test-codebases/carddemo/_analysis/programs.json").read())
+cbd = CopybookDictionary("../test-codebases/carddemo")
 
-python_code = PythonRenderer().render(ir)
-java_code = JavaRenderer().render(ir)
-csharp_code = CSharpRenderer().render(ir)
+spec = generate_program_spec("COSGN00C", idx, programs, "../test-codebases/carddemo")
+skeleton = generate_skeleton(spec, cbd)
+print(skeleton)
+# Produces a Python file with:
+#   - Typed @dataclass for each copybook (PIC X -> str, PIC 9V99 -> Decimal)
+#   - Method stubs per paragraph with CICS operation comments
+#   - Repository interface stubs for file operations
 ```
 
-### Extract Business Rules
+### 4. Extract Business Rules
 
 ```python
 from business_rules import extract_structural_rules
-import json
 
-programs = json.loads(open("_analysis/programs.json").read())
 rules = extract_structural_rules("COSGN00C", programs["COSGN00C"])
 for r in rules:
     print(f"[{r.rule_type}] {r.claim}")
@@ -160,27 +149,7 @@ for r in rules:
     # [ACCESS_CONTROL] When SEC-USR-PWD = WS-USER-PWD matches...
 ```
 
-### Run the Differential Harness
-
-```python
-from differential_harness import TestVector, run_vectors, render_report_text
-
-vectors = [
-    TestVector(
-        vector_id="V001",
-        program="CODATE01",
-        inputs={"WS-DATE-IN": "20260315"},
-        expected_outputs={"WS-DATE-OUT": "03/15/2026"},
-        actual_outputs={"WS-DATE-OUT": "03/15/2026"},  # from reimplementation
-        field_types={"WS-DATE-OUT": "str"},
-    ),
-]
-report = run_vectors(vectors)
-print(render_report_text(report))
-# Confidence: 100.0%
-```
-
-### Use CobolDecimal for Faithful Arithmetic
+### 5. Use CobolDecimal for Faithful Arithmetic
 
 ```python
 from cobol_decimal import CobolDecimal
@@ -193,79 +162,159 @@ balance.set(Decimal("5000.00"))
 debit = CobolDecimal(digits=10, scale=2, signed=True)
 debit.set(Decimal("3500.75"))
 
-result = balance.subtract(debit)  # Intermediate: max(10,10)+1=11 digits, scale=2
+result = balance.subtract(debit)
 print(result.value)  # 1499.25
 
 # Overflow silently truncates (COBOL default — no ON SIZE ERROR)
 small = CobolDecimal(digits=3, scale=0, signed=False)
 small.set(12345)
-print(small.value)  # 345 (left-truncated)
+print(small.value)  # 345 (left-truncated to fit PIC 9(3))
 ```
 
-### Map CICS Operations to Repositories
+### 6. Verify Your Reimplementation
 
 ```python
-from repository_mapper import map_cics_repositories, generate_repository_code
+from differential_harness import DiffVector, run_vectors, render_report_text
 
-repos = map_cics_repositories("COSGN00C", programs["COSGN00C"],
-                               source_dir="test-codebases/carddemo/app/cbl")
-for repo in repos:
-    print(generate_repository_code(repo))
-    # class WsUsrsecFileRepository:
-    #     def find_by_id(self, ws_user_id: str) -> Optional[SecUserData]:
-    #         ...
+vectors = [
+    DiffVector(
+        vector_id="V001",
+        program="MY-PROGRAM",
+        inputs={"WS-DATE-IN": "20260315"},
+        expected_outputs={"WS-DATE-OUT": "03/15/2026"},
+        actual_outputs={"WS-DATE-OUT": "03/15/2026"},  # from your Python reimplementation
+        field_types={"WS-DATE-OUT": "str"},
+    ),
+]
+report = run_vectors(vectors)
+print(render_report_text(report))
+# Confidence: 100.0%
 ```
 
-### Resolve Qualified Field References
+## Included Test Codebases
 
-```python
-from symbol_table import build_symbol_table, AmbiguousReferenceError
-from copybook_dict import CopybookDictionary
+Masquerade ships with 5 real COBOL codebases (273 programs, 96K lines of code) for testing and learning:
 
-cbd = CopybookDictionary("test-codebases/carddemo/app/cpy")
-st = build_symbol_table(["CUSTREC", "CVCUS01Y"], cbd)
+| Codebase | What it is | Programs | Lines |
+|----------|-----------|----------|-------|
+| **carddemo** | AWS CardDemo — credit card management with CICS online + batch processing | 31 | 33K |
+| **cbsa** | IBM CICS Banking Sample — accounts, customers, debit/credit, transfers | 29 | 27K |
+| **star-trek** | 1979 Star Trek game — deep GO TO nesting, PERFORM VARYING | 1 | 1.6K |
+| **taxe-fonciere** | French property tax calculation — EVALUATE ALSO, complex fee logic | 6 | 4.5K |
+| **cobolcraft** | A Minecraft 1.21.4 server written entirely in COBOL | 206 | 30K |
 
-# Qualified resolution
-node = st.resolve("CUST-ADDR-COUNTRY-CD", qualifier="CUSTOMER-RECORD")
-print(node.fully_qualified_name())  # CUST-ADDR-COUNTRY-CD.CUSTOMER-RECORD
+## Included Python Reimplementations
 
-# Ambiguous detection
-try:
-    st.resolve("CUST-ADDR-COUNTRY-CD")  # exists in both copybooks
-except AmbiguousReferenceError as e:
-    print(e)  # Ambiguous reference: found in 2 locations
-```
+36 COBOL programs have been fully reimplemented in Python with differential test suites in `pipeline/reimpl/`. These serve as reference examples for how to approach reimplementation:
+
+| Codebase | Reimplemented | What's covered |
+|----------|--------------|----------------|
+| **AWS CardDemo** | All 31 core programs | Sign-on, menus, accounts, cards, transactions, billing, reports, batch processing |
+| **IBM CBSA** | DBCRFUN | Debit/credit engine |
+| **Star Trek** | Full game | Complete 1,615-line game logic |
+| **Taxe Fonciere** | EFITA3B8 | Full property tax fee calculation (669 lines) |
+| **CobolCraft** | uuid, json-parse | UUID handling and full JSON token parser |
 
 ## Running Tests
 
 ```bash
-# From repo root
+# All pipeline tests (parser, graph, specs, skeletons, CobolDecimal, etc.)
 python -m pytest pipeline/tests/ -v
+# 502 tests
 
-# 318 tests, all passing
-# Covers: parser, graph, specs, skeletons, copybook wiring, CobolDecimal,
-#         business rules, behavioral tests, repositories, API contracts,
-#         multi-language IR, differential harness, symbol table
+# All reimplementation differential tests
+python -m pytest pipeline/reimpl/ -v
+# 58 tests
+
+# Everything
+python -m pytest pipeline/tests/ pipeline/reimpl/ -v
+# 560 tests, all passing
 ```
 
-## Implementation Quality Checklist
+## Architecture
 
-All 10 implementation quality items are complete. Each followed spec-driven + test-driven development (specify, write failing tests, implement to green, verify no regressions).
+```
+COBOL Source (.cbl, .cpy, .bms, .jcl)
+    |
+    v
+[cobol_parser.py] -----> Structural AST (paragraphs, data flows, conditionals)
+    |
+    v
+[analyze.py] -----------> programs.json + graph.json + stats.json
+    |
+    +---> [graph_context.py] ------> Dependency graph (callers, readiness, dead code)
+    +---> [copybook_dict.py] ------> Typed field catalog (PIC, USAGE, OCCURS)
+    +---> [bms_parser.py] ---------> Screen layouts and field attributes
+    |
+    v
+[spec_generator.py] ----> Program specifications (complexity, readiness, patterns)
+    |
+    +---> [skeleton_generator.py] -> Python skeletons with typed copybook fields
+    +---> [test_generator.py] -----> Behavioral pytest suites from decision trees
+    +---> [business_rules.py] -----> Evidence-anchored business rules (structural + LLM)
+    +---> [cobol_decimal.py] ------> Faithful COBOL numeric semantics
+    +---> [repository_mapper.py] --> CICS file ops -> typed repository interfaces
+    +---> [api_contract_mapper.py] > BMS screens -> Pydantic + FastAPI
+    +---> [symbol_table.py] -------> Qualified field resolution
+    +---> [differential_harness.py] > Equivalence verification
+    |
+    v
+[synthesis/chain.py] ---> LLM-powered RAG pipeline
+    |                      (Pinecone vectors + Cohere rerank + Gemini LLM)
+    +---> Natural-language Q&A with source citations
+    +---> Semantic business rule extraction
+    +---> Reimplementation spec generation
+    +---> Impact analysis
+    |
+    v
+[cli.py] --------------> Interactive REPL (20+ commands)
+[web_dashboard.py] -----> Flask web UI for exploration
+```
 
-| ID | Title | Tests | Status |
-|----|-------|-------|--------|
-| IQ-01 | Conditional Logic Extraction | 22 | Done |
-| IQ-02 | Wire Copybook Fields into Skeletons | 12 | Done |
-| IQ-03 | COBOL Numeric Semantics Module | 49 | Done |
-| IQ-04 | Business Rule Extraction (LLM-Assisted) | 15 | Done |
-| IQ-05 | Behavioral Test Generation | 10 | Done |
-| IQ-06 | File I/O to Repository Mapping | 14 | Done |
-| IQ-07 | BMS Screen to API Contract | 15 | Done |
-| IQ-08 | Multi-Language Skeleton Support | 27 | Done |
-| IQ-09 | Differential Test Harness | 15 | Done |
-| IQ-10 | Symbol Table and Scope Resolution | 12 | Done |
+## Pipeline Modules
 
-See [IMPLEMENTATION_QUALITY.md](IMPLEMENTATION_QUALITY.md) for detailed deliverables, design decisions, and evidence references per item.
+### Core Analysis
+
+| Module | What it does |
+|--------|-------------|
+| `cobol_parser.py` | Recursive-descent parser for COBOL-85/2002. Extracts paragraphs, PERFORM/CALL/CICS targets, data flows, and full conditional logic (IF/EVALUATE/GO TO/inline PERFORM). |
+| `analyze.py` | Orchestrates parsing across a codebase. Produces `programs.json`, `graph.json`, `stats.json`. |
+| `graph_builder.py` | Builds the dependency graph with CALL, COPY, FILE, CICS_IO edges. |
+| `graph_context.py` | Fast dependency lookups: callers, callees, transitive deps, readiness scores, dead code detection. |
+| `copybook_dict.py` | Parses `.cpy` files into a searchable typed field catalog (PIC, USAGE, OCCURS, REDEFINES, level-88). |
+| `bms_parser.py` | Parses BMS screen maps into field definitions with attributes. |
+| `jcl_parser.py` | JCL job/step/DD parser for batch orchestration. |
+
+### Code Generation
+
+| Module | What it does |
+|--------|-------------|
+| `skeleton_generator.py` | Generates Python skeletons with typed copybook dataclasses. Nested groups become nested `@dataclass`, OCCURS becomes `list[T]`, REDEFINES becomes `Optional[T]`. |
+| `cobol_decimal.py` | Faithful COBOL arithmetic: silent left-truncation, ROUND_HALF_UP, COMP/COMP-3 storage sizes, SPACES-to-zero coercion. |
+| `business_rules.py` | Two-tier rule extraction: deterministic structural analysis + optional LLM tier with anti-hallucination validation. |
+| `test_generator.py` | Generates behavioral pytest suites from the COBOL decision tree. Each branch produces a test scenario with setup, assertions, and category. |
+| `repository_mapper.py` | Maps CICS file operations to typed repository interfaces: READ -> `find_by_id`, WRITE -> `save`, DELETE -> `delete`, BROWSE -> iterator. |
+| `api_contract_mapper.py` | Maps BMS screens to Pydantic request/response schemas and FastAPI route stubs. |
+| `symbol_table.py` | Hierarchical symbol table with qualified name resolution (`FIELD OF GROUP OF RECORD`) and ambiguous reference detection. |
+| `differential_harness.py` | Field-by-field equivalence checking with CobolDecimal-aware numerics and confidence scoring. |
+
+### LLM-Powered Analysis
+
+| Module | What it does |
+|--------|-------------|
+| `synthesis/chain.py` | LCEL RAG pipeline: embed query -> Pinecone vector search -> graph expansion (1-hop neighbors) -> Cohere reranking -> copybook resolution -> Google Gemini generation. Streaming support. |
+| `synthesis/prompts.py` | Prompt templates for Q&A, impact analysis, business rule extraction, and reimplementation spec generation. All enforce source citation and evidence grounding. |
+| `cli.py` | Interactive REPL with 20+ commands across graph analysis, data exploration, and LLM-powered generation. |
+| `web_dashboard.py` | Flask web UI for interactive codebase exploration. |
+
+## Known Parser Limitations
+
+| Limitation | Impact | What to do |
+|-----------|--------|-----------|
+| Free-format COBOL (GnuCOBOL style) | Paragraph extraction fails; COPY graph still works | Accept partial parse, use dependency graph + manual source reading |
+| Nested programs (multiple IDENTIFICATION DIVISION per file) | Only last program detected | Split files or accept partial extraction |
+| `ANY LENGTH` / `EXTERNAL` clauses | Parsed but type info lost | Annotate manually in reimplementation |
+| CICS EXEC blocks | Identified but not deep-parsed | Use stub injection for testing |
 
 ## Project Structure
 
@@ -279,50 +328,40 @@ masquerade-cobol/
     copybook_dict.py           # Copybook field catalog
     bms_parser.py              # BMS screen map parser
     spec_generator.py          # Program specification generator
-    skeleton_generator.py      # Python skeleton generator (IQ-02)
-    skeleton_ir.py             # Multi-language IR + renderers (IQ-08)
-    test_generator.py          # Test suite generator (IQ-05)
-    cobol_decimal.py           # COBOL numeric semantics (IQ-03)
-    business_rules.py          # Business rule extraction (IQ-04)
-    repository_mapper.py       # File I/O repository mapping (IQ-06)
-    api_contract_mapper.py     # BMS to API contract mapping (IQ-07)
-    differential_harness.py    # Golden vector comparison (IQ-09)
-    symbol_table.py            # Hierarchical field resolution (IQ-10)
+    skeleton_generator.py      # Python skeleton generator
+    cobol_decimal.py           # COBOL numeric semantics
+    test_generator.py          # Test suite generator
+    business_rules.py          # Business rule extraction
+    repository_mapper.py       # File I/O repository mapping
+    api_contract_mapper.py     # BMS to API contract mapping
+    differential_harness.py    # Equivalence verification
+    symbol_table.py            # Hierarchical field resolution
     complexity.py              # Cyclomatic complexity analysis
-    effort_estimator.py        # Migration effort estimation
     jcl_parser.py              # JCL job parser
-    cli.py                     # Command-line interface
+    cli.py                     # Interactive REPL (20+ commands)
     web_dashboard.py           # Flask web dashboard
     synthesis/
-      chain.py                 # RAG pipeline (Pinecone + Gemini)
+      chain.py                 # RAG pipeline (Pinecone + Gemini + Cohere)
       prompts.py               # LLM prompt templates
     ingestion/
       chunker.py               # Code chunking for embeddings
       embedder.py              # OpenAI embedding generation
-      scanner.py               # Codebase file scanner
       uploader.py              # Pinecone vector upload
-    tests/                     # 318 tests across 19 test files
-  specs/
-    001-006/                   # Feature specifications
-    iq-01 through iq-10/       # Implementation quality specs
-  test-codebases/
-    carddemo/                  # AWS CardDemo (44 COBOL programs)
-    star-trek/                 # Star Trek game in COBOL
-    taxe-fonciere/             # French property tax system
-  IMPLEMENTATION_QUALITY.md    # IQ checklist with full deliverables
+    tests/                     # 502 pipeline tests
+    reimpl/                    # 36 reimplemented programs + 58 tests
+  test-codebases/              # 5 real COBOL systems (273 programs, 96K LOC)
+  specs/                       # Feature specifications (agent-consumable contracts)
+  docs/
+    FEATURES.md                # Detailed feature documentation
+    DESIGN.md                  # Design decisions and architecture rationale
 ```
 
-## Design Principles
+## Contributing
 
-- **Spec-driven development**: Every feature starts with a specification documenting design decisions with reasoning and alternatives considered
-- **Test-driven development**: Red-green-refactor strictly — failing tests before implementation, minimum code to pass, then refactor
-- **LLM evidence contract**: Every claim needs a source reference — no hallucinated behavior
-- **Faithful COBOL semantics**: `CobolDecimal` preserves exact PIC precision, overflow, and truncation behavior rather than approximating with Python defaults
-- **Incremental enrichment**: Each IQ item builds on prior work (IQ-01 conditional blocks feed IQ-04 business rules feed IQ-05 behavioral tests)
-- **No API keys required for core analysis**: Static analysis, skeleton generation, and test generation work entirely offline. RAG synthesis is optional.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, how to add new codebase support, and how to contribute reimplementations.
 
 ## License
 
 MIT License. See [LICENSE](LICENSE).
 
-Test codebases have their own licenses: CardDemo is Apache 2.0 (AWS).
+Test codebases have their own licenses (CardDemo is Apache 2.0 from AWS).

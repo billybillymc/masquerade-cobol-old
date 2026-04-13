@@ -171,3 +171,96 @@ def _process_enter(selected_rows, page_num, acct_filter, card_filter, repo, comm
         return result
 
     return _load_page(page_num, acct_filter, card_filter, repo, commarea, result)
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_CARDS = [
+    CardRecord(card_num=f"411111111111{i:04d}", card_acct_id=10000001, card_cvv_cd=100+i,
+               card_embossed_name=f"TEST USER {i:04d}", card_expiration_date="2028-12-31",
+               card_active_status="Y")
+    for i in range(1, 10)
+]
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY   — context=0, first entry → load page 1
+      LIST_PAGE_1   — display page 1
+      SELECT_VIEW   — select card for view → COCRDSLC
+      SELECT_UPDATE — select card for update → COCRDUPC
+      PF3_RETURN    — press PF3 → return to menu
+      INVALID_KEY   — press PF9 → invalid key error
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    repo = CardRepository(list(_SEED_CARDS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CM00",
+        cdemo_from_program="COMEN01C",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_card_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "LIST_PAGE_1":
+        result = process_card_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "SELECT_VIEW":
+        result = process_card_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_repo=repo, page_num=1,
+            selected_rows=[("S", "4111111111110001")],
+        )
+    elif scenario == "SELECT_UPDATE":
+        result = process_card_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_repo=repo, page_num=1,
+            selected_rows=[("U", "4111111111110002")],
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_card_list(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            card_repo=repo, page_num=1, selected_rows=[],
+        )
+    elif scenario == "INVALID_KEY":
+        result = process_card_list(
+            eibcalen=100, eibaid="PF9", commarea=commarea,
+            card_repo=repo, page_num=1, selected_rows=[],
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_card_list(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_repo=repo, page_num=1, selected_rows=[],
+        )
+
+    out: dict[str, str] = {
+        "PAGE_NUM": str(result.page_num),
+        "ROW_COUNT": str(len(result.rows)),
+        "HAS_NEXT": "Y" if result.has_next_page else "N",
+        "HAS_PREV": "Y" if result.has_prev_page else "N",
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "SELECTED_CARD_NUM": result.selected_card_num,
+        "SELECTED_ACTION": result.selected_action,
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+    }
+    for i, row in enumerate(result.rows):
+        out[f"ROW_{i}_CARD_NUM"] = row.card_num
+        out[f"ROW_{i}_ACCT_ID"] = str(row.acct_id)
+        out[f"ROW_{i}_NAME"] = row.embossed_name
+        out[f"ROW_{i}_STATUS"] = row.active_status
+    return out

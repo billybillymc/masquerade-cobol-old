@@ -165,3 +165,121 @@ def _lookup_card(card_num, card_repo, account_repo, xref_repo, customer_repo, re
         cust_id=cust.cust_id if cust else 0,
     )
     result.message = "Card record found"
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_CARDS: dict[str, CardRecord] = {
+    "4111111111110001": CardRecord(card_num="4111111111110001", card_acct_id=10000001, card_cvv_cd=123,
+                                   card_embossed_name="JANE USER", card_expiration_date="2028-12-31",
+                                   card_active_status="Y"),
+    "4111111111110002": CardRecord(card_num="4111111111110002", card_acct_id=10000001, card_cvv_cd=456,
+                                   card_embossed_name="BOB SMITH", card_expiration_date="2027-06-30",
+                                   card_active_status="Y"),
+}
+
+_SEED_ACCOUNTS: dict[int, AccountRecord] = {
+    10000001: AccountRecord(acct_id=10000001, acct_active_status="Y",
+                            acct_curr_bal=1500.00, acct_credit_limit=5000.00),
+}
+
+_SEED_XREFS: dict[str, CardXrefRecord] = {
+    "4111111111110001": CardXrefRecord(xref_card_num="4111111111110001", xref_cust_id=100001, xref_acct_id=10000001),
+    "4111111111110002": CardXrefRecord(xref_card_num="4111111111110002", xref_cust_id=100001, xref_acct_id=10000001),
+}
+
+_SEED_CUSTOMERS: dict[int, CustomerRecord] = {
+    100001: CustomerRecord(cust_id=100001, cust_first_name="Jane", cust_last_name="User",
+                           cust_ssn=123456789, cust_dob_yyyy_mm_dd="1985-03-15",
+                           cust_fico_credit_score=750, cust_addr_zip="10001",
+                           cust_phone_num_1="212-555-0100", cust_phone_num_2="212-555-0101"),
+}
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      FIRST_ENTRY    — context=0, preloaded card → display detail
+      LOOKUP_CARD    — ENTER with card number → display detail
+      CARD_NOT_FOUND — ENTER with bad card number → error
+      PF3_RETURN     — press PF3 → return to menu
+    """
+    scenario = inputs.get("SCENARIO", "FIRST_ENTRY")
+
+    card_repo = CardRepository(dict(_SEED_CARDS))
+    account_repo = AccountRepository(dict(_SEED_ACCOUNTS))
+    xref_repo = XrefRepository(dict(_SEED_XREFS))
+    customer_repo = CustomerRepository(dict(_SEED_CUSTOMERS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CCLI",
+        cdemo_from_program="COCRDLIC",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "FIRST_ENTRY":
+        commarea.cdemo_pgm_context = 0
+        result = process_card_view(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_num_input="", card_repo=card_repo,
+            account_repo=account_repo, xref_repo=xref_repo,
+            customer_repo=customer_repo,
+            preloaded_card_num="4111111111110001",
+        )
+    elif scenario == "LOOKUP_CARD":
+        result = process_card_view(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_num_input="4111111111110002", card_repo=card_repo,
+            account_repo=account_repo, xref_repo=xref_repo,
+            customer_repo=customer_repo,
+        )
+    elif scenario == "CARD_NOT_FOUND":
+        result = process_card_view(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_num_input="9999999999999999", card_repo=card_repo,
+            account_repo=account_repo, xref_repo=xref_repo,
+            customer_repo=customer_repo,
+        )
+    elif scenario == "PF3_RETURN":
+        result = process_card_view(
+            eibcalen=100, eibaid="PF3", commarea=commarea,
+            card_num_input="", card_repo=card_repo,
+            account_repo=account_repo, xref_repo=xref_repo,
+            customer_repo=customer_repo,
+        )
+    else:
+        commarea.cdemo_pgm_context = 0
+        result = process_card_view(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            card_num_input="", card_repo=card_repo,
+            account_repo=account_repo, xref_repo=xref_repo,
+            customer_repo=customer_repo,
+            preloaded_card_num="4111111111110001",
+        )
+
+    card_num_out = ""
+    acct_id_out = ""
+    embossed_name_out = ""
+    cust_name_out = ""
+    acct_curr_bal_out = ""
+    if result.card_data:
+        card_num_out = result.card_data.card_num
+        acct_id_out = str(result.card_data.card_acct_id)
+        embossed_name_out = result.card_data.card_embossed_name
+        cust_name_out = result.card_data.cust_name
+        acct_curr_bal_out = result.card_data.acct_curr_bal
+
+    return {
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "XCTL_PROGRAM": result.xctl_program or "",
+        "RETURN_TO_PREV": "Y" if result.return_to_prev else "N",
+        "CARD_NUM": card_num_out,
+        "ACCT_ID": acct_id_out,
+        "EMBOSSED_NAME": embossed_name_out,
+        "CUST_NAME": cust_name_out,
+        "ACCT_CURR_BAL": acct_curr_bal_out,
+    }

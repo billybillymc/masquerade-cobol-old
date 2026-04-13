@@ -1,0 +1,27 @@
+# Commonly ignored files
+.DS_Store
+.idea
+.vscode
+_superbol
+
+# Build output
+/build*
+/data
+*.so
+/out
+/cobolcraft
+/*.c
+/*.d
+/*.h
+/*.i
+callgrind.out.*
+
+# Test files
+/test
+/test.log
+
+# Application files
+/save*
+/world*
+/server.properties
+/whitelist.json

@@ -16,7 +16,12 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from spec_generator import ProgramSpec
-from skeleton_generator import _cobol_name_to_python, _cobol_name_to_class
+from skeleton_generator import (
+    _cobol_name_to_python,
+    _cobol_name_to_class,
+    _pic_to_field_metadata,
+    _default_for_type,
+)
 
 
 # ── IR Data Model ───────────────────────────────────────────────────────────
@@ -90,8 +95,17 @@ class IRModule:
 # ── Spec → IR conversion ───────────────────────────────────────────────────
 
 
-def spec_to_ir(spec: ProgramSpec) -> IRModule:
-    """Convert a ProgramSpec to a language-neutral IRModule."""
+def spec_to_ir(spec: ProgramSpec, copybook_dict=None) -> IRModule:
+    """Convert a ProgramSpec to a language-neutral IRModule.
+
+    Args:
+        spec: The program specification.
+        copybook_dict: Optional CopybookDictionary. When provided, each
+            DataContract's copybook is looked up and its PIC-typed fields are
+            populated into the IRClass.fields list. Without this, dataclass
+            bodies are empty (pre-GAP-1 behavior, preserved for backward
+            compatibility with tests that don't have a copybook dictionary).
+    """
     module_name = _cobol_name_to_python(spec.program)
     class_name = _cobol_name_to_class(spec.program)
 
@@ -103,6 +117,78 @@ def spec_to_ir(spec: ProgramSpec) -> IRModule:
             docstring=f"Data structure from COBOL copybook {contract.copybook}.",
             is_dataclass=True,
         )
+
+        # GAP 1 closure: populate fields from the copybook dictionary.
+        # Each field gets a type (str/int/Decimal), a default, and PIC
+        # metadata (digits, scale, signed, usage) that renderers use to
+        # emit language-specific typed declarations (e.g., CobolDecimal
+        # in Java, Decimal in Python).
+        if copybook_dict is not None:
+            detail = copybook_dict.copybook_detail(contract.copybook)
+            if detail:
+                for f_info in detail.get("fields", []):
+                    level = f_info.get("level", 0)
+                    picture = f_info.get("picture")
+                    if level == 88:      # skip 88-level conditions
+                        continue
+                    if picture is None:  # skip group-level (no PIC)
+                        continue
+                    fname = f_info.get("name", "FILLER")
+                    if fname.upper() == "FILLER":  # skip COBOL padding
+                        continue
+
+                    # Level-88 conditions → constants
+                    if level == 88:
+                        conditions = f_info.get("conditions", [])
+                        for cond_name, cond_val in conditions:
+                            dc.fields.append(IRField(
+                                name=_cobol_name_to_python(cond_name),
+                                type="str",
+                                default=f'"{cond_val}"',
+                                is_constant=True,
+                                constant_value=cond_val,
+                                comment=f"Level-88 condition on {fname}",
+                            ))
+                        continue
+
+                    py_type, metadata = _pic_to_field_metadata(
+                        picture, f_info.get("usage"),
+                    )
+                    ir_meta = {}
+                    if "max_digits" in metadata:
+                        ir_meta["digits"] = metadata["max_digits"]
+                    if "scale" in metadata:
+                        ir_meta["scale"] = metadata["scale"]
+                    if "signed" in metadata:
+                        ir_meta["signed"] = metadata["signed"]
+                    if "usage" in metadata:
+                        ir_meta["usage"] = metadata["usage"]
+                    if "max_length" in metadata:
+                        ir_meta["max_length"] = metadata["max_length"]
+
+                    # OCCURS → List field
+                    occurs = f_info.get("occurs")
+                    is_list = occurs is not None and occurs > 0
+
+                    # REDEFINES → Optional/union field
+                    redefines = f_info.get("redefines")
+                    is_optional = redefines is not None
+
+                    if is_list and occurs:
+                        ir_meta["occurs"] = occurs
+                    if redefines:
+                        ir_meta["redefines"] = redefines
+
+                    dc.fields.append(IRField(
+                        name=_cobol_name_to_python(f_info["name"]),
+                        type=py_type,
+                        default=_default_for_type(py_type),
+                        metadata=ir_meta,
+                        is_list=is_list,
+                        is_optional=is_optional,
+                        comment=f"REDEFINES {redefines}" if redefines else "",
+                    ))
+
         dataclasses.append(dc)
 
     # Service stubs from external calls
@@ -484,6 +570,410 @@ class JavaRenderer:
 
     def _java_default(self, t: str) -> str:
         return {"str": '""', "int": "0", "Decimal": "BigDecimal.ZERO"}.get(t, "null")
+
+    # ── render_module: full Maven project emission (W3) ─────────────────
+
+    # The methods below produce a complete Maven module instead of a single
+    # concatenated .java file. The original render() above is preserved for
+    # backwards compatibility with test_multi_language.py and any caller that
+    # wants the legacy single-string output.
+    #
+    # Numeric fields use the project's own CobolDecimal class (the W1 Java
+    # port of cobol_decimal.py) instead of raw BigDecimal — per OD-6 in the
+    # PRD, explicit CobolDecimal fields rather than annotation+AOP magic.
+
+    COBOL_DECIMAL_FQN = "com.modernization.masquerade.cobol.CobolDecimal"
+    COBOL_DECIMAL_VERSION = "0.1.0-SNAPSHOT"
+
+    def render_module(
+        self,
+        ir: "IRModule",
+        codebase: str = "generated",
+    ) -> dict:
+        """Render an IRModule as a complete Maven module.
+
+        Returns a dict mapping relative file paths (under the module root) to
+        UTF-8 file contents. Generation is deterministic — the same input
+        produces byte-identical output across runs.
+
+        Caller writes them to disk via :meth:`write_module` or directly. The
+        emitted layout is::
+
+            <module_root>/
+              pom.xml
+              src/main/java/com/modernization/<codebase>/<program>/
+                Main.java
+                dto/<DataClass>.java        (one per IR dataclass)
+                service/<Stub>.java         (one per IR service stub)
+                controller/<Program>Controller.java  (CICS Online only)
+        """
+        files = {}
+        pkg = self._java_package(codebase, ir.name)
+        pkg_path = pkg.replace(".", "/")
+        is_cics = ir.program_type == "CICS Online"
+
+        files["pom.xml"] = self._render_pom(ir, codebase, is_cics)
+        files[f"src/main/java/{pkg_path}/Main.java"] = self._render_main_class(
+            ir, pkg, is_cics,
+        )
+
+        for dc in ir.dataclasses:
+            files[f"src/main/java/{pkg_path}/dto/{dc.name}.java"] = self._render_dto(
+                dc, pkg + ".dto",
+            )
+
+        for stub in ir.service_stubs:
+            files[f"src/main/java/{pkg_path}/service/{stub.name}.java"] = (
+                self._render_service(stub, pkg + ".service")
+            )
+
+        if is_cics:
+            controller_name = ir.main_class + "Controller"
+            files[
+                f"src/main/java/{pkg_path}/controller/{controller_name}.java"
+            ] = self._render_controller(ir, pkg + ".controller", pkg)
+
+        return files
+
+    def write_module(
+        self,
+        ir: "IRModule",
+        output_dir,
+        codebase: str = "generated",
+    ):
+        """Write the rendered module to disk under output_dir. Returns the path."""
+        from pathlib import Path as _Path
+
+        out = _Path(output_dir)
+        files = self.render_module(ir, codebase)
+        for rel_path, contents in files.items():
+            full_path = out / rel_path
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            full_path.write_text(contents, encoding="utf-8")
+        return out
+
+    # ── render_module helpers ───────────────────────────────────────────
+
+    @staticmethod
+    def _java_package(codebase: str, module_name: str) -> str:
+        """Build a stable Java package name for a generated module."""
+        clean_codebase = "".join(c for c in codebase.lower() if c.isalnum() or c == "_")
+        clean_module = "".join(c for c in module_name.lower() if c.isalnum() or c == "_")
+        return f"com.modernization.{clean_codebase}.{clean_module}"
+
+    def _render_pom(self, ir: "IRModule", codebase: str, is_cics: bool) -> str:
+        """pom.xml for the generated module.
+
+        Depends on the cobol-decimal artifact. The cobol-decimal module must be
+        installed locally first via `mvn install -pl pipeline/reimpl/java/cobol-decimal/`.
+        For CICS programs, also pulls in spring-boot-starter-web for the
+        @RestController class.
+        """
+        artifact_id = ir.name.replace("_", "-")
+        spring_block = ""
+        if is_cics:
+            spring_block = """
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.2.5</version>
+        </dependency>
+"""
+        return f"""<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.modernization.{codebase.lower()}</groupId>
+    <artifactId>{artifact_id}</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>{ir.main_class} (Java reimplementation)</name>
+    <description>
+        Modern Java equivalent of COBOL program {ir.main_class}.
+        Original source: {ir.source_file}
+        Type: {ir.program_type}
+        Generated by Masquerade COBOL Intelligence Engine.
+    </description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.modernization.masquerade</groupId>
+            <artifactId>cobol-decimal</artifactId>
+            <version>{self.COBOL_DECIMAL_VERSION}</version>
+        </dependency>{spring_block}    </dependencies>
+</project>
+"""
+
+    def _render_main_class(self, ir: "IRModule", pkg: str, is_cics: bool) -> str:
+        lines = []
+        lines.append(f"package {pkg};")
+        lines.append("")
+        lines.append(f"import {self.COBOL_DECIMAL_FQN};")
+        if ir.dataclasses:
+            lines.append(f"import {pkg}.dto.*;")
+        if ir.service_stubs:
+            lines.append(f"import {pkg}.service.*;")
+        lines.append("")
+
+        # Header comment
+        lines.append("/**")
+        lines.append(f" * Modern Java equivalent of COBOL program {ir.main_class}.")
+        lines.append(" *")
+        lines.append(f" * Original: {ir.source_file.replace(chr(92), '/')}")
+        lines.append(f" * Type: {ir.program_type}")
+        lines.append(f" * Lines: {ir.code_lines} code / {ir.total_lines} total")
+        if ir.complexity:
+            lines.append(f" * Complexity: {ir.complexity} (grade: {ir.complexity_grade})")
+        if ir.readiness:
+            lines.append(f" * Readiness: {ir.readiness}/100")
+        lines.append(" *")
+        lines.append(" * Generated by Masquerade COBOL Intelligence Engine.")
+        lines.append(" */")
+        lines.append(f"public class Main {{")
+        lines.append("")
+
+        # Constructor fields
+        for cf in ir.constructor_fields:
+            jname = _to_camel_case(cf.name.lstrip("_"))
+            if cf.default == "new":
+                lines.append(f"    private final {cf.type} {jname} = new {cf.type}();")
+            elif cf.type == "Decimal":
+                # Use CobolDecimal with default PIC; metadata-driven precision
+                # comes once spec_to_ir populates IRField.metadata from the
+                # copybook dictionary (see review point R4).
+                d = cf.metadata.get("digits", 9) if cf.metadata else 9
+                s = cf.metadata.get("scale", 0) if cf.metadata else 0
+                signed = cf.metadata.get("signed", True) if cf.metadata else True
+                lines.append(
+                    f"    private final CobolDecimal {jname} = "
+                    f"new CobolDecimal({d}, {s}, {str(signed).lower()});"
+                )
+            else:
+                jtype = self._java_type(cf.type)
+                default = self._java_default(cf.type)
+                lines.append(f"    private {jtype} {jname} = {default};")
+        if ir.constructor_fields:
+            lines.append("")
+
+        # Methods (paragraphs)
+        for method in ir.methods:
+            jmethod = _to_camel_case(method.name)
+            lines.append("    /**")
+            if method.docstring:
+                for dl in method.docstring.split("\n"):
+                    lines.append(f"     * {dl}")
+            else:
+                lines.append(f"     * COBOL paragraph {method.name.upper()}")
+            lines.append("     */")
+            lines.append(f"    public void {jmethod}() {{")
+            for call in method.calls:
+                if call.call_type == "self":
+                    lines.append(f"        this.{_to_camel_case(call.target)}();")
+                elif call.call_type == "service":
+                    svc = _to_camel_case(call.target.lstrip("_"))
+                    if call.comment:
+                        lines.append(f"        // {call.comment}")
+                    lines.append(f"        // TODO: invoke {svc} service")
+                elif call.call_type == "cics":
+                    lines.append(f"        // CICS {call.target}")
+                    if call.comment.startswith("TODO"):
+                        lines.append(f"        // {call.comment}")
+            if not method.calls:
+                lines.append(
+                    '        throw new UnsupportedOperationException('
+                    '"TODO: implement ' + method.name + '");'
+                )
+            lines.append("    }")
+            lines.append("")
+
+        # run() entry point — mirrors PROCEDURE DIVISION top-level
+        lines.append("    /** Main entry point — mirrors PROCEDURE DIVISION. */")
+        lines.append("    public void run() {")
+        if ir.entry_points:
+            for ep in ir.entry_points[:3]:
+                lines.append(f"        this.{_to_camel_case(ep)}();")
+        else:
+            lines.append(
+                '        throw new UnsupportedOperationException('
+                '"No entry point identified");'
+            )
+        lines.append("    }")
+        lines.append("")
+
+        # main() so the JAR is executable
+        lines.append("    public static void main(String[] args) {")
+        lines.append("        new Main().run();")
+        lines.append("    }")
+        lines.append("}")
+        lines.append("")
+        return "\n".join(lines)
+
+    def _render_dto(self, dc: "IRClass", pkg: str) -> str:
+        """Render a DTO class for a copybook record with typed fields,
+        getters/setters, OCCURS arrays, REDEFINES comments, and level-88
+        constants.
+        """
+        lines = []
+        lines.append(f"package {pkg};")
+        lines.append("")
+        lines.append(f"import {self.COBOL_DECIMAL_FQN};")
+        has_list = any(f.is_list for f in dc.fields)
+        if has_list:
+            lines.append("import java.util.ArrayList;")
+            lines.append("import java.util.List;")
+        lines.append("")
+        lines.append("/**")
+        lines.append(f" * {dc.docstring}")
+        regular = [f for f in dc.fields if not f.is_constant]
+        constants = [f for f in dc.fields if f.is_constant]
+        if regular:
+            lines.append(f" * {len(regular)} fields extracted from PIC clauses.")
+        if constants:
+            lines.append(f" * {len(constants)} level-88 condition constants.")
+        if not regular and not constants:
+            lines.append(" * No PIC fields found (copybook may not have been parsed).")
+        lines.append(" */")
+        lines.append(f"public class {dc.name} {{")
+
+        # Level-88 constants
+        for f in constants:
+            if f.comment:
+                lines.append(f"    /** {f.comment} */")
+            safe_val = f.constant_value.replace('"', '\\"')
+            lines.append(
+                f'    public static final String {f.name.upper()} = "{safe_val}";'
+            )
+        if constants:
+            lines.append("")
+
+        # Fields
+        for f in regular:
+            jname = _to_camel_case(f.name)
+            if f.comment:
+                lines.append(f"    /** {f.comment} */")
+
+            if f.is_list:
+                # OCCURS array
+                elem_type = self._java_type(f.type)
+                if f.type == "Decimal":
+                    elem_type = "CobolDecimal"
+                occurs = f.metadata.get("occurs", 1) if f.metadata else 1
+                lines.append(
+                    f"    private List<{self._java_boxed(f.type)}> {jname} "
+                    f"= new ArrayList<>({occurs});"
+                )
+            elif f.type == "Decimal":
+                d = f.metadata.get("digits", 9) if f.metadata else 9
+                s = f.metadata.get("scale", 0) if f.metadata else 0
+                signed = f.metadata.get("signed", True) if f.metadata else True
+                lines.append(
+                    f"    private CobolDecimal {jname} = "
+                    f"new CobolDecimal({d}, {s}, {str(signed).lower()});"
+                )
+            else:
+                jtype = self._java_type(f.type)
+                default = self._java_default(f.type)
+                lines.append(f"    private {jtype} {jname} = {default};")
+
+        # Getters and setters
+        if regular:
+            lines.append("")
+        for f in regular:
+            jname = _to_camel_case(f.name)
+            cap = jname[0].upper() + jname[1:] if jname else ""
+
+            if f.is_list:
+                ret_type = f"List<{self._java_boxed(f.type)}>"
+                lines.append(f"    public {ret_type} get{cap}() {{ return {jname}; }}")
+                lines.append(
+                    f"    public void set{cap}({ret_type} value) {{ this.{jname} = value; }}"
+                )
+            elif f.type == "Decimal":
+                lines.append(f"    public CobolDecimal get{cap}() {{ return {jname}; }}")
+                lines.append(
+                    f"    public void set{cap}(CobolDecimal value) {{ this.{jname} = value; }}"
+                )
+            else:
+                jtype = self._java_type(f.type)
+                lines.append(f"    public {jtype} get{cap}() {{ return {jname}; }}")
+                lines.append(
+                    f"    public void set{cap}({jtype} value) {{ this.{jname} = value; }}"
+                )
+
+        lines.append("}")
+        lines.append("")
+        return "\n".join(lines)
+
+    @staticmethod
+    def _java_boxed(t: str) -> str:
+        """Return the boxed Java type for use in generics (List<Integer> not List<int>)."""
+        return {"str": "String", "int": "Integer", "Decimal": "CobolDecimal"}.get(t, t)
+
+    def _render_service(self, stub: "IRClass", pkg: str) -> str:
+        lines = []
+        lines.append(f"package {pkg};")
+        lines.append("")
+        lines.append("/**")
+        lines.append(f" * {stub.docstring}")
+        lines.append(" *")
+        lines.append(" * Stub for an external program reference. Replace the body of")
+        lines.append(" * execute() with the real call when the dependency is reimplemented.")
+        lines.append(" */")
+        lines.append(f"public class {stub.name} {{")
+        lines.append("    public void execute() {")
+        lines.append(
+            '        throw new UnsupportedOperationException("TODO: integrate dependency");'
+        )
+        lines.append("    }")
+        lines.append("}")
+        lines.append("")
+        return "\n".join(lines)
+
+    def _render_controller(self, ir: "IRModule", pkg: str, main_pkg: str) -> str:
+        """Spring REST controller for a CICS Online program.
+
+        BMS map → REST endpoint mapping is left as a stub — that work lives in
+        the api_contract_mapper Java emitter (W5).
+        """
+        controller_name = ir.main_class + "Controller"
+        lines = []
+        lines.append(f"package {pkg};")
+        lines.append("")
+        lines.append("import org.springframework.web.bind.annotation.RestController;")
+        lines.append("import org.springframework.web.bind.annotation.RequestMapping;")
+        lines.append("import org.springframework.web.bind.annotation.PostMapping;")
+        lines.append(f"import {main_pkg}.Main;")
+        lines.append("")
+        lines.append("/**")
+        lines.append(f" * REST controller stub for CICS Online program {ir.main_class}.")
+        lines.append(" *")
+        lines.append(" * BMS screen → endpoint mapping is generated by the api_contract_mapper")
+        lines.append(" * Java emitter (W5). Until that lands, this is a placeholder that")
+        lines.append(" * delegates to Main.run().")
+        lines.append(" */")
+        lines.append("@RestController")
+        lines.append(f'@RequestMapping("/{ir.name.lower()}")')
+        lines.append(f"public class {controller_name} {{")
+        lines.append("")
+        lines.append("    private final Main program = new Main();")
+        lines.append("")
+        lines.append('    @PostMapping("/run")')
+        lines.append("    public String run() {")
+        lines.append("        program.run();")
+        lines.append('        return "OK";')
+        lines.append("    }")
+        lines.append("}")
+        lines.append("")
+        return "\n".join(lines)
 
 
 # ── C# Renderer ─────────────────────────────────────────────────────────────

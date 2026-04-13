@@ -1,0 +1,39 @@
+# Commonly ignored files
+**/.DS_Store
+/.idea
+/.vscode
+
+# Build output
+/build*
+/data
+**/*.so
+/out
+/cobolcraft
+/*.c
+/*.d
+/*.h
+/*.i
+/callgrind.out.*
+
+# Test files
+/tests
+/test
+/test.log
+
+# Application files
+/save
+/world
+/server.properties
+/whitelist.json
+
+# Git
+/.git
+/.gitignore
+/.gitattributes
+/.github
+
+# Files excluded from the image
+/.dockerignore
+/Dockerfile
+/renovate.json
+/*.md

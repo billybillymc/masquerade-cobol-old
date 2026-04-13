@@ -343,3 +343,143 @@ def _copy_last_tran(inp, tran_repo, xref_repo, commarea, result):
         result.last_tran_copied = True
 
     return _process_enter(inp, tran_repo, xref_repo, commarea, result)
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_XREFS = [
+    CardXrefRecord(xref_card_num="4111111111111111", xref_cust_id=1, xref_acct_id=10000001),
+    CardXrefRecord(xref_card_num="4222222222222222", xref_cust_id=2, xref_acct_id=10000002),
+]
+
+_SEED_TRANS = [
+    TranRecord(tran_id="0000000000000001", tran_type_cd="01", tran_cat_cd=1,
+               tran_source="ONLINE", tran_desc="SEED PURCHASE",
+               tran_amt=Decimal("50.00"), tran_card_num="4111111111111111",
+               tran_merchant_id=100001, tran_merchant_name="ACME STORE",
+               tran_merchant_city="NEW YORK", tran_merchant_zip="10001",
+               tran_orig_ts="2025-01-10", tran_proc_ts="2025-01-10"),
+]
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      ADD_SUCCESS       — valid input, confirm Y → transaction added
+      ACCT_NOT_FOUND    — non-existent account → error
+      MISSING_FIELDS    — empty description → validation error
+      INVALID_AMOUNT    — bad amount format → error
+      INVALID_DATE      — bad date → error
+      CONFIRM_PENDING   — no confirm → "Confirm to add..."
+    """
+    scenario = inputs.get("SCENARIO", "ADD_SUCCESS")
+
+    import copy
+    tran_repo = TranRepository(copy.deepcopy(_SEED_TRANS))
+    xref_repo = XrefRepository(list(_SEED_XREFS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CM00",
+        cdemo_from_program="COMEN01C",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "ADD_SUCCESS":
+        inp = TranAddInput(
+            acct_id="10000001", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="NEW PURCHASE", amount="+00000100.00",
+            orig_date="2025-03-15", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST MERCHANT",
+            merchant_city="BOSTON", merchant_zip="02101", confirm="Y",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+    elif scenario == "ACCT_NOT_FOUND":
+        inp = TranAddInput(
+            acct_id="99999999", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="TEST", amount="+00000050.00",
+            orig_date="2025-03-15", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST",
+            merchant_city="NYC", merchant_zip="10001", confirm="Y",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+    elif scenario == "MISSING_FIELDS":
+        inp = TranAddInput(
+            acct_id="10000001", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="", amount="+00000050.00",
+            orig_date="2025-03-15", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST",
+            merchant_city="NYC", merchant_zip="10001", confirm="Y",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+    elif scenario == "INVALID_AMOUNT":
+        inp = TranAddInput(
+            acct_id="10000001", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="TEST", amount="BADAMT",
+            orig_date="2025-03-15", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST",
+            merchant_city="NYC", merchant_zip="10001", confirm="Y",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+    elif scenario == "INVALID_DATE":
+        inp = TranAddInput(
+            acct_id="10000001", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="TEST", amount="+00000050.00",
+            orig_date="2025-13-45", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST",
+            merchant_city="NYC", merchant_zip="10001", confirm="Y",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+    elif scenario == "CONFIRM_PENDING":
+        inp = TranAddInput(
+            acct_id="10000001", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="TEST", amount="+00000050.00",
+            orig_date="2025-03-15", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST",
+            merchant_city="NYC", merchant_zip="10001", confirm="",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+    else:
+        inp = TranAddInput(
+            acct_id="10000001", card_num="", type_cd="01", cat_cd="1",
+            source="ONLINE", desc="NEW PURCHASE", amount="+00000100.00",
+            orig_date="2025-03-15", proc_date="2025-03-15",
+            merchant_id="100001", merchant_name="TEST MERCHANT",
+            merchant_city="BOSTON", merchant_zip="02101", confirm="Y",
+        )
+        result = process_tran_add(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            inp=inp, tran_repo=tran_repo, xref_repo=xref_repo,
+        )
+
+    tran_id = ""
+    if result.tran_record:
+        tran_id = result.tran_record.tran_id
+
+    return {
+        "SUCCESS": "Y" if result.success else "N",
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "TRAN_ID": tran_id,
+        "XCTL_PROGRAM": result.xctl_program or "",
+    }

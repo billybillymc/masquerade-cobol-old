@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 
 from cobol_runner import is_cobc_available, _to_wsl_path
-from differential_harness import TestVector, run_vectors, render_report_text
+from differential_harness import DiffVector, run_vectors, render_report_text
 
 CARDDEMO = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "carddemo"
 STARTREK = Path(__file__).resolve().parent.parent.parent / "test-codebases" / "star-trek"
@@ -209,7 +209,7 @@ class TestCosgn00cFullCommarea:
             expected = {k: cobol_output.get(k, "") for k in compare_fields}
             actual = {k: python_output.get(k, "") for k in compare_fields}
 
-            vectors.append(TestVector(
+            vectors.append(DiffVector(
                 vector_id=sc["id"],
                 program="COSGN00C",
                 inputs={"USERID": sc["userid"], "PASSWD": sc["passwd"]},
@@ -279,7 +279,7 @@ class TestCbact01cOutputRecords:
         cobol_fields = v.expected_outputs
 
         # Verify specific fields match expected values
-        field_checks = TestVector(
+        field_checks = DiffVector(
             vector_id="CBACT01C_RECORD",
             program="CBACT01C",
             inputs={"ACCT-ID": "12345678901"},
@@ -326,7 +326,7 @@ class TestStarTrekDeterministicInit:
             game = StarTrekGame(seed=12345678, captain_name="KIRK", skill_level=skill)
             python_klingons = str(game.k_or)
 
-            vectors.append(TestVector(
+            vectors.append(DiffVector(
                 vector_id=f"SKILL_{skill}_KLINGONS",
                 program="STAR_TREK",
                 inputs={"NAME": "KIRK", "SKILL": str(skill)},
@@ -430,7 +430,7 @@ class TestTaxeFonciereFullRetour:
             combat, rate_fetcher=_failing_rate_fetcher,
         )
 
-        vectors = [TestVector(
+        vectors = [DiffVector(
             vector_id="TAXE_VALID_FULL",
             program="EFITA3B8",
             inputs={"CCOBNB": "2", "DAN": "2018", "CC2DEP": "75", "CCOCOM": "056"},

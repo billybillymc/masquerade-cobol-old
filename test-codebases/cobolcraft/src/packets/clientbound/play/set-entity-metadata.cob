@@ -1,0 +1,36 @@
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SendPacket-SetEntityMetadata.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+    COPY DD-PACKET REPLACING IDENTIFIER BY "play/clientbound/minecraft:set_entity_data".
+    *> buffer used to store the packet data
+    01 PAYLOAD          PIC X(1024).
+    01 PAYLOADPOS       BINARY-LONG UNSIGNED.
+    01 PAYLOADLEN       BINARY-LONG UNSIGNED.
+LINKAGE SECTION.
+    01 LK-CLIENT        BINARY-LONG UNSIGNED.
+    01 LK-ENTITY-ID     BINARY-LONG.
+    *> Metadata is very much dependent on the entity implementation in Java, so we don't make an attempt at
+    *> giving it a meaningful structure here.
+    01 LK-METADATA-LEN  BINARY-LONG UNSIGNED.
+    01 LK-METADATA-DATA PIC X ANY LENGTH.
+
+PROCEDURE DIVISION USING LK-CLIENT LK-ENTITY-ID LK-METADATA-LEN LK-METADATA-DATA.
+    COPY PROC-PACKET-INIT.
+
+    MOVE 1 TO PAYLOADPOS
+
+    *> entity ID
+    CALL "Encode-VarInt" USING LK-ENTITY-ID PAYLOAD PAYLOADPOS
+
+    *> metadata
+    MOVE LK-METADATA-DATA(1:LK-METADATA-LEN) TO PAYLOAD(PAYLOADPOS:LK-METADATA-LEN)
+    ADD LK-METADATA-LEN TO PAYLOADPOS
+
+    *> send packet
+    COMPUTE PAYLOADLEN = PAYLOADPOS - 1
+    CALL "SendPacket" USING LK-CLIENT PACKET-ID PAYLOAD PAYLOADLEN
+    GOBACK.
+
+END PROGRAM SendPacket-SetEntityMetadata.

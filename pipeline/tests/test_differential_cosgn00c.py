@@ -22,7 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "reimpl"))
 from cobol_runner import is_cobc_available, _to_wsl_path
 from cics_stub import preprocess_cics
 from bms_symbolic import generate_all_symbolic_maps
-from differential_harness import TestVector, run_vectors, render_report_text
+from differential_harness import DiffVector, run_vectors, render_report_text
 from reimpl.cosgn00c import (
     process_signon,
     UserSecurityRepository,
@@ -300,7 +300,7 @@ class TestDifferentialCosgn00c:
                 scenario["userid"], scenario["passwd"], PYTHON_REPO,
             )
 
-            vectors.append(TestVector(
+            vectors.append(DiffVector(
                 vector_id=scenario["id"],
                 program="COSGN00C",
                 inputs={"USERID": scenario["userid"], "PASSWD": scenario["passwd"]},

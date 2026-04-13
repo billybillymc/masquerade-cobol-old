@@ -42,3 +42,24 @@ def _format_xref_record(xref: CardXrefRecord) -> str:
         f"CUST-ID:{xref.xref_cust_id:09d} "
         f"ACCT-ID:{xref.xref_acct_id:011d}"
     )
+
+
+def run_vector(inputs: dict) -> dict:
+    """Adapter for the differential harness runner contract."""
+    xrefs = [
+        CardXrefRecord(
+            xref_card_num="4111111111111111",
+            xref_cust_id=1,
+            xref_acct_id=100000001,
+        ),
+        CardXrefRecord(
+            xref_card_num="4222222222222222",
+            xref_cust_id=2,
+            xref_acct_id=100000002,
+        ),
+    ]
+    result = process_xref_file(xrefs, logger=lambda _: None)
+    out: dict[str, str] = {"RECORDS_READ": str(result.records_read)}
+    for i, line in enumerate(result.display_lines):
+        out[f"DISPLAY_{i}"] = line
+    return out

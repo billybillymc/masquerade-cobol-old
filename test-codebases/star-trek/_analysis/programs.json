@@ -1,0 +1,7071 @@
+{
+  "star_trek": {
+    "program_id": "star_trek",
+    "source_file": "..\\test-codebases\\star-trek\\ctrek.cob",
+    "author": null,
+    "total_lines": 1581,
+    "code_lines": 1400,
+    "comment_lines": 80,
+    "divisions": {
+      "identification": {
+        "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+        "start_line": 13,
+        "end_line": 13
+      },
+      "environment": {
+        "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+        "start_line": 33,
+        "end_line": 33
+      },
+      "data": {
+        "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+        "start_line": 38,
+        "end_line": 38
+      },
+      "procedure": {
+        "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+        "start_line": 245,
+        "end_line": 245
+      }
+    },
+    "paragraphs": [
+      {
+        "name": "0000-PROGRAM-CONTROL",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 248,
+          "end_line": 263
+        },
+        "performs": [
+          {
+            "target": "0100-HOUSEKEEPING",
+            "thru": "0100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "1000-MAINLINE",
+            "thru": "1000-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "9000-END-OF-JOB",
+            "thru": "9000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "0100-HOUSEKEEPING",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 263,
+          "end_line": 331
+        },
+        "performs": [
+          {
+            "target": "1200-INITIALIZE-GALAXY",
+            "thru": "1200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "0500-PRT-INST",
+            "thru": "0500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "0550-ADD-INST",
+            "thru": "0550-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "SPACES"
+            ],
+            "targets": [
+              "MD-ROW"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "SEED-TABLE"
+            ],
+            "targets": [
+              "GENERATE-TABLE"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "NAME-X"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "SKILL-LEV"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "SKILL-LEV"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKILL-LEV"
+            ],
+            "targets": [
+              "VAB1"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "K-OR"
+            ],
+            "targets": [
+              "KLINGONS"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAB1"
+            ],
+            "targets": [
+              "VAE1"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "WS-TIME"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "WS-MIN",
+              "OF",
+              "WS-TIME"
+            ],
+            "targets": [
+              "DS-MIN"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "WS-SEC",
+              "OF",
+              "WS-TIME"
+            ],
+            "targets": [
+              "DS-SEC"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "DS-TABLE"
+            ],
+            "targets": [
+              "S-DATE"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "DS-TABLE"
+            ],
+            "targets": [
+              "DS-DATE"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "INST-REPLY"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "0500-PRT-INST",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 331,
+          "end_line": 351
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "0550-ADD-INST",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 351,
+          "end_line": 362
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "RETURN-X"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "1000-MAINLINE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 362,
+          "end_line": 370
+        },
+        "performs": [
+          {
+            "target": "4000-DISPLAY-G",
+            "thru": "4000-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "2000-PROCESS",
+            "thru": "2000-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "8500-FINISH-GAME",
+            "thru": "8500-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1100-CHK-GALAXY",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 370,
+          "end_line": 390
+        },
+        "performs": [
+          {
+            "target": "1120-RESET",
+            "thru": "1120-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1120-RESET",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 390,
+          "end_line": 400
+        },
+        "performs": [
+          {
+            "target": "5900-TRANS",
+            "thru": "5900-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1145-CK-FLAG",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 400,
+          "end_line": 406
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1150-CK-TIME",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 406,
+          "end_line": 442
+        },
+        "performs": [
+          {
+            "target": "1145-CK-FLAG",
+            "thru": "1145-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "1170-MOVE-ON-HQ",
+            "thru": "1170-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "5900-TRANS",
+            "thru": "5900-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "WS-MIN",
+              "OF",
+              "WS-TIME"
+            ],
+            "targets": [
+              "DS-MIN",
+              "1145-CK-FLAG",
+              "1145-EXIT",
+              "WS-SEC",
+              "OF",
+              "WS-TIME",
+              "DS-SEC",
+              "DS-TABLE",
+              "S-DATE",
+              "1150-EXIT"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "WS-TIME"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "DS-DATE",
+              "S-DATE"
+            ],
+            "targets": [
+              "T-STORE"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "HQ2",
+              "HQ1",
+              "MASTER-TBL",
+              "REPLACING",
+              "ALL",
+              "RX",
+              "1170-MOVE-ON-HQ",
+              "1170-EXIT",
+              "KCTR",
+              "KCTR",
+              "KLINGONS",
+              "ATTACK-FLAG",
+              "5900-TRANS",
+              "5900-EXIT",
+              "Q1",
+              "HQ1",
+              "Q2",
+              "HQ2",
+              "WARNING",
+              "STAR",
+              "DATE",
+              "S-DATE",
+              "SCIENCE",
+              "OFFICER",
+              "SPOCK",
+              "ADVISES",
+              "YOU",
+              "NAVIGATE",
+              "QUADRANT",
+              "HQ1",
+              "HQ2",
+              "DEFEND",
+              "STAR",
+              "FLEET",
+              "HEADQUARTERS"
+            ],
+            "targets": [
+              "W"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "DS-DATE"
+            ],
+            "targets": [
+              "WS-DATE"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "1160-DBL-K",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 442,
+          "end_line": 449
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1170-MOVE-ON-HQ",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 449,
+          "end_line": 464
+        },
+        "performs": [
+          {
+            "target": "1160-DBL-K",
+            "thru": "1160-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1200-INITIALIZE-GALAXY",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 464,
+          "end_line": 483
+        },
+        "performs": [
+          {
+            "target": "1230-MOVE-STARS",
+            "thru": "1230-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "1240-MOVE-ROMULONS",
+            "thru": "1240-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "1250-MOVE-KLINGONS",
+            "thru": "1250-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "1260-MOVE-BASE",
+            "thru": "1260-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "1270-MOVE-E",
+            "thru": "1270-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "1280-MOVE-HQ",
+            "thru": "1280-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "SPACES"
+            ],
+            "targets": [
+              "MASTER-TBL"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "WS-TIME"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "CORRESPONDING",
+              "WS-TIME"
+            ],
+            "targets": [
+              "TIME-REV"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "TIME-REV"
+            ],
+            "targets": [
+              "REV-STR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "REV-STR"
+            ],
+            "targets": [
+              "SEED-X"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "1220-ROLL",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 483,
+          "end_line": 489
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "SEED-AST"
+            ],
+            "targets": [
+              "SEED-X"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SEED-X",
+              "MAX-NO"
+            ],
+            "targets": [
+              "ROLL-X"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "1225-DBL-ROLL",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 489,
+          "end_line": 496
+        },
+        "performs": [
+          {
+            "target": "1220-ROLL",
+            "thru": "1220-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "1220-ROLL",
+            "thru": "1220-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1230-MOVE-STARS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 496,
+          "end_line": 501
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1240-MOVE-ROMULONS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 501,
+          "end_line": 506
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1250-MOVE-KLINGONS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 506,
+          "end_line": 512
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1260-MOVE-BASE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 512,
+          "end_line": 518
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1270-MOVE-E",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 518,
+          "end_line": 526
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1280-MOVE-HQ",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 526,
+          "end_line": 534
+        },
+        "performs": [
+          {
+            "target": "1225-DBL-ROLL",
+            "thru": "1225-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "1700-CK-VAR-WARP",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 534,
+          "end_line": 553
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "ZERO"
+            ],
+            "targets": [
+              "COURSE-B"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "ZERO"
+            ],
+            "targets": [
+              "WARP-A"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "ZERO"
+            ],
+            "targets": [
+              "WARP-B"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "2000-PROCESS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 553,
+          "end_line": 606
+        },
+        "performs": [
+          {
+            "target": "8400-GENERATE",
+            "thru": "8400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "1700-CK-VAR-WARP",
+            "thru": "1700-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7100-NAV",
+            "thru": "7100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4000-DISPLAY-G",
+            "thru": "4000-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7200-PHA",
+            "thru": "7200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7300-TOR",
+            "thru": "7300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7500-DEF",
+            "thru": "7500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7600-DOC",
+            "thru": "7600-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "3000-COM-FUN",
+            "thru": "3000-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "0500-PRT-INST",
+            "thru": "0500-E",
+            "is_loop": false
+          },
+          {
+            "target": "1150-CK-TIME",
+            "thru": "1150-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "1100-CHK-GALAXY",
+            "thru": "1100-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "COMMANDS-X"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "ENTRY1"
+            ],
+            "targets": [
+              "COURSE-A",
+              "ENTRY2",
+              "WARP-A",
+              "COURSE-B",
+              "WARP-B",
+              "7100-NAV",
+              "7100-EXIT",
+              "4000-DISPLAY-G",
+              "4000-EXIT",
+              "PHASERS",
+              "PHA-C",
+              "7200-PHA",
+              "7200-EXIT",
+              "TORPEDO",
+              "TOR-C",
+              "7300-TOR",
+              "7300-EXIT",
+              "SHIELDS",
+              "DEF-C",
+              "7500-DEF",
+              "7500-EXIT",
+              "DOCK",
+              "DOC-C",
+              "7600-DOC",
+              "7600-EXIT",
+              "LIB-COM",
+              "COM-C",
+              "3000-COM-FUN",
+              "3000-EXIT",
+              "INVALID",
+              "COMMAND",
+              "DO",
+              "YOU",
+              "WAN",
+              "LST-REPLY",
+              "YES-LST",
+              "0500-PRT-INST",
+              "0500-E",
+              "1150-CK-TIME",
+              "1150-EXIT"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "COURSE-X"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "WARP-SPEED"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "LST-REPLY"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "3000-COM-FUN",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 606,
+          "end_line": 643
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "ENTRY1"
+            ],
+            "targets": [
+              "COMP-COM"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "COMP-COM"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "LST-REPLY"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "COMP-COM"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "COMP-COM"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "3010-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 643,
+          "end_line": 647
+        },
+        "performs": [
+          {
+            "target": "7400-STA",
+            "thru": "7400-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "3020-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 647,
+          "end_line": 651
+        },
+        "performs": [
+          {
+            "target": "4000-DISPLAY-G",
+            "thru": "4000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "3030-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 651,
+          "end_line": 655
+        },
+        "performs": [
+          {
+            "target": "7700-LRS",
+            "thru": "7700-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "3040-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 655,
+          "end_line": 665
+        },
+        "performs": [
+          {
+            "target": "8100-DMG-COM",
+            "thru": "8100-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "K-OR",
+              "KLINGONS"
+            ],
+            "targets": [
+              "BYE-K"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "3050-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 665,
+          "end_line": 669
+        },
+        "performs": [
+          {
+            "target": "7800-INT",
+            "thru": "7800-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "3060-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 669,
+          "end_line": 690
+        },
+        "performs": [
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "LST-REPLY"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "4000-DISPLAY-G",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 690,
+          "end_line": 737
+        },
+        "performs": [
+          {
+            "target": "5900-TRANS",
+            "thru": "5900-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4200-TEST-VAR",
+            "thru": "4200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "6500-DISPLAY-MT",
+            "thru": "6500-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "Q1"
+            ],
+            "targets": [
+              "QS-1"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "Q2"
+            ],
+            "targets": [
+              "QS-2"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "MKCTR"
+            ],
+            "targets": [
+              "Q1"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "MRCTR"
+            ],
+            "targets": [
+              "Q2"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "Q1"
+            ],
+            "targets": [
+              "X"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "Q2"
+            ],
+            "targets": [
+              "Y"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KLGNS",
+              "FUEL-COUNT",
+              "SHIELD-CNT",
+              "4200-TEST-VAR",
+              "4200-EXIT",
+              "VAR3"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "ENTERPRISE",
+              "ENCOUNTERING",
+              "KLINGON",
+              "FIRE",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "CON-GREEN"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "SHIELD-CNT",
+              "ENTERPRISE",
+              "ENCOUNTERING",
+              "KLINGON",
+              "FIRE",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "CON-GREEN"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "4200-TEST-VAR",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 737,
+          "end_line": 743
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KLGNS",
+              "VAR2"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "4500-DISP-HIT",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 743,
+          "end_line": 748
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "VAR5"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "4700-DISP-HIT",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 748,
+          "end_line": 753
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR4"
+            ],
+            "targets": [
+              "VAR5"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "5400-TRANS-BACK",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 753,
+          "end_line": 759
+        },
+        "performs": [
+          {
+            "target": "5500-TRANSFER-BACK",
+            "thru": "5500-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "5500-TRANSFER-BACK",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 759,
+          "end_line": 765
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "RCNTR"
+            ],
+            "targets": [
+              "A"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KCNTR"
+            ],
+            "targets": [
+              "B"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "MCOL",
+              "RCNTR",
+              "KCNTR"
+            ],
+            "targets": [
+              "MACOL"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "5900-TRANS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 765,
+          "end_line": 771
+        },
+        "performs": [
+          {
+            "target": "6000-TRANSFER",
+            "thru": "6000-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "6000-TRANSFER",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 771,
+          "end_line": 777
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "RCNTR"
+            ],
+            "targets": [
+              "A"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KCNTR"
+            ],
+            "targets": [
+              "B"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "MACOL"
+            ],
+            "targets": [
+              "MCOL",
+              "RCNTR",
+              "KCNTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "6500-DISPLAY-MT",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 777,
+          "end_line": 784
+        },
+        "performs": [
+          {
+            "target": "6600-MINI-DIS",
+            "thru": "6600-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "6600-MINI-DIS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 784,
+          "end_line": 790
+        },
+        "performs": [
+          {
+            "target": "6700-MINI-MOD",
+            "thru": "6700-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "6700-MINI-MOD",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 790,
+          "end_line": 795
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KCNTR"
+            ],
+            "targets": [
+              "MOD-CTR"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "MCOL",
+              "RCNTR",
+              "KCNTR"
+            ],
+            "targets": [
+              "MD-SUB",
+              "MOD-CTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7000-NAV-CK",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 795,
+          "end_line": 819
+        },
+        "performs": [
+          {
+            "target": "8100-DMG-COM",
+            "thru": "8100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8000-BOMB",
+            "thru": "8000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "SKCTR"
+            ],
+            "targets": [
+              "MKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7100-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 819,
+          "end_line": 844
+        },
+        "performs": [
+          {
+            "target": "8340-CK-FL",
+            "thru": "8340-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "FUEL-COUNT",
+              "WARP-A"
+            ],
+            "targets": [
+              "FUEL-COUNT"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "WARP-A"
+            ],
+            "targets": [
+              "RX-S",
+              "RX-S",
+              "ROUNDED",
+              "WARP-B"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "MRCTR"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "MKCTR"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7110-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 844,
+          "end_line": 849
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP2",
+              "WARP4"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP3"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7120-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 849,
+          "end_line": 854
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP1",
+              "WARP3"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP1",
+              "WARP4"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7130-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 854,
+          "end_line": 859
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP3"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP2",
+              "WARP4"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7140-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 859,
+          "end_line": 864
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP1",
+              "WARP4"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP1",
+              "WARP3"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7150-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 864,
+          "end_line": 869
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP2",
+              "WARP4"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP3"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7160-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 869,
+          "end_line": 874
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP1",
+              "WARP3"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP1",
+              "WARP4"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7170-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 874,
+          "end_line": 879
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP3"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP2",
+              "WARP4"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7180-NAV",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 879,
+          "end_line": 886
+        },
+        "performs": [
+          {
+            "target": "7000-NAV-CK",
+            "thru": "7000-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SRCTR",
+              "WARP1",
+              "WARP4"
+            ],
+            "targets": [
+              "SRCTR"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SKCTR",
+              "WARP1",
+              "WARP3"
+            ],
+            "targets": [
+              "SKCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7200-PHA",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 886,
+          "end_line": 957
+        },
+        "performs": [
+          {
+            "target": "8340-CK-FL",
+            "thru": "8340-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7210-REP-BL",
+            "thru": "7210-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7220-COMPUTE-DIST",
+            "thru": "7220-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8150-TEST-AGN",
+            "thru": "8150-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7250-ROMULON-CK",
+            "thru": "7250-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4700-DISP-HIT",
+            "thru": "4700-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7201-REPLACE",
+            "thru": "7201-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "5400-TRANS-BACK",
+            "thru": "5400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8120-DAM-COM",
+            "thru": "8120-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "FUEL-COUNT"
+            ],
+            "targets": [
+              "FUEL-CO",
+              "MAXIMUM",
+              "OF",
+              "FUEL-CO",
+              "UNITS",
+              "AVAILABLE",
+              "PHASER",
+              "HOW",
+              "MANY",
+              "UNITS",
+              "PHASER",
+              "BANKS"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "VAR4-AN"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SHIELD-CNT"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR4",
+              "DAMAGE-CNT"
+            ],
+            "targets": [
+              "DM-VAR4"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "VAR3"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "LST-REPLY"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "DM-VAR4"
+            ],
+            "targets": [
+              "VAR4",
+              "KH-TL",
+              "VAR4",
+              "VAR4",
+              "4700-DISP-HIT",
+              "4700-EXIT",
+              "KLINGON",
+              "DISABLED",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR4"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "VAR2",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR3",
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "THERE",
+              "ARE",
+              "KLINGONS",
+              "IN",
+              "THIS",
+              "QUADRANT",
+              "NAME-X"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2",
+              "DIST-X",
+              "VAR4",
+              "FUEL-COUNT",
+              "DM-VAR4",
+              "VAR4",
+              "KH-TL",
+              "VAR4",
+              "VAR4",
+              "4700-DISP-HIT",
+              "4700-EXIT",
+              "KLINGON",
+              "DISABLED",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR4"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR4",
+              "DIST-X"
+            ],
+            "targets": [
+              "VAR4"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2",
+              "VAR2",
+              "SHIELD-CNT",
+              "VAR3",
+              "VAR2",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR3",
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "THERE",
+              "ARE",
+              "KLINGONS",
+              "IN",
+              "THIS",
+              "QUADRANT",
+              "NAME-X"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "KH-TL"
+            ],
+            "targets": [
+              "VAR4",
+              "VAR4",
+              "4700-DISP-HIT",
+              "4700-EXIT",
+              "KLINGON",
+              "DISABLED",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR4"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR4"
+            ],
+            "targets": [
+              "KH-TL",
+              "VAR2",
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "7201-REPLACE",
+              "7201-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "RX",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "VAR4",
+              "VAR4",
+              "DIST-X"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "THERE",
+              "ARE",
+              "KLINGONS",
+              "IN",
+              "THIS",
+              "QUADRANT",
+              "NAME-X"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR4"
+            ],
+            "targets": [
+              "FUEL-COUNT",
+              "DM-VAR4",
+              "VAR4",
+              "KH-TL",
+              "VAR4",
+              "VAR4",
+              "4700-DISP-HIT",
+              "4700-EXIT",
+              "KLINGON",
+              "DISABLED",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR4"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "SHIELD-CNT",
+              "7201-REPLACE",
+              "7201-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "RX",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "VAR4",
+              "VAR4",
+              "DIST-X"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "SHIELD-CNT",
+              "VAR3",
+              "VAR2",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR3",
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "THERE",
+              "ARE",
+              "KLINGONS",
+              "IN",
+              "THIS",
+              "QUADRANT",
+              "NAME-X"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7201-REPLACE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 957,
+          "end_line": 961
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "7202-REPLACE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 961,
+          "end_line": 965
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "7210-REP-BL",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 965,
+          "end_line": 984
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR4-AN"
+            ],
+            "targets": [
+              "VAR4",
+              "VAR4",
+              "VAR4",
+              "TAL4",
+              "VAR4",
+              "VAR4-AN",
+              "NUMERIC",
+              "VAR4-AN",
+              "VAR4",
+              "VAR4"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR4",
+              "TAL4",
+              "VAR4",
+              "VAR4-AN",
+              "NUMERIC",
+              "VAR4-AN",
+              "VAR4",
+              "VAR4"
+            ],
+            "targets": [
+              "VAR4"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7220-COMPUTE-DIST",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 984,
+          "end_line": 999
+        },
+        "performs": [
+          {
+            "target": "7225-FIND-E",
+            "thru": "7225-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "7230-COMPUTE",
+            "thru": "7230-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "7247-EST-NBR",
+            "thru": "7247-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "7225-FIND-E",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 999,
+          "end_line": 1005
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "RCNTR"
+            ],
+            "targets": [
+              "E1",
+              "KCNTR",
+              "E2"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7230-COMPUTE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1005,
+          "end_line": 1031
+        },
+        "performs": [
+          {
+            "target": "7240-DIST-K",
+            "thru": "7240-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7243-DIST-R",
+            "thru": "7243-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7245-DIST-B",
+            "thru": "7245-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "RCNTR"
+            ],
+            "targets": [
+              "K1",
+              "KCNTR",
+              "K2",
+              "CT-K",
+              "DIST-X",
+              "STR-A",
+              "7240-DIST-K",
+              "7240-EXIT",
+              "DIST-X",
+              "STR-A",
+              "STR-A",
+              "DIST-X"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "RCNTR"
+            ],
+            "targets": [
+              "R1",
+              "KCNTR",
+              "R2",
+              "CT-R",
+              "DIST-R",
+              "STR-R",
+              "7243-DIST-R",
+              "7243-EXIT",
+              "DIST-R",
+              "STR-R",
+              "STR-R",
+              "DIST-R"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "RCNTR"
+            ],
+            "targets": [
+              "B1",
+              "KCNTR",
+              "B2",
+              "DIST-B",
+              "STR-X",
+              "7245-DIST-B",
+              "7245-EXIT",
+              "DIST-B",
+              "STR-X",
+              "STR-X",
+              "DIST-B"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7240-DIST-K",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1031,
+          "end_line": 1044
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "K1",
+              "E1",
+              "K1",
+              "E1",
+              "K1"
+            ],
+            "targets": [
+              "K1"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "K2",
+              "E2",
+              "K2",
+              "E2",
+              "K2"
+            ],
+            "targets": [
+              "K2"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "DIST-X"
+            ],
+            "targets": [
+              "DKC",
+              "CT-K"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7243-DIST-R",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1044,
+          "end_line": 1057
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "R1",
+              "E1",
+              "R1",
+              "E1",
+              "R1"
+            ],
+            "targets": [
+              "R1"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "R2",
+              "E2",
+              "R2",
+              "E2",
+              "R2"
+            ],
+            "targets": [
+              "R2"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "DIST-R"
+            ],
+            "targets": [
+              "DRC",
+              "CT-R"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7245-DIST-B",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1057,
+          "end_line": 1069
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "B1",
+              "E1",
+              "B1",
+              "E1",
+              "B1"
+            ],
+            "targets": [
+              "B1"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "B2",
+              "E2",
+              "B2",
+              "E2",
+              "B2"
+            ],
+            "targets": [
+              "B2"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7247-EST-NBR",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1069,
+          "end_line": 1078
+        },
+        "performs": [
+          {
+            "target": "7248-EST-K",
+            "thru": "7248-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "7249-EST-R",
+            "thru": "7249-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "7248-EST-K",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1078,
+          "end_line": 1084
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "DKC",
+              "RT"
+            ],
+            "targets": [
+              "STR-X",
+              "RX",
+              "RT"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "RT"
+            ],
+            "targets": [
+              "RX"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7249-EST-R",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1084,
+          "end_line": 1090
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "DRC",
+              "QT"
+            ],
+            "targets": [
+              "STR-R",
+              "QX",
+              "QT"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "QT"
+            ],
+            "targets": [
+              "QX"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7250-ROMULON-CK",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1090,
+          "end_line": 1138
+        },
+        "performs": [
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8400-GENERATE",
+            "thru": "8400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7202-REPLACE",
+            "thru": "7202-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "5400-TRANS-BACK",
+            "thru": "5400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8100-DMG-COM",
+            "thru": "8100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR4"
+            ],
+            "targets": [
+              "VAR5",
+              "VAR5",
+              "UNIT",
+              "HIT",
+              "ROMULON",
+              "ROMULON",
+              "RETURNING",
+              "FIRE",
+              "8400-GENERATE",
+              "8400-EXIT",
+              "NO-WAY",
+              "ENTERPRISE",
+              "DESTROYED",
+              "ROMULON",
+              "TORPEDO",
+              "INDICATE-X",
+              "8200-CK-DONE",
+              "8200-EXIT",
+              "VAR2",
+              "VAR2",
+              "DIST-R",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR2",
+              "DAMAGE-CNT",
+              "VAR3",
+              "VAR2",
+              "VAR3",
+              "VAR3",
+              "SHIELD-CNT",
+              "SHIELD-CNT",
+              "VAR4",
+              "VAR4",
+              "DIST-X"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR4"
+            ],
+            "targets": [
+              "VAR5",
+              "VAR5",
+              "UNIT",
+              "HIT",
+              "ROMULON",
+              "ROMULON",
+              "DESTROYED",
+              "7202-REPLACE",
+              "7202-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "QX",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "ROMULONS",
+              "5400-TRANS-BACK",
+              "5400-EXIT"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR4",
+              "DIST-R"
+            ],
+            "targets": [
+              "VAR4"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2",
+              "DIST-R",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR2",
+              "DAMAGE-CNT",
+              "VAR3",
+              "VAR2",
+              "VAR3",
+              "VAR3",
+              "SHIELD-CNT",
+              "SHIELD-CNT",
+              "VAR4",
+              "VAR4",
+              "DIST-X"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR3",
+              "VAR2",
+              "VAR3",
+              "VAR3",
+              "SHIELD-CNT",
+              "SHIELD-CNT",
+              "VAR4",
+              "VAR4",
+              "DIST-X"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR4"
+            ],
+            "targets": [
+              "FUEL-COUNT",
+              "NO-WAY",
+              "VAR4",
+              "VAR4",
+              "VAR4",
+              "DIST-R"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "SHIELD-CNT",
+              "SHIELD-CNT",
+              "VAR4",
+              "VAR4",
+              "DIST-X"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7300-TOR",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1138,
+          "end_line": 1198
+        },
+        "performs": [
+          {
+            "target": "8400-GENERATE",
+            "thru": "8400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8150-TEST-AGN",
+            "thru": "8150-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7220-COMPUTE-DIST",
+            "thru": "7220-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7350-ROMULON-CK",
+            "thru": "7350-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8120-DAM-COM",
+            "thru": "8120-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7201-REPLACE",
+            "thru": "7201-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "5400-TRANS-BACK",
+            "thru": "5400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SHIELD-CNT"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2",
+              "KLGNS"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "VAR3"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "LST-REPLY"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2",
+              "DIST-X",
+              "TORPEDO",
+              "MISSED",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR2",
+              "DAMAGE-CNT",
+              "TORPS",
+              "VAR3",
+              "SHIELD-CNT",
+              "8120-DAM-COM",
+              "8120-EXIT",
+              "KLINGON",
+              "DESTROYED",
+              "VAR3",
+              "DAMAGE-CNT",
+              "7201-REPLACE",
+              "7201-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "TORPS",
+              "KLGNS",
+              "KLINGONS",
+              "5400-TRANS-BACK",
+              "5400-EXIT",
+              "KLGNS",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR2",
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "8120-DAM-COM",
+              "8120-EXIT",
+              "8120-DAM-COM",
+              "8120-EXIT",
+              "THERE",
+              "ARE",
+              "KLINGON",
+              "VESSELS",
+              "IN",
+              "THIS",
+              "QUADRANT",
+              "TORPEDOES",
+              "REMAINING",
+              "NAME-X"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "TORPS",
+              "VAR3",
+              "SHIELD-CNT",
+              "8120-DAM-COM",
+              "8120-EXIT",
+              "KLINGON",
+              "DESTROYED",
+              "VAR3",
+              "DAMAGE-CNT",
+              "7201-REPLACE",
+              "7201-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "TORPS",
+              "KLGNS",
+              "KLINGONS",
+              "5400-TRANS-BACK",
+              "5400-EXIT",
+              "KLGNS",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR2",
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT",
+              "8120-DAM-COM",
+              "8120-EXIT",
+              "8120-DAM-COM",
+              "8120-EXIT",
+              "THERE",
+              "ARE",
+              "KLINGON",
+              "VESSELS",
+              "IN",
+              "THIS",
+              "QUADRANT",
+              "TORPEDOES",
+              "REMAINING",
+              "NAME-X"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7350-ROMULON-CK",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1198,
+          "end_line": 1235
+        },
+        "performs": [
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8400-GENERATE",
+            "thru": "8400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7202-REPLACE",
+            "thru": "7202-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "5400-TRANS-BACK",
+            "thru": "5400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "VAR2",
+              "DIST-R",
+              "4500-DISP-HIT",
+              "4500-EXIT",
+              "VAR2",
+              "DAMAGE-CNT",
+              "VAR3",
+              "VAR2",
+              "VAR3",
+              "SHIELD-CNT",
+              "ROMULON",
+              "DESTROYED",
+              "7202-REPLACE",
+              "7202-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "QX",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "ROMULONS",
+              "5400-TRANS-BACK",
+              "5400-EXIT"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR3",
+              "VAR2",
+              "VAR3",
+              "SHIELD-CNT",
+              "ROMULON",
+              "DESTROYED",
+              "7202-REPLACE",
+              "7202-EXIT",
+              "REP-CTR",
+              "REP-CTR",
+              "QX",
+              "MINI-TABLE",
+              "REPLACING",
+              "FIRST",
+              "MINI-TABLE",
+              "REPLACING",
+              "ALL",
+              "ROMULONS",
+              "5400-TRANS-BACK",
+              "5400-EXIT"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7400-STA",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1235,
+          "end_line": 1258
+        },
+        "performs": [
+          {
+            "target": "8100-DMG-COM",
+            "thru": "8100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "DAMAGE-CNT"
+            ],
+            "targets": [
+              "VAR3"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "VAR6"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "FUEL-COUNT"
+            ],
+            "targets": [
+              "FUEL-CO"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "SHIELD-CNT"
+            ],
+            "targets": [
+              "SHIELD-CO"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7500-DEF",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1258,
+          "end_line": 1274
+        },
+        "performs": [
+          {
+            "target": "7520-ASC",
+            "thru": "7520-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7520-ASC",
+            "thru": "7520-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "ADD",
+            "sources": [
+              "SHIELD-CNT"
+            ],
+            "targets": [
+              "FUEL-COUNT"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "FUEL-COUNT"
+            ],
+            "targets": [
+              "FUEL-CO",
+              "MAXIMUM",
+              "AMOUNT",
+              "SHIELDS",
+              "FUEL-CO",
+              "HOW",
+              "MANY",
+              "UNITS",
+              "SHIELDS",
+              "7520-ASC",
+              "7520-EXIT",
+              "SHIELD-CNT",
+              "FUEL-COUNT"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "SHIELD-CNT"
+            ],
+            "targets": [
+              "FUEL-COUNT",
+              "FUEL-COUNT",
+              "FUEL-CO",
+              "MAXIMUM",
+              "AMOUNT",
+              "SHIELDS",
+              "FUEL-CO",
+              "HOW",
+              "MANY",
+              "UNITS",
+              "SHIELDS",
+              "7520-ASC",
+              "7520-EXIT",
+              "SHIELD-CNT",
+              "FUEL-COUNT"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "SHIELD-CNT"
+            ],
+            "targets": [
+              "SHIELD-CO"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7520-ASC",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1274,
+          "end_line": 1294
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "SHIELD-CNT-AN"
+            ]
+          },
+          {
+            "type": "ACCEPT",
+            "sources": [
+              "SYSTEM-INPUT"
+            ],
+            "targets": [
+              "SHIELD-CNT-AN"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "SHIELD-CNT-AN"
+            ],
+            "targets": [
+              "SHIELD-CNT"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "SHIELD-CNT",
+              "SBL"
+            ],
+            "targets": [
+              "SHIELD-CNT"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7600-DOC",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1294,
+          "end_line": 1319
+        },
+        "performs": [
+          {
+            "target": "8400-GENERATE",
+            "thru": "8400-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7220-COMPUTE-DIST",
+            "thru": "7220-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8100-DMG-COM",
+            "thru": "8100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "7650-TRANS-STAR",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1319,
+          "end_line": 1341
+        },
+        "performs": [
+          {
+            "target": "7670-STRANS",
+            "thru": "7670-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "Q9"
+            ],
+            "targets": [
+              "W"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "R9"
+            ],
+            "targets": [
+              "Z"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7670-STRANS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1341,
+          "end_line": 1347
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "RCTR"
+            ],
+            "targets": [
+              "A"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KCTR"
+            ],
+            "targets": [
+              "B"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "MACOL"
+            ],
+            "targets": [
+              "KOLUMN",
+              "RCTR",
+              "KCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7700-LRS",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1347,
+          "end_line": 1400
+        },
+        "performs": [
+          {
+            "target": "7650-TRANS-STAR",
+            "thru": "7650-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "7730-TRADE-TBL",
+            "thru": "7730-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "8100-DMG-COM",
+            "thru": "8100-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8300-CK-FUEL-DAMAGE",
+            "thru": "8300-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "ZEROS"
+            ],
+            "targets": [
+              "SCAN-KEEP"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "Q1",
+              "QT3",
+              "Q1"
+            ],
+            "targets": [
+              "QT1"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "Q2",
+              "QT4",
+              "Q2"
+            ],
+            "targets": [
+              "QT2"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7730-TRADE-TBL",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1400,
+          "end_line": 1409
+        },
+        "performs": [
+          {
+            "target": "7750-TRADE-ACT",
+            "thru": "7750-EXIT",
+            "is_loop": true
+          },
+          {
+            "target": "7770-INSPECT-SCAN",
+            "thru": "7770-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "TR1"
+            ],
+            "targets": [
+              "QT"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "TR2"
+            ],
+            "targets": [
+              "RT"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7750-TRADE-ACT",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1409,
+          "end_line": 1415
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "QT",
+              "KTCTR"
+            ],
+            "targets": [
+              "QX"
+            ]
+          },
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "RT",
+              "RTCTR"
+            ],
+            "targets": [
+              "RX"
+            ]
+          },
+          {
+            "type": "MOVE",
+            "sources": [
+              "KOLUMN",
+              "RX",
+              "QX"
+            ],
+            "targets": [
+              "SCAN-COL",
+              "RTCTR",
+              "KTCTR"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7770-INSPECT-SCAN",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1415,
+          "end_line": 1422
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "7800-INT",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1422,
+          "end_line": 1439
+        },
+        "performs": [
+          {
+            "target": "7850-SEARCH",
+            "thru": "7850-EXIT",
+            "is_loop": true
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "DX",
+              "DX-1",
+              "CX",
+              "LATEST",
+              "INTELLIGENCE",
+              "GATHERING",
+              "REPORTS",
+              "INDICATE",
+              "MORE",
+              "KLINGON",
+              "VESSELS",
+              "IN",
+              "THE",
+              "VICINITY",
+              "OF",
+              "QUADRANT",
+              "CX-1",
+              "DX-1",
+              "ENTERPRISE",
+              "IN",
+              "QUADRANT",
+              "Q1",
+              "Q2"
+            ],
+            "targets": [
+              "CX-1"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "7850-SEARCH",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1439,
+          "end_line": 1446
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8000-BOMB",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1446,
+          "end_line": 1465
+        },
+        "performs": [
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8100-DMG-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1465,
+          "end_line": 1476
+        },
+        "performs": [
+          {
+            "target": "8150-TEST-AGN",
+            "thru": "8150-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "K-OR",
+              "KLINGONS",
+              "KLGNS",
+              "FUEL-COUNT",
+              "8150-TEST-AGN",
+              "8150-EXIT",
+              "VAR3"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "SHIELD-CNT"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "8120-DAM-COM",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1476,
+          "end_line": 1487
+        },
+        "performs": [
+          {
+            "target": "8160-TEST-AGN",
+            "thru": "8160-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "4500-DISP-HIT",
+            "thru": "4500-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "ROMULONS",
+              "FUEL-COUNT",
+              "SHIELD-CNT",
+              "8160-TEST-AGN",
+              "8160-EXIT",
+              "VAR3"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          },
+          {
+            "type": "ADD",
+            "sources": [
+              "VAR2"
+            ],
+            "targets": [
+              "DAMAGE-CNT",
+              "VAR3",
+              "SHIELD-CNT"
+            ]
+          },
+          {
+            "type": "SUBTRACT",
+            "sources": [
+              "VAR3"
+            ],
+            "targets": [
+              "SHIELD-CNT"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "8150-TEST-AGN",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1487,
+          "end_line": 1493
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "KLGNS",
+              "VAR2"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "8160-TEST-AGN",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1493,
+          "end_line": 1499
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "COMPUTE",
+            "sources": [
+              "ROMULONS",
+              "VAR2"
+            ],
+            "targets": [
+              "VAR2"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "8200-CK-DONE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1499,
+          "end_line": 1513
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8300-CK-FUEL-DAMAGE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1513,
+          "end_line": 1531
+        },
+        "performs": [
+          {
+            "target": "8350-CK-SHIFT",
+            "thru": "8350-EXIT",
+            "is_loop": false
+          },
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8340-CK-FL",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1531,
+          "end_line": 1538
+        },
+        "performs": [
+          {
+            "target": "8350-CK-SHIFT",
+            "thru": "8350-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8350-CK-SHIFT",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1538,
+          "end_line": 1547
+        },
+        "performs": [
+          {
+            "target": "8200-CK-DONE",
+            "thru": "8200-EXIT",
+            "is_loop": false
+          }
+        ],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8400-GENERATE",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1547,
+          "end_line": 1560
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      },
+      {
+        "name": "8500-FINISH-GAME",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1560,
+          "end_line": 1579
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": [
+          {
+            "type": "MOVE",
+            "sources": [
+              "KLINGONS"
+            ],
+            "targets": [
+              "VAE1",
+              "WS-DATE",
+              "DS-DATE",
+              "IT",
+              "IS",
+              "NOW",
+              "STAR",
+              "DATE",
+              "S-DATE",
+              "STAR",
+              "DATE",
+              "DS-DATE",
+              "STAR",
+              "FLEET",
+              "HQ",
+              "WAS",
+              "DESTROYED",
+              "VAE1",
+              "KLINGON",
+              "VESSELS",
+              "NAME-X",
+              "COURT",
+              "MARTIALED",
+              "NAME-X",
+              "COURT",
+              "MARTIALED",
+              "CONGRATULATIONS",
+              "JOB",
+              "WELL",
+              "DONE"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "9000-END-OF-JOB",
+        "span": {
+          "file": "..\\test-codebases\\star-trek\\ctrek.cob",
+          "start_line": 1579,
+          "end_line": 1581
+        },
+        "performs": [],
+        "calls": [],
+        "cics_ops": [],
+        "data_flows": []
+      }
+    ],
+    "copy_statements": [],
+    "call_targets": [],
+    "file_controls": [],
+    "data_items_count": 197,
+    "data_items_sample": [
+      {
+        "level": 1,
+        "name": "eof-flag",
+        "picture": "x",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "star-table",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 5,
+        "name": "row",
+        "picture": null,
+        "occurs": 42
+      },
+      {
+        "level": 10,
+        "name": "kolumn",
+        "picture": "x",
+        "occurs": 42
+      },
+      {
+        "level": 1,
+        "name": "rctr",
+        "picture": "99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "kctr",
+        "picture": "99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "commands-x",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 5,
+        "name": "command",
+        "picture": "x(3)",
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "navigate",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "phasers",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "torpedo",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "shields",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "dock",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "lib-com",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "nav-c",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "pha-c",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "tor-c",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "def-c",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "doc-c",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "com-c",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 5,
+        "name": "entry1",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 5,
+        "name": "entry2",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "mini-table",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 5,
+        "name": "mrow",
+        "picture": null,
+        "occurs": 14
+      },
+      {
+        "level": 10,
+        "name": "mcol",
+        "picture": "x",
+        "occurs": 14
+      },
+      {
+        "level": 1,
+        "name": "rcntr",
+        "picture": "99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "kcntr",
+        "picture": "99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "x",
+        "picture": "999",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "y",
+        "picture": "999",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "ws-date",
+        "picture": "9(4)",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "time-flag",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "time-flag-set",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "max-no",
+        "picture": "999",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "hq1",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "hq2",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "t-store",
+        "picture": "9(4)",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "attack-flag",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "klingons-attacking",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "too-late-flag",
+        "picture": "9",
+        "occurs": null
+      },
+      {
+        "level": 88,
+        "name": "too-late",
+        "picture": null,
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "bye-k",
+        "picture": "99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var1",
+        "picture": "99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var2",
+        "picture": "9(6)",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var3",
+        "picture": "9(6)",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var4",
+        "picture": "9(4)",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var4-an",
+        "picture": "x(4)",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var5",
+        "picture": "zzz999",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "var6",
+        "picture": "zzzz99",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "return-x",
+        "picture": "x",
+        "occurs": null
+      },
+      {
+        "level": 1,
+        "name": "comp-com",
+        "picture": "9",
+        "occurs": null
+      }
+    ],
+    "data_flows_count": 169,
+    "data_flows": [
+      {
+        "type": "MOVE",
+        "sources": [
+          "SPACES"
+        ],
+        "targets": [
+          "MD-ROW"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 269
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SEED-TABLE"
+        ],
+        "targets": [
+          "GENERATE-TABLE"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 270
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "NAME-X"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 282
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "SKILL-LEV"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 284
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "SKILL-LEV"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 285
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKILL-LEV"
+        ],
+        "targets": [
+          "VAB1"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 300
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "K-OR"
+        ],
+        "targets": [
+          "KLINGONS"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 302
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAB1"
+        ],
+        "targets": [
+          "VAE1"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 303
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "WS-TIME"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 304
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "WS-MIN",
+          "OF",
+          "WS-TIME"
+        ],
+        "targets": [
+          "DS-MIN"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 305
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "WS-SEC",
+          "OF",
+          "WS-TIME"
+        ],
+        "targets": [
+          "DS-SEC"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 306
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DS-TABLE"
+        ],
+        "targets": [
+          "S-DATE"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 307
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DS-TABLE"
+        ],
+        "targets": [
+          "DS-DATE"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 313
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "INST-REPLY"
+        ],
+        "paragraph": "0100-HOUSEKEEPING",
+        "line": 325
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "RETURN-X"
+        ],
+        "paragraph": "0550-ADD-INST",
+        "line": 359
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "WS-MIN",
+          "OF",
+          "WS-TIME"
+        ],
+        "targets": [
+          "DS-MIN",
+          "1145-CK-FLAG",
+          "1145-EXIT",
+          "WS-SEC",
+          "OF",
+          "WS-TIME",
+          "DS-SEC",
+          "DS-TABLE",
+          "S-DATE",
+          "1150-EXIT"
+        ],
+        "paragraph": "1150-CK-TIME",
+        "line": 407
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "WS-TIME"
+        ],
+        "paragraph": "1150-CK-TIME",
+        "line": 407
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "DS-DATE",
+          "S-DATE"
+        ],
+        "targets": [
+          "T-STORE"
+        ],
+        "paragraph": "1150-CK-TIME",
+        "line": 415
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "HQ2",
+          "HQ1",
+          "MASTER-TBL",
+          "REPLACING",
+          "ALL",
+          "RX",
+          "1170-MOVE-ON-HQ",
+          "1170-EXIT",
+          "KCTR",
+          "KCTR",
+          "KLINGONS",
+          "ATTACK-FLAG",
+          "5900-TRANS",
+          "5900-EXIT",
+          "Q1",
+          "HQ1",
+          "Q2",
+          "HQ2",
+          "WARNING",
+          "STAR",
+          "DATE",
+          "S-DATE",
+          "SCIENCE",
+          "OFFICER",
+          "SPOCK",
+          "ADVISES",
+          "YOU",
+          "NAVIGATE",
+          "QUADRANT",
+          "HQ1",
+          "HQ2",
+          "DEFEND",
+          "STAR",
+          "FLEET",
+          "HEADQUARTERS"
+        ],
+        "targets": [
+          "W"
+        ],
+        "paragraph": "1150-CK-TIME",
+        "line": 416
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DS-DATE"
+        ],
+        "targets": [
+          "WS-DATE"
+        ],
+        "paragraph": "1150-CK-TIME",
+        "line": 431
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SPACES"
+        ],
+        "targets": [
+          "MASTER-TBL"
+        ],
+        "paragraph": "1200-INITIALIZE-GALAXY",
+        "line": 465
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "WS-TIME"
+        ],
+        "paragraph": "1200-INITIALIZE-GALAXY",
+        "line": 466
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "CORRESPONDING",
+          "WS-TIME"
+        ],
+        "targets": [
+          "TIME-REV"
+        ],
+        "paragraph": "1200-INITIALIZE-GALAXY",
+        "line": 467
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "TIME-REV"
+        ],
+        "targets": [
+          "REV-STR"
+        ],
+        "paragraph": "1200-INITIALIZE-GALAXY",
+        "line": 468
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "REV-STR"
+        ],
+        "targets": [
+          "SEED-X"
+        ],
+        "paragraph": "1200-INITIALIZE-GALAXY",
+        "line": 469
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SEED-AST"
+        ],
+        "targets": [
+          "SEED-X"
+        ],
+        "paragraph": "1220-ROLL",
+        "line": 485
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SEED-X",
+          "MAX-NO"
+        ],
+        "targets": [
+          "ROLL-X"
+        ],
+        "paragraph": "1220-ROLL",
+        "line": 486
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "ZERO"
+        ],
+        "targets": [
+          "COURSE-B"
+        ],
+        "paragraph": "1700-CK-VAR-WARP",
+        "line": 538
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "ZERO"
+        ],
+        "targets": [
+          "WARP-A"
+        ],
+        "paragraph": "1700-CK-VAR-WARP",
+        "line": 540
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "ZERO"
+        ],
+        "targets": [
+          "WARP-B"
+        ],
+        "paragraph": "1700-CK-VAR-WARP",
+        "line": 542
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "COMMANDS-X"
+        ],
+        "paragraph": "2000-PROCESS",
+        "line": 558
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "ENTRY1"
+        ],
+        "targets": [
+          "COURSE-A",
+          "ENTRY2",
+          "WARP-A",
+          "COURSE-B",
+          "WARP-B",
+          "7100-NAV",
+          "7100-EXIT",
+          "4000-DISPLAY-G",
+          "4000-EXIT",
+          "PHASERS",
+          "PHA-C",
+          "7200-PHA",
+          "7200-EXIT",
+          "TORPEDO",
+          "TOR-C",
+          "7300-TOR",
+          "7300-EXIT",
+          "SHIELDS",
+          "DEF-C",
+          "7500-DEF",
+          "7500-EXIT",
+          "DOCK",
+          "DOC-C",
+          "7600-DOC",
+          "7600-EXIT",
+          "LIB-COM",
+          "COM-C",
+          "3000-COM-FUN",
+          "3000-EXIT",
+          "INVALID",
+          "COMMAND",
+          "DO",
+          "YOU",
+          "WAN",
+          "LST-REPLY",
+          "YES-LST",
+          "0500-PRT-INST",
+          "0500-E",
+          "1150-CK-TIME",
+          "1150-EXIT"
+        ],
+        "paragraph": "2000-PROCESS",
+        "line": 559
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "COURSE-X"
+        ],
+        "paragraph": "2000-PROCESS",
+        "line": 559
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "WARP-SPEED"
+        ],
+        "paragraph": "2000-PROCESS",
+        "line": 559
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "LST-REPLY"
+        ],
+        "paragraph": "2000-PROCESS",
+        "line": 559
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "ENTRY1"
+        ],
+        "targets": [
+          "COMP-COM"
+        ],
+        "paragraph": "3000-COM-FUN",
+        "line": 608
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "COMP-COM"
+        ],
+        "paragraph": "3000-COM-FUN",
+        "line": 608
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "LST-REPLY"
+        ],
+        "paragraph": "3000-COM-FUN",
+        "line": 613
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "COMP-COM"
+        ],
+        "paragraph": "3000-COM-FUN",
+        "line": 613
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "COMP-COM"
+        ],
+        "paragraph": "3000-COM-FUN",
+        "line": 613
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "K-OR",
+          "KLINGONS"
+        ],
+        "targets": [
+          "BYE-K"
+        ],
+        "paragraph": "3040-COM",
+        "line": 656
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "LST-REPLY"
+        ],
+        "paragraph": "3060-COM",
+        "line": 670
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "Q1"
+        ],
+        "targets": [
+          "QS-1"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 694
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "Q2"
+        ],
+        "targets": [
+          "QS-2"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 695
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "MKCTR"
+        ],
+        "targets": [
+          "Q1"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 696
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "MRCTR"
+        ],
+        "targets": [
+          "Q2"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 697
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "Q1"
+        ],
+        "targets": [
+          "X"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 700
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "Q2"
+        ],
+        "targets": [
+          "Y"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 701
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KLGNS",
+          "FUEL-COUNT",
+          "SHIELD-CNT",
+          "4200-TEST-VAR",
+          "4200-EXIT",
+          "VAR3"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 707
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "ENTERPRISE",
+          "ENCOUNTERING",
+          "KLINGON",
+          "FIRE",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "CON-GREEN"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 707
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "SHIELD-CNT",
+          "ENTERPRISE",
+          "ENCOUNTERING",
+          "KLINGON",
+          "FIRE",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "CON-GREEN"
+        ],
+        "paragraph": "4000-DISPLAY-G",
+        "line": 707
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KLGNS",
+          "VAR2"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "4200-TEST-VAR",
+        "line": 738
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "VAR5"
+        ],
+        "paragraph": "4500-DISP-HIT",
+        "line": 744
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR4"
+        ],
+        "targets": [
+          "VAR5"
+        ],
+        "paragraph": "4700-DISP-HIT",
+        "line": 749
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "RCNTR"
+        ],
+        "targets": [
+          "A"
+        ],
+        "paragraph": "5500-TRANSFER-BACK",
+        "line": 760
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KCNTR"
+        ],
+        "targets": [
+          "B"
+        ],
+        "paragraph": "5500-TRANSFER-BACK",
+        "line": 761
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "MCOL",
+          "RCNTR",
+          "KCNTR"
+        ],
+        "targets": [
+          "MACOL"
+        ],
+        "paragraph": "5500-TRANSFER-BACK",
+        "line": 762
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "RCNTR"
+        ],
+        "targets": [
+          "A"
+        ],
+        "paragraph": "6000-TRANSFER",
+        "line": 772
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KCNTR"
+        ],
+        "targets": [
+          "B"
+        ],
+        "paragraph": "6000-TRANSFER",
+        "line": 773
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "MACOL"
+        ],
+        "targets": [
+          "MCOL",
+          "RCNTR",
+          "KCNTR"
+        ],
+        "paragraph": "6000-TRANSFER",
+        "line": 774
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KCNTR"
+        ],
+        "targets": [
+          "MOD-CTR"
+        ],
+        "paragraph": "6700-MINI-MOD",
+        "line": 791
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "MCOL",
+          "RCNTR",
+          "KCNTR"
+        ],
+        "targets": [
+          "MD-SUB",
+          "MOD-CTR"
+        ],
+        "paragraph": "6700-MINI-MOD",
+        "line": 792
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SKCTR"
+        ],
+        "targets": [
+          "MKCTR"
+        ],
+        "paragraph": "7000-NAV-CK",
+        "line": 804
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "FUEL-COUNT",
+          "WARP-A"
+        ],
+        "targets": [
+          "FUEL-COUNT"
+        ],
+        "paragraph": "7100-NAV",
+        "line": 821
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "WARP-A"
+        ],
+        "targets": [
+          "RX-S",
+          "RX-S",
+          "ROUNDED",
+          "WARP-B"
+        ],
+        "paragraph": "7100-NAV",
+        "line": 822
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "MRCTR"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7100-NAV",
+        "line": 826
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "MKCTR"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7100-NAV",
+        "line": 827
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP2",
+          "WARP4"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7110-NAV",
+        "line": 845
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP3"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7110-NAV",
+        "line": 846
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP1",
+          "WARP3"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7120-NAV",
+        "line": 850
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP1",
+          "WARP4"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7120-NAV",
+        "line": 851
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP3"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7130-NAV",
+        "line": 855
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP2",
+          "WARP4"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7130-NAV",
+        "line": 856
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP1",
+          "WARP4"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7140-NAV",
+        "line": 860
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP1",
+          "WARP3"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7140-NAV",
+        "line": 861
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP2",
+          "WARP4"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7150-NAV",
+        "line": 865
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP3"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7150-NAV",
+        "line": 866
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP1",
+          "WARP3"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7160-NAV",
+        "line": 870
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP1",
+          "WARP4"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7160-NAV",
+        "line": 871
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP3"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7170-NAV",
+        "line": 875
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP2",
+          "WARP4"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7170-NAV",
+        "line": 876
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SRCTR",
+          "WARP1",
+          "WARP4"
+        ],
+        "targets": [
+          "SRCTR"
+        ],
+        "paragraph": "7180-NAV",
+        "line": 880
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SKCTR",
+          "WARP1",
+          "WARP3"
+        ],
+        "targets": [
+          "SKCTR"
+        ],
+        "paragraph": "7180-NAV",
+        "line": 881
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "FUEL-COUNT"
+        ],
+        "targets": [
+          "FUEL-CO",
+          "MAXIMUM",
+          "OF",
+          "FUEL-CO",
+          "UNITS",
+          "AVAILABLE",
+          "PHASER",
+          "HOW",
+          "MANY",
+          "UNITS",
+          "PHASER",
+          "BANKS"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 892
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "VAR4-AN"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 896
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SHIELD-CNT"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 899
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR4",
+          "DAMAGE-CNT"
+        ],
+        "targets": [
+          "DM-VAR4"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 906
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "VAR3"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 907
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "LST-REPLY"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 908
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DM-VAR4"
+        ],
+        "targets": [
+          "VAR4",
+          "KH-TL",
+          "VAR4",
+          "VAR4",
+          "4700-DISP-HIT",
+          "4700-EXIT",
+          "KLINGON",
+          "DISABLED",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR4"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "VAR2",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR3",
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "THERE",
+          "ARE",
+          "KLINGONS",
+          "IN",
+          "THIS",
+          "QUADRANT",
+          "NAME-X"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2",
+          "DIST-X",
+          "VAR4",
+          "FUEL-COUNT",
+          "DM-VAR4",
+          "VAR4",
+          "KH-TL",
+          "VAR4",
+          "VAR4",
+          "4700-DISP-HIT",
+          "4700-EXIT",
+          "KLINGON",
+          "DISABLED",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR4"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR4",
+          "DIST-X"
+        ],
+        "targets": [
+          "VAR4"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2",
+          "VAR2",
+          "SHIELD-CNT",
+          "VAR3",
+          "VAR2",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR3",
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "THERE",
+          "ARE",
+          "KLINGONS",
+          "IN",
+          "THIS",
+          "QUADRANT",
+          "NAME-X"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "KH-TL"
+        ],
+        "targets": [
+          "VAR4",
+          "VAR4",
+          "4700-DISP-HIT",
+          "4700-EXIT",
+          "KLINGON",
+          "DISABLED",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR4"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR4"
+        ],
+        "targets": [
+          "KH-TL",
+          "VAR2",
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "7201-REPLACE",
+          "7201-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "RX",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "VAR4",
+          "VAR4",
+          "DIST-X"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR2"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "THERE",
+          "ARE",
+          "KLINGONS",
+          "IN",
+          "THIS",
+          "QUADRANT",
+          "NAME-X"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR4"
+        ],
+        "targets": [
+          "FUEL-COUNT",
+          "DM-VAR4",
+          "VAR4",
+          "KH-TL",
+          "VAR4",
+          "VAR4",
+          "4700-DISP-HIT",
+          "4700-EXIT",
+          "KLINGON",
+          "DISABLED",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR4"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "SHIELD-CNT",
+          "7201-REPLACE",
+          "7201-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "RX",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "VAR4",
+          "VAR4",
+          "DIST-X"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "SHIELD-CNT",
+          "VAR3",
+          "VAR2",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR3",
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "THERE",
+          "ARE",
+          "KLINGONS",
+          "IN",
+          "THIS",
+          "QUADRANT",
+          "NAME-X"
+        ],
+        "paragraph": "7200-PHA",
+        "line": 915
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR4-AN"
+        ],
+        "targets": [
+          "VAR4",
+          "VAR4",
+          "VAR4",
+          "TAL4",
+          "VAR4",
+          "VAR4-AN",
+          "NUMERIC",
+          "VAR4-AN",
+          "VAR4",
+          "VAR4"
+        ],
+        "paragraph": "7210-REP-BL",
+        "line": 968
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR4",
+          "TAL4",
+          "VAR4",
+          "VAR4-AN",
+          "NUMERIC",
+          "VAR4-AN",
+          "VAR4",
+          "VAR4"
+        ],
+        "targets": [
+          "VAR4"
+        ],
+        "paragraph": "7210-REP-BL",
+        "line": 968
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "RCNTR"
+        ],
+        "targets": [
+          "E1",
+          "KCNTR",
+          "E2"
+        ],
+        "paragraph": "7225-FIND-E",
+        "line": 1000
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "RCNTR"
+        ],
+        "targets": [
+          "K1",
+          "KCNTR",
+          "K2",
+          "CT-K",
+          "DIST-X",
+          "STR-A",
+          "7240-DIST-K",
+          "7240-EXIT",
+          "DIST-X",
+          "STR-A",
+          "STR-A",
+          "DIST-X"
+        ],
+        "paragraph": "7230-COMPUTE",
+        "line": 1006
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "RCNTR"
+        ],
+        "targets": [
+          "R1",
+          "KCNTR",
+          "R2",
+          "CT-R",
+          "DIST-R",
+          "STR-R",
+          "7243-DIST-R",
+          "7243-EXIT",
+          "DIST-R",
+          "STR-R",
+          "STR-R",
+          "DIST-R"
+        ],
+        "paragraph": "7230-COMPUTE",
+        "line": 1014
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "RCNTR"
+        ],
+        "targets": [
+          "B1",
+          "KCNTR",
+          "B2",
+          "DIST-B",
+          "STR-X",
+          "7245-DIST-B",
+          "7245-EXIT",
+          "DIST-B",
+          "STR-X",
+          "STR-X",
+          "DIST-B"
+        ],
+        "paragraph": "7230-COMPUTE",
+        "line": 1022
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "K1",
+          "E1",
+          "K1",
+          "E1",
+          "K1"
+        ],
+        "targets": [
+          "K1"
+        ],
+        "paragraph": "7240-DIST-K",
+        "line": 1032
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "K2",
+          "E2",
+          "K2",
+          "E2",
+          "K2"
+        ],
+        "targets": [
+          "K2"
+        ],
+        "paragraph": "7240-DIST-K",
+        "line": 1036
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DIST-X"
+        ],
+        "targets": [
+          "DKC",
+          "CT-K"
+        ],
+        "paragraph": "7240-DIST-K",
+        "line": 1041
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "R1",
+          "E1",
+          "R1",
+          "E1",
+          "R1"
+        ],
+        "targets": [
+          "R1"
+        ],
+        "paragraph": "7243-DIST-R",
+        "line": 1045
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "R2",
+          "E2",
+          "R2",
+          "E2",
+          "R2"
+        ],
+        "targets": [
+          "R2"
+        ],
+        "paragraph": "7243-DIST-R",
+        "line": 1049
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DIST-R"
+        ],
+        "targets": [
+          "DRC",
+          "CT-R"
+        ],
+        "paragraph": "7243-DIST-R",
+        "line": 1054
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "B1",
+          "E1",
+          "B1",
+          "E1",
+          "B1"
+        ],
+        "targets": [
+          "B1"
+        ],
+        "paragraph": "7245-DIST-B",
+        "line": 1058
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "B2",
+          "E2",
+          "B2",
+          "E2",
+          "B2"
+        ],
+        "targets": [
+          "B2"
+        ],
+        "paragraph": "7245-DIST-B",
+        "line": 1062
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DKC",
+          "RT"
+        ],
+        "targets": [
+          "STR-X",
+          "RX",
+          "RT"
+        ],
+        "paragraph": "7248-EST-K",
+        "line": 1079
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "RT"
+        ],
+        "targets": [
+          "RX"
+        ],
+        "paragraph": "7248-EST-K",
+        "line": 1079
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "DRC",
+          "QT"
+        ],
+        "targets": [
+          "STR-R",
+          "QX",
+          "QT"
+        ],
+        "paragraph": "7249-EST-R",
+        "line": 1085
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "QT"
+        ],
+        "targets": [
+          "QX"
+        ],
+        "paragraph": "7249-EST-R",
+        "line": 1085
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR4"
+        ],
+        "targets": [
+          "VAR5",
+          "VAR5",
+          "UNIT",
+          "HIT",
+          "ROMULON",
+          "ROMULON",
+          "RETURNING",
+          "FIRE",
+          "8400-GENERATE",
+          "8400-EXIT",
+          "NO-WAY",
+          "ENTERPRISE",
+          "DESTROYED",
+          "ROMULON",
+          "TORPEDO",
+          "INDICATE-X",
+          "8200-CK-DONE",
+          "8200-EXIT",
+          "VAR2",
+          "VAR2",
+          "DIST-R",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR2",
+          "DAMAGE-CNT",
+          "VAR3",
+          "VAR2",
+          "VAR3",
+          "VAR3",
+          "SHIELD-CNT",
+          "SHIELD-CNT",
+          "VAR4",
+          "VAR4",
+          "DIST-X"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR4"
+        ],
+        "targets": [
+          "VAR5",
+          "VAR5",
+          "UNIT",
+          "HIT",
+          "ROMULON",
+          "ROMULON",
+          "DESTROYED",
+          "7202-REPLACE",
+          "7202-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "QX",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "ROMULONS",
+          "5400-TRANS-BACK",
+          "5400-EXIT"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR4",
+          "DIST-R"
+        ],
+        "targets": [
+          "VAR4"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2",
+          "DIST-R",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR2",
+          "DAMAGE-CNT",
+          "VAR3",
+          "VAR2",
+          "VAR3",
+          "VAR3",
+          "SHIELD-CNT",
+          "SHIELD-CNT",
+          "VAR4",
+          "VAR4",
+          "DIST-X"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR3",
+          "VAR2",
+          "VAR3",
+          "VAR3",
+          "SHIELD-CNT",
+          "SHIELD-CNT",
+          "VAR4",
+          "VAR4",
+          "DIST-X"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR4"
+        ],
+        "targets": [
+          "FUEL-COUNT",
+          "NO-WAY",
+          "VAR4",
+          "VAR4",
+          "VAR4",
+          "DIST-R"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "SHIELD-CNT",
+          "SHIELD-CNT",
+          "VAR4",
+          "VAR4",
+          "DIST-X"
+        ],
+        "paragraph": "7250-ROMULON-CK",
+        "line": 1091
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SHIELD-CNT"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7300-TOR",
+        "line": 1143
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2",
+          "KLGNS"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7300-TOR",
+        "line": 1146
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "VAR3"
+        ],
+        "paragraph": "7300-TOR",
+        "line": 1148
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "LST-REPLY"
+        ],
+        "paragraph": "7300-TOR",
+        "line": 1149
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2",
+          "DIST-X",
+          "TORPEDO",
+          "MISSED",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR2",
+          "DAMAGE-CNT",
+          "TORPS",
+          "VAR3",
+          "SHIELD-CNT",
+          "8120-DAM-COM",
+          "8120-EXIT",
+          "KLINGON",
+          "DESTROYED",
+          "VAR3",
+          "DAMAGE-CNT",
+          "7201-REPLACE",
+          "7201-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "TORPS",
+          "KLGNS",
+          "KLINGONS",
+          "5400-TRANS-BACK",
+          "5400-EXIT",
+          "KLGNS",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR2",
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "8120-DAM-COM",
+          "8120-EXIT",
+          "8120-DAM-COM",
+          "8120-EXIT",
+          "THERE",
+          "ARE",
+          "KLINGON",
+          "VESSELS",
+          "IN",
+          "THIS",
+          "QUADRANT",
+          "TORPEDOES",
+          "REMAINING",
+          "NAME-X"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7300-TOR",
+        "line": 1156
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "TORPS",
+          "VAR3",
+          "SHIELD-CNT",
+          "8120-DAM-COM",
+          "8120-EXIT",
+          "KLINGON",
+          "DESTROYED",
+          "VAR3",
+          "DAMAGE-CNT",
+          "7201-REPLACE",
+          "7201-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "TORPS",
+          "KLGNS",
+          "KLINGONS",
+          "5400-TRANS-BACK",
+          "5400-EXIT",
+          "KLGNS",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR2",
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT",
+          "8120-DAM-COM",
+          "8120-EXIT",
+          "8120-DAM-COM",
+          "8120-EXIT",
+          "THERE",
+          "ARE",
+          "KLINGON",
+          "VESSELS",
+          "IN",
+          "THIS",
+          "QUADRANT",
+          "TORPEDOES",
+          "REMAINING",
+          "NAME-X"
+        ],
+        "paragraph": "7300-TOR",
+        "line": 1156
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "VAR2",
+          "DIST-R",
+          "4500-DISP-HIT",
+          "4500-EXIT",
+          "VAR2",
+          "DAMAGE-CNT",
+          "VAR3",
+          "VAR2",
+          "VAR3",
+          "SHIELD-CNT",
+          "ROMULON",
+          "DESTROYED",
+          "7202-REPLACE",
+          "7202-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "QX",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "ROMULONS",
+          "5400-TRANS-BACK",
+          "5400-EXIT"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "7350-ROMULON-CK",
+        "line": 1199
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR3",
+          "VAR2",
+          "VAR3",
+          "SHIELD-CNT",
+          "ROMULON",
+          "DESTROYED",
+          "7202-REPLACE",
+          "7202-EXIT",
+          "REP-CTR",
+          "REP-CTR",
+          "QX",
+          "MINI-TABLE",
+          "REPLACING",
+          "FIRST",
+          "MINI-TABLE",
+          "REPLACING",
+          "ALL",
+          "ROMULONS",
+          "5400-TRANS-BACK",
+          "5400-EXIT"
+        ],
+        "paragraph": "7350-ROMULON-CK",
+        "line": 1199
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "DAMAGE-CNT"
+        ],
+        "targets": [
+          "VAR3"
+        ],
+        "paragraph": "7400-STA",
+        "line": 1236
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "VAR6"
+        ],
+        "paragraph": "7400-STA",
+        "line": 1237
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "FUEL-COUNT"
+        ],
+        "targets": [
+          "FUEL-CO"
+        ],
+        "paragraph": "7400-STA",
+        "line": 1238
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SHIELD-CNT"
+        ],
+        "targets": [
+          "SHIELD-CO"
+        ],
+        "paragraph": "7400-STA",
+        "line": 1239
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "SHIELD-CNT"
+        ],
+        "targets": [
+          "FUEL-COUNT"
+        ],
+        "paragraph": "7500-DEF",
+        "line": 1259
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "FUEL-COUNT"
+        ],
+        "targets": [
+          "FUEL-CO",
+          "MAXIMUM",
+          "AMOUNT",
+          "SHIELDS",
+          "FUEL-CO",
+          "HOW",
+          "MANY",
+          "UNITS",
+          "SHIELDS",
+          "7520-ASC",
+          "7520-EXIT",
+          "SHIELD-CNT",
+          "FUEL-COUNT"
+        ],
+        "paragraph": "7500-DEF",
+        "line": 1262
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "SHIELD-CNT"
+        ],
+        "targets": [
+          "FUEL-COUNT",
+          "FUEL-COUNT",
+          "FUEL-CO",
+          "MAXIMUM",
+          "AMOUNT",
+          "SHIELDS",
+          "FUEL-CO",
+          "HOW",
+          "MANY",
+          "UNITS",
+          "SHIELDS",
+          "7520-ASC",
+          "7520-EXIT",
+          "SHIELD-CNT",
+          "FUEL-COUNT"
+        ],
+        "paragraph": "7500-DEF",
+        "line": 1262
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SHIELD-CNT"
+        ],
+        "targets": [
+          "SHIELD-CO"
+        ],
+        "paragraph": "7500-DEF",
+        "line": 1270
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "SHIELD-CNT-AN"
+        ],
+        "paragraph": "7520-ASC",
+        "line": 1275
+      },
+      {
+        "type": "ACCEPT",
+        "sources": [
+          "SYSTEM-INPUT"
+        ],
+        "targets": [
+          "SHIELD-CNT-AN"
+        ],
+        "paragraph": "7520-ASC",
+        "line": 1279
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "SHIELD-CNT-AN"
+        ],
+        "targets": [
+          "SHIELD-CNT"
+        ],
+        "paragraph": "7520-ASC",
+        "line": 1289
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "SHIELD-CNT",
+          "SBL"
+        ],
+        "targets": [
+          "SHIELD-CNT"
+        ],
+        "paragraph": "7520-ASC",
+        "line": 1290
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "Q9"
+        ],
+        "targets": [
+          "W"
+        ],
+        "paragraph": "7650-TRANS-STAR",
+        "line": 1334
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "R9"
+        ],
+        "targets": [
+          "Z"
+        ],
+        "paragraph": "7650-TRANS-STAR",
+        "line": 1335
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "RCTR"
+        ],
+        "targets": [
+          "A"
+        ],
+        "paragraph": "7670-STRANS",
+        "line": 1342
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KCTR"
+        ],
+        "targets": [
+          "B"
+        ],
+        "paragraph": "7670-STRANS",
+        "line": 1343
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "MACOL"
+        ],
+        "targets": [
+          "KOLUMN",
+          "RCTR",
+          "KCTR"
+        ],
+        "paragraph": "7670-STRANS",
+        "line": 1344
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "ZEROS"
+        ],
+        "targets": [
+          "SCAN-KEEP"
+        ],
+        "paragraph": "7700-LRS",
+        "line": 1349
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "Q1",
+          "QT3",
+          "Q1"
+        ],
+        "targets": [
+          "QT1"
+        ],
+        "paragraph": "7700-LRS",
+        "line": 1351
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "Q2",
+          "QT4",
+          "Q2"
+        ],
+        "targets": [
+          "QT2"
+        ],
+        "paragraph": "7700-LRS",
+        "line": 1361
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "TR1"
+        ],
+        "targets": [
+          "QT"
+        ],
+        "paragraph": "7730-TRADE-TBL",
+        "line": 1401
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "TR2"
+        ],
+        "targets": [
+          "RT"
+        ],
+        "paragraph": "7730-TRADE-TBL",
+        "line": 1402
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "QT",
+          "KTCTR"
+        ],
+        "targets": [
+          "QX"
+        ],
+        "paragraph": "7750-TRADE-ACT",
+        "line": 1410
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "RT",
+          "RTCTR"
+        ],
+        "targets": [
+          "RX"
+        ],
+        "paragraph": "7750-TRADE-ACT",
+        "line": 1411
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "KOLUMN",
+          "RX",
+          "QX"
+        ],
+        "targets": [
+          "SCAN-COL",
+          "RTCTR",
+          "KTCTR"
+        ],
+        "paragraph": "7750-TRADE-ACT",
+        "line": 1412
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "DX",
+          "DX-1",
+          "CX",
+          "LATEST",
+          "INTELLIGENCE",
+          "GATHERING",
+          "REPORTS",
+          "INDICATE",
+          "MORE",
+          "KLINGON",
+          "VESSELS",
+          "IN",
+          "THE",
+          "VICINITY",
+          "OF",
+          "QUADRANT",
+          "CX-1",
+          "DX-1",
+          "ENTERPRISE",
+          "IN",
+          "QUADRANT",
+          "Q1",
+          "Q2"
+        ],
+        "targets": [
+          "CX-1"
+        ],
+        "paragraph": "7800-INT",
+        "line": 1423
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "K-OR",
+          "KLINGONS",
+          "KLGNS",
+          "FUEL-COUNT",
+          "8150-TEST-AGN",
+          "8150-EXIT",
+          "VAR3"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "8100-DMG-COM",
+        "line": 1466
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT"
+        ],
+        "paragraph": "8100-DMG-COM",
+        "line": 1466
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "SHIELD-CNT"
+        ],
+        "paragraph": "8100-DMG-COM",
+        "line": 1466
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "ROMULONS",
+          "FUEL-COUNT",
+          "SHIELD-CNT",
+          "8160-TEST-AGN",
+          "8160-EXIT",
+          "VAR3"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "8120-DAM-COM",
+        "line": 1477
+      },
+      {
+        "type": "ADD",
+        "sources": [
+          "VAR2"
+        ],
+        "targets": [
+          "DAMAGE-CNT",
+          "VAR3",
+          "SHIELD-CNT"
+        ],
+        "paragraph": "8120-DAM-COM",
+        "line": 1477
+      },
+      {
+        "type": "SUBTRACT",
+        "sources": [
+          "VAR3"
+        ],
+        "targets": [
+          "SHIELD-CNT"
+        ],
+        "paragraph": "8120-DAM-COM",
+        "line": 1477
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "KLGNS",
+          "VAR2"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "8150-TEST-AGN",
+        "line": 1488
+      },
+      {
+        "type": "COMPUTE",
+        "sources": [
+          "ROMULONS",
+          "VAR2"
+        ],
+        "targets": [
+          "VAR2"
+        ],
+        "paragraph": "8160-TEST-AGN",
+        "line": 1494
+      },
+      {
+        "type": "MOVE",
+        "sources": [
+          "KLINGONS"
+        ],
+        "targets": [
+          "VAE1",
+          "WS-DATE",
+          "DS-DATE",
+          "IT",
+          "IS",
+          "NOW",
+          "STAR",
+          "DATE",
+          "S-DATE",
+          "STAR",
+          "DATE",
+          "DS-DATE",
+          "STAR",
+          "FLEET",
+          "HQ",
+          "WAS",
+          "DESTROYED",
+          "VAE1",
+          "KLINGON",
+          "VESSELS",
+          "NAME-X",
+          "COURT",
+          "MARTIALED",
+          "NAME-X",
+          "COURT",
+          "MARTIALED",
+          "CONGRATULATIONS",
+          "JOB",
+          "WELL",
+          "DONE"
+        ],
+        "paragraph": "8500-FINISH-GAME",
+        "line": 1562
+      }
+    ]
+  }
+}

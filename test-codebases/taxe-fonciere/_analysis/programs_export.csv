@@ -1,0 +1,7 @@
+program,type,code_lines,total_lines,paragraphs,callers,callees,copybooks,readiness_score,isolation,simplicity,dependency_clarity,testability,cyclomatic_complexity,max_nesting,complexity_grade,effort_days,risk_level,migration_wave
+EFITAUX2,Batch,194,340,5,2,0,8,79.5,55,80,100,90,,,,0.5,LOW,Wave 1: Quick Wins
+EFITA3B8,Batch,309,516,0,1,2,8,77.0,70,60,100,80,,,,0.9,LOW,Wave 1: Quick Wins
+EFITA3N8,Batch,388,772,0,1,2,8,77.0,70,60,100,80,,,,1.2,LOW,Wave 1: Quick Wins
+CTXTA3B,Batch,53,79,1,0,9,0,69.8,100,95,0,80,,,,0.5,MEDIUM,Wave 1: Quick Wins
+CTXTA3N,Batch,44,67,1,0,9,0,69.8,100,95,0,80,,,,0.5,MEDIUM,Wave 1: Quick Wins
+FMSTAU2,Batch,403,532,16,2,2,14,45.5,55,60,0,70,,,,2.7,MEDIUM,Wave 2: Core Migration

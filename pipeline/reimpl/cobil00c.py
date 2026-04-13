@@ -227,3 +227,114 @@ def _process_enter(acct_id_input, confirm, acct_repo, xref_repo, tran_repo, comm
     result.screen.errmsg = result.message
     result.commarea = commarea
     return result
+
+
+# ── Differential harness runner adapter ──────────────────────────────────────
+
+_SEED_ACCOUNTS = {
+    10000001: AccountRecord(
+        acct_id=10000001, acct_active_status="Y",
+        acct_curr_bal=Decimal("1500.00"), acct_credit_limit=Decimal("5000.00"),
+    ),
+    10000002: AccountRecord(
+        acct_id=10000002, acct_active_status="Y",
+        acct_curr_bal=Decimal("0.00"), acct_credit_limit=Decimal("3000.00"),
+    ),
+}
+
+_SEED_XREFS = {
+    10000001: CardXrefRecord(
+        xref_card_num="4111111111111111", xref_cust_id=1, xref_acct_id=10000001,
+    ),
+}
+
+_SEED_TRANS: list[TranRecord] = [
+    TranRecord(tran_id="0000000000000001", tran_type_cd="01", tran_cat_cd=1,
+               tran_source="ONLINE", tran_desc="PURCHASE", tran_amt=Decimal("50.00"),
+               tran_card_num="4111111111111111"),
+]
+
+
+def run_vector(inputs: dict) -> dict:
+    """Canonical runner entry point for the differential harness.
+
+    SCENARIO selects a hardcoded test path:
+      PAY_SUCCESS      — valid account, confirm Y → payment created
+      ACCT_NOT_FOUND   — non-existent account → error
+      ZERO_BALANCE     — account with zero balance → nothing to pay
+      EMPTY_ACCT_ID    — empty account ID → error
+      CONFIRM_NO       — confirm N → cleared
+      INVALID_KEY      — PF9 → invalid key error
+    """
+    scenario = inputs.get("SCENARIO", "PAY_SUCCESS")
+
+    import copy
+    acct_repo = AccountRepository(copy.deepcopy(_SEED_ACCOUNTS))
+    xref_repo = XrefRepository(dict(_SEED_XREFS))
+    tran_repo = TranRepository(list(_SEED_TRANS))
+
+    commarea = CarddemoCommarea(
+        cdemo_from_tranid="CM00",
+        cdemo_from_program="COMEN01C",
+        cdemo_user_id="USER0001",
+        cdemo_user_type="U",
+        cdemo_pgm_context=1,
+    )
+
+    if scenario == "PAY_SUCCESS":
+        result = process_bill_pay(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            acct_id_input="10000001", confirm="Y",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+    elif scenario == "ACCT_NOT_FOUND":
+        result = process_bill_pay(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            acct_id_input="99999999", confirm="",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+    elif scenario == "ZERO_BALANCE":
+        result = process_bill_pay(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            acct_id_input="10000002", confirm="",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+    elif scenario == "EMPTY_ACCT_ID":
+        result = process_bill_pay(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            acct_id_input="", confirm="",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+    elif scenario == "CONFIRM_NO":
+        result = process_bill_pay(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            acct_id_input="10000001", confirm="N",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+    elif scenario == "INVALID_KEY":
+        result = process_bill_pay(
+            eibcalen=100, eibaid="PF9", commarea=commarea,
+            acct_id_input="", confirm="",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+    else:
+        result = process_bill_pay(
+            eibcalen=100, eibaid="ENTER", commarea=commarea,
+            acct_id_input="10000001", confirm="Y",
+            acct_repo=acct_repo, xref_repo=xref_repo, tran_repo=tran_repo,
+        )
+
+    tran_id = ""
+    tran_amt = ""
+    if result.tran_record:
+        tran_id = result.tran_record.tran_id
+        tran_amt = f"{result.tran_record.tran_amt:.2f}"
+
+    return {
+        "SUCCESS": "Y" if result.success else "N",
+        "ERROR": "Y" if result.error else "N",
+        "MESSAGE": result.message,
+        "TRAN_ID": tran_id,
+        "TRAN_AMT": tran_amt,
+        "XCTL_PROGRAM": result.xctl_program or "",
+    }

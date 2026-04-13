@@ -67,6 +67,35 @@ KNOWN_CODEBASES = {
             "What are the OM (ordures ménagères) zone rate categories?",
         ],
     },
+    "cbsa": {
+        "dir": str(_test_codebases / "cbsa"),
+        "label": "CBSA — IBM CICS Banking Sample Application (29 programs, 27K LOC)",
+        "questions": [
+            "How does CREACC create a new account and what validations does it apply?",
+            "What is the debit/credit (DBCRFUN) logic and how does it update balances?",
+            "How do the CRDTAGY1-5 credit agency programs work — what do they simulate?",
+            "What is the full call chain for a customer inquiry (INQCUST)?",
+            "How does XFRFUN handle fund transfers between accounts?",
+            "Which copybooks define the core data structures shared across all programs?",
+            "How does DELCUS handle cascading deletion of a customer and their accounts?",
+        ],
+    },
+    "cobolcraft": {
+        "dir": str(_test_codebases / "cobolcraft"),
+        "label": "CobolCraft — Minecraft Server in COBOL (268 files, 30K LOC)",
+        "questions": [
+            "How does the server handle incoming TCP packets and dispatch them to handlers?",
+            "What is the chunk generation and serialization logic in chunk-io.cob?",
+            "How does the NBT encoder/decoder handle nested compound tags?",
+            "What data structures represent player state and inventory?",
+            "How does the crafting system match shaped and shapeless recipes?",
+            "What is the block physics and collision detection logic?",
+            "How does the server handle player login and session authentication?",
+            "What is the world persistence format and how are region files read/written?",
+            "How does the entity tick system work and what entities are supported?",
+            "How does the server broadcast chunk updates to connected clients?",
+        ],
+    },
 }
 
 
@@ -173,6 +202,7 @@ def _print_help():
     print("    /estimate        — migration effort estimation (person-days, waves, risk)")
     print("    /spec-gen [pgm]  — generate behavioral specs (no API keys needed)")
     print("    /skeleton [pgm]  — generate Python module skeletons from COBOL")
+    print("    /java-gen [pgm]  — generate Java Maven modules (DTOs, repos, controllers)")
     print("    /test-gen [pgm]  — generate pytest test stubs for modernized code")
     print("    /xref <field>    — cross-reference a field across all programs")
     print("    /export          — export CSV + JSON (for Excel/JIRA/tooling)")
@@ -194,7 +224,7 @@ from cli_data import (
     cmd_dict, cmd_screens, cmd_jobs, cmd_trace, cmd_xref,
 )
 from cli_generate import (
-    cmd_spec, cmd_rules, cmd_spec_gen, cmd_skeleton, cmd_test_gen,
+    cmd_spec, cmd_rules, cmd_spec_gen, cmd_skeleton, cmd_java_gen, cmd_test_gen,
     cmd_export, cmd_report, cmd_eval, cmd_complexity, cmd_estimate,
 )
 
@@ -271,6 +301,8 @@ def main():
             cmd_test_gen(user_input[len("/test-gen"):].strip(), active, KNOWN_CODEBASES, _get_graph, _suggest_similar)
         elif user_input.startswith("/skeleton"):
             cmd_skeleton(user_input[len("/skeleton"):].strip(), active, KNOWN_CODEBASES, _get_graph, _suggest_similar)
+        elif user_input.startswith("/java-gen"):
+            cmd_java_gen(user_input[len("/java-gen"):].strip(), active, KNOWN_CODEBASES, _get_graph, _suggest_similar)
         elif user_input.startswith("/spec-gen"):
             cmd_spec_gen(user_input[len("/spec-gen"):].strip(), active, KNOWN_CODEBASES, _get_graph, _suggest_similar)
         elif user_input.startswith("/spec"):

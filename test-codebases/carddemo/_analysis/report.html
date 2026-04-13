@@ -1,0 +1,3035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Masquerade Analysis Report - carddemo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.5; }
+  header { background: #161b22; border-bottom: 1px solid #30363d; padding: 20px 32px; }
+  header h1 { font-size: 22px; color: #58a6ff; }
+  header .subtitle { color: #8b949e; font-size: 13px; margin-top: 4px; }
+  nav { background: #161b22; border-bottom: 1px solid #30363d; padding: 0 32px; display: flex; gap: 0; position: sticky; top: 0; z-index: 10; }
+  nav a { color: #8b949e; text-decoration: none; padding: 10px 16px; font-size: 13px; border-bottom: 2px solid transparent; }
+  nav a:hover { color: #c9d1d9; border-bottom-color: #30363d; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 32px; }
+  section { margin-bottom: 40px; }
+  h2 { font-size: 18px; color: #f0883e; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #21262d; }
+  h3 { font-size: 14px; color: #58a6ff; margin: 20px 0 8px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px 20px; }
+  .card-value { font-size: 28px; font-weight: 700; color: #58a6ff; }
+  .card-label { font-size: 13px; color: #8b949e; margin-top: 2px; }
+  .card-detail { font-size: 11px; color: #484f58; margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  thead th { text-align: left; padding: 8px 10px; color: #8b949e; font-weight: 600; border-bottom: 2px solid #30363d; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tbody td { padding: 6px 10px; border-bottom: 1px solid #21262d; }
+  tbody tr:hover { background: #161b22; }
+  .dim { color: #484f58; }
+  .summary-bar { margin-bottom: 16px; font-size: 14px; }
+  p { margin-bottom: 12px; }
+  footer { text-align: center; padding: 24px; color: #484f58; font-size: 11px; border-top: 1px solid #21262d; margin-top: 40px; }
+  @media print {
+    body { background: white; color: #1f2328; }
+    header, nav { background: white; border-color: #d1d9e0; }
+    header h1 { color: #0969da; }
+    .card { border-color: #d1d9e0; }
+    .card-value { color: #0969da; }
+    nav { position: static; }
+    h2 { color: #bf8700; border-color: #d1d9e0; }
+    h3 { color: #0969da; }
+    tbody td { border-color: #d1d9e0; }
+    thead th { border-color: #d1d9e0; }
+    .dim { color: #656d76; }
+    tbody tr:hover { background: transparent; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Masquerade Analysis Report</h1>
+  <div class="subtitle">carddemo &middot; Generated 2026-03-14 22:44</div>
+</header>
+<nav><a href="#summary">Summary</a><a href="#readiness">Readiness</a><a href="#complexity">Complexity</a><a href="#effort">Effort</a><a href="#dead-code">Dead Code</a><a href="#screens">Screens</a><a href="#files">Files</a><a href="#copybooks">Copybooks</a><a href="#hotspots">Hotspots</a><a href="#dataflow">Data Flow</a><a href="#jobs">Jobs</a><a href="#dictionary">Dictionary</a><a href="#unresolved">Unresolved</a></nav>
+<main>
+
+    <section id="summary">
+      <h2>Executive Summary</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-value">60</div>
+          <div class="card-label">Programs</div>
+          <div class="card-detail">21 CICS &middot; 39 Batch</div>
+        </div>
+        <div class="card">
+          <div class="card-value">30,175</div>
+          <div class="card-label">Total Lines</div>
+          <div class="card-detail">22,893 code &middot; 3,906 comments</div>
+        </div>
+        <div class="card">
+          <div class="card-value">68</div>
+          <div class="card-label">Copybooks</div>
+          <div class="card-detail">15 shared across programs</div>
+        </div>
+        <div class="card">
+          <div class="card-value">2146</div>
+          <div class="card-label">Dependencies</div>
+          <div class="card-detail">946 PERFORMS &middot; 613 DATA_PASSES &middot; 348 COPIES &middot; 91 CICS_IO</div>
+        </div>
+        <div class="card">
+          <div class="card-value">3</div>
+          <div class="card-label">Components</div>
+          <div class="card-detail">Largest: 57 programs</div>
+        </div>
+        <div class="card">
+          <div class="card-value">871</div>
+          <div class="card-label">Paragraphs</div>
+          <div class="card-detail">106 potentially dead</div>
+        </div>
+      </div>
+    </section>
+    <section id="readiness">
+      <h2>Reimplementation Readiness</h2>
+      <div class="summary-bar">
+        <span style="color:#3fb950">12 Good</span> &middot;
+        <span style="color:#d29922">27 Moderate</span> &middot;
+        <span style="color:#f85149">5 Complex</span> &middot;
+        44 total programs
+      </div>
+      <table>
+        <thead><tr>
+          <th>Program</th><th>Score</th><th></th><th>Iso</th><th>Sim</th><th>Dep</th><th>Test</th><th>LOC</th><th>Type</th><th>Grade</th>
+        </tr></thead>
+        <tbody><tr>
+          <td><strong>COBTUPDT</strong></td>
+          <td style="color:#3fb950;font-weight:600">95</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:95.0%;height:100%"></div></div></td>
+          <td>100</td>
+          <td>80</td>
+          <td>100</td>
+          <td>100</td>
+          <td>177</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CBSTM03B</strong></td>
+          <td style="color:#3fb950;font-weight:600">90</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:90.5%;height:100%"></div></div></td>
+          <td>85</td>
+          <td>80</td>
+          <td>100</td>
+          <td>100</td>
+          <td>162</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>COBSWAIT</strong></td>
+          <td style="color:#3fb950;font-weight:600">90</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:89.8%;height:100%"></div></div></td>
+          <td>100</td>
+          <td>95</td>
+          <td>80</td>
+          <td>80</td>
+          <td>13</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CBPAUP0C</strong></td>
+          <td style="color:#3fb950;font-weight:600">84</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:84.5%;height:100%"></div></div></td>
+          <td>65</td>
+          <td>80</td>
+          <td>100</td>
+          <td>100</td>
+          <td>266</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>COPAUS2C</strong></td>
+          <td style="color:#3fb950;font-weight:600">84</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:84.5%;height:100%"></div></div></td>
+          <td>65</td>
+          <td>80</td>
+          <td>100</td>
+          <td>100</td>
+          <td>201</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CSUTLDTC</strong></td>
+          <td style="color:#3fb950;font-weight:600">84</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:84.0%;height:100%"></div></div></td>
+          <td>70</td>
+          <td>80</td>
+          <td>100</td>
+          <td>90</td>
+          <td>114</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>DBUNLDGS</strong></td>
+          <td style="color:#3fb950;font-weight:600">76</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:75.5%;height:100%"></div></div></td>
+          <td>65</td>
+          <td>80</td>
+          <td>80</td>
+          <td>80</td>
+          <td>198</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>PAUDBLOD</strong></td>
+          <td style="color:#3fb950;font-weight:600">76</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:75.5%;height:100%"></div></div></td>
+          <td>65</td>
+          <td>80</td>
+          <td>80</td>
+          <td>80</td>
+          <td>251</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>PAUDBUNL</strong></td>
+          <td style="color:#3fb950;font-weight:600">76</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:75.5%;height:100%"></div></div></td>
+          <td>65</td>
+          <td>80</td>
+          <td>80</td>
+          <td>80</td>
+          <td>207</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CBACT02C</strong></td>
+          <td style="color:#3fb950;font-weight:600">74</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:74.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>80</td>
+          <td>80</td>
+          <td>80</td>
+          <td>129</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CBACT03C</strong></td>
+          <td style="color:#3fb950;font-weight:600">74</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:74.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>80</td>
+          <td>80</td>
+          <td>80</td>
+          <td>130</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CBCUS01C</strong></td>
+          <td style="color:#3fb950;font-weight:600">74</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:74.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>80</td>
+          <td>80</td>
+          <td>80</td>
+          <td>130</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#3fb950">GOOD</td>
+        </tr><tr>
+          <td><strong>CBEXPORT</strong></td>
+          <td style="color:#d29922;font-weight:600">69</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:69.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>80</td>
+          <td>80</td>
+          <td>396</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBIMPORT</strong></td>
+          <td style="color:#d29922;font-weight:600">69</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:69.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>80</td>
+          <td>80</td>
+          <td>337</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBTRN01C</strong></td>
+          <td style="color:#d29922;font-weight:600">69</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:69.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>80</td>
+          <td>80</td>
+          <td>415</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COSGN00C</strong></td>
+          <td style="color:#d29922;font-weight:600">64</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:64.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>70</td>
+          <td>70</td>
+          <td>172</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBACT01C</strong></td>
+          <td style="color:#d29922;font-weight:600">64</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:64.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>60</td>
+          <td>80</td>
+          <td>358</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBACT04C</strong></td>
+          <td style="color:#d29922;font-weight:600">64</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:64.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>80</td>
+          <td>80</td>
+          <td>552</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBSTM03A</strong></td>
+          <td style="color:#d29922;font-weight:600">64</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:64.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>80</td>
+          <td>80</td>
+          <td>773</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBTRN02C</strong></td>
+          <td style="color:#d29922;font-weight:600">64</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:64.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>80</td>
+          <td>80</td>
+          <td>619</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CBTRN03C</strong></td>
+          <td style="color:#d29922;font-weight:600">64</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:64.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>80</td>
+          <td>80</td>
+          <td>545</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COTRN01C</strong></td>
+          <td style="color:#d29922;font-weight:600">60</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:59.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>50</td>
+          <td>70</td>
+          <td>231</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COUSR01C</strong></td>
+          <td style="color:#d29922;font-weight:600">60</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:59.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>50</td>
+          <td>70</td>
+          <td>198</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COUSR03C</strong></td>
+          <td style="color:#d29922;font-weight:600">60</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:59.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>60</td>
+          <td>50</td>
+          <td>70</td>
+          <td>251</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CODATE01</strong></td>
+          <td style="color:#d29922;font-weight:600">58</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:57.99999999999999%;height:100%"></div></div></td>
+          <td>90</td>
+          <td>60</td>
+          <td>0</td>
+          <td>80</td>
+          <td>409</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COBIL00C</strong></td>
+          <td style="color:#d29922;font-weight:600">54</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:54.50000000000001%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>50</td>
+          <td>70</td>
+          <td>420</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>CORPT00C</strong></td>
+          <td style="color:#d29922;font-weight:600">54</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:54.50000000000001%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>50</td>
+          <td>70</td>
+          <td>498</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COUSR02C</strong></td>
+          <td style="color:#d29922;font-weight:600">54</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:54.50000000000001%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>50</td>
+          <td>70</td>
+          <td>303</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COTRTUPC</strong></td>
+          <td style="color:#d29922;font-weight:600">52</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:51.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>80</td>
+          <td>1241</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COADM01C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:50.0%;height:100%"></div></div></td>
+          <td>45</td>
+          <td>60</td>
+          <td>30</td>
+          <td>70</td>
+          <td>189</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COMEN01C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:50.0%;height:100%"></div></div></td>
+          <td>45</td>
+          <td>60</td>
+          <td>30</td>
+          <td>70</td>
+          <td>213</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COACTVWC</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>70</td>
+          <td>703</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COCRDSLC</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>70</td>
+          <td>642</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COPAUS0C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>70</td>
+          <td>792</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COPAUS1C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>30</td>
+          <td>70</td>
+          <td>461</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COTRN00C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>70</td>
+          <td>529</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COTRN02C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>70</td>
+          <td>614</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COUSR00C</strong></td>
+          <td style="color:#d29922;font-weight:600">50</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:49.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>50</td>
+          <td>70</td>
+          <td>531</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COTRTLIC</strong></td>
+          <td style="color:#d29922;font-weight:600">46</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:46.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>30</td>
+          <td>80</td>
+          <td>1597</td>
+          <td><span style="color:#3fb950">Batch</span></td>
+          <td style="color:#d29922">MODERATE</td>
+        </tr><tr>
+          <td><strong>COACTUPC</strong></td>
+          <td style="color:#f85149;font-weight:600">44</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:44.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>0</td>
+          <td>50</td>
+          <td>70</td>
+          <td>3368</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#f85149">COMPLEX</td>
+        </tr><tr>
+          <td><strong>COCRDUPC</strong></td>
+          <td style="color:#f85149;font-weight:600">44</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:44.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>0</td>
+          <td>50</td>
+          <td>70</td>
+          <td>1194</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#f85149">COMPLEX</td>
+        </tr><tr>
+          <td><strong>COACCT01</strong></td>
+          <td style="color:#f85149;font-weight:600">42</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:42.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>40</td>
+          <td>0</td>
+          <td>70</td>
+          <td>500</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#f85149">COMPLEX</td>
+        </tr><tr>
+          <td><strong>COCRDLIC</strong></td>
+          <td style="color:#f85149;font-weight:600">40</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:39.5%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>0</td>
+          <td>30</td>
+          <td>70</td>
+          <td>1093</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#f85149">COMPLEX</td>
+        </tr><tr>
+          <td><strong>COPAUA0C</strong></td>
+          <td style="color:#f85149;font-weight:600">37</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:37.0%;height:100%"></div></div></td>
+          <td>60</td>
+          <td>20</td>
+          <td>0</td>
+          <td>70</td>
+          <td>771</td>
+          <td><span style="color:#58a6ff">CICS</span></td>
+          <td style="color:#f85149">COMPLEX</td>
+        </tr></tbody>
+      </table>
+    </section>
+        <section id="complexity">
+          <h2>Cyclomatic Complexity</h2>
+          <div class="grid-3">
+            <div class="card"><div class="card-value">38.8</div><div class="card-label">Average Complexity</div><div class="card-detail">1709 total across 44 programs</div></div>
+            <div class="card"><div class="card-value" style="color:#3fb950">7</div><div class="card-label">Low Complexity</div></div>
+            <div class="card"><div class="card-value" style="color:#f85149">19</div><div class="card-label">High/Very High</div><div class="card-detail">18 moderate</div></div>
+          </div>
+          <table><thead><tr><th>Program</th><th>CC</th><th></th><th>Nest</th><th>Decisions</th><th>Paras</th><th>Grade</th></tr></thead>
+          <tbody><tr>
+              <td><strong>COACTUPC</strong></td>
+              <td>293</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+              <td>63</td>
+              <td>292</td>
+              <td>85</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>COCRDUPC</strong></td>
+              <td>133</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:45.39249146757679%;height:100%"></div></div></td>
+              <td>27</td>
+              <td>132</td>
+              <td>45</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>COCRDLIC</strong></td>
+              <td>104</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:35.49488054607509%;height:100%"></div></div></td>
+              <td>31</td>
+              <td>103</td>
+              <td>39</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>COUSR00C</strong></td>
+              <td>80</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:27.303754266211605%;height:100%"></div></div></td>
+              <td>38</td>
+              <td>79</td>
+              <td>17</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>COTRN00C</strong></td>
+              <td>79</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:26.96245733788396%;height:100%"></div></div></td>
+              <td>39</td>
+              <td>78</td>
+              <td>17</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>COTRN02C</strong></td>
+              <td>78</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:26.621160409556317%;height:100%"></div></div></td>
+              <td>61</td>
+              <td>77</td>
+              <td>20</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>COPAUS0C</strong></td>
+              <td>73</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:24.914675767918087%;height:100%"></div></div></td>
+              <td>45</td>
+              <td>72</td>
+              <td>21</td>
+              <td style="color:#f85149;font-weight:600">VERY HIGH</td>
+            </tr><tr>
+              <td><strong>CBTRN02C</strong></td>
+              <td>55</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:18.771331058020476%;height:100%"></div></div></td>
+              <td>61</td>
+              <td>54</td>
+              <td>29</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COCRDSLC</strong></td>
+              <td>50</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:17.064846416382252%;height:100%"></div></div></td>
+              <td>21</td>
+              <td>49</td>
+              <td>34</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COPAUA0C</strong></td>
+              <td>48</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:16.38225255972696%;height:100%"></div></div></td>
+              <td>36</td>
+              <td>47</td>
+              <td>42</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>CBTRN03C</strong></td>
+              <td>48</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:16.38225255972696%;height:100%"></div></div></td>
+              <td>73</td>
+              <td>47</td>
+              <td>27</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>CBACT04C</strong></td>
+              <td>47</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:16.040955631399317%;height:100%"></div></div></td>
+              <td>56</td>
+              <td>46</td>
+              <td>25</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COACTVWC</strong></td>
+              <td>45</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:15.358361774744028%;height:100%"></div></div></td>
+              <td>20</td>
+              <td>44</td>
+              <td>34</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COBIL00C</strong></td>
+              <td>43</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:14.675767918088736%;height:100%"></div></div></td>
+              <td>38</td>
+              <td>42</td>
+              <td>18</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>CORPT00C</strong></td>
+              <td>41</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:13.993174061433447%;height:100%"></div></div></td>
+              <td>34</td>
+              <td>40</td>
+              <td>12</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COPAUS1C</strong></td>
+              <td>40</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:13.651877133105803%;height:100%"></div></div></td>
+              <td>35</td>
+              <td>39</td>
+              <td>15</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>CBTRN01C</strong></td>
+              <td>38</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:12.969283276450511%;height:100%"></div></div></td>
+              <td>42</td>
+              <td>37</td>
+              <td>20</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COUSR02C</strong></td>
+              <td>34</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:11.604095563139932%;height:100%"></div></div></td>
+              <td>31</td>
+              <td>33</td>
+              <td>13</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>CBSTM03A</strong></td>
+              <td>32</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:10.921501706484642%;height:100%"></div></div></td>
+              <td>27</td>
+              <td>31</td>
+              <td>28</td>
+              <td style="color:#f85149;font-weight:600">HIGH</td>
+            </tr><tr>
+              <td><strong>COMEN01C</strong></td>
+              <td>27</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:9.215017064846416%;height:100%"></div></div></td>
+              <td>13</td>
+              <td>26</td>
+              <td>8</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBPAUP0C</strong></td>
+              <td>25</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:8.532423208191126%;height:100%"></div></div></td>
+              <td>16</td>
+              <td>24</td>
+              <td>18</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>COUSR03C</strong></td>
+              <td>25</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:8.532423208191126%;height:100%"></div></div></td>
+              <td>26</td>
+              <td>24</td>
+              <td>13</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBACT01C</strong></td>
+              <td>23</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:7.849829351535837%;height:100%"></div></div></td>
+              <td>35</td>
+              <td>22</td>
+              <td>19</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>COADM01C</strong></td>
+              <td>22</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:7.508532423208192%;height:100%"></div></div></td>
+              <td>12</td>
+              <td>21</td>
+              <td>9</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBIMPORT</strong></td>
+              <td>21</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:7.167235494880546%;height:100%"></div></div></td>
+              <td>29</td>
+              <td>20</td>
+              <td>19</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>COBTUPDT</strong></td>
+              <td>20</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:6.825938566552901%;height:100%"></div></div></td>
+              <td>14</td>
+              <td>19</td>
+              <td>1</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>COUSR01C</strong></td>
+              <td>19</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:6.484641638225256%;height:100%"></div></div></td>
+              <td>20</td>
+              <td>18</td>
+              <td>11</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>PAUDBLOD</strong></td>
+              <td>18</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:6.143344709897611%;height:100%"></div></div></td>
+              <td>14</td>
+              <td>17</td>
+              <td>1</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBSTM03B</strong></td>
+              <td>18</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:6.143344709897611%;height:100%"></div></div></td>
+              <td>6</td>
+              <td>17</td>
+              <td>14</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>COTRN01C</strong></td>
+              <td>18</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:6.143344709897611%;height:100%"></div></div></td>
+              <td>17</td>
+              <td>17</td>
+              <td>11</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBEXPORT</strong></td>
+              <td>17</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:5.802047781569966%;height:100%"></div></div></td>
+              <td>41</td>
+              <td>16</td>
+              <td>27</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>COSGN00C</strong></td>
+              <td>14</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:4.778156996587031%;height:100%"></div></div></td>
+              <td>12</td>
+              <td>13</td>
+              <td>7</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>PAUDBUNL</strong></td>
+              <td>12</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:4.09556313993174%;height:100%"></div></div></td>
+              <td>10</td>
+              <td>11</td>
+              <td>1</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBACT02C</strong></td>
+              <td>12</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:4.09556313993174%;height:100%"></div></div></td>
+              <td>10</td>
+              <td>11</td>
+              <td>6</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBACT03C</strong></td>
+              <td>12</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:4.09556313993174%;height:100%"></div></div></td>
+              <td>10</td>
+              <td>11</td>
+              <td>6</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CBCUS01C</strong></td>
+              <td>12</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:4.09556313993174%;height:100%"></div></div></td>
+              <td>10</td>
+              <td>11</td>
+              <td>6</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>CSUTLDTC</strong></td>
+              <td>11</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#d29922;border-radius:3px;width:3.754266211604096%;height:100%"></div></div></td>
+              <td>2</td>
+              <td>10</td>
+              <td>2</td>
+              <td style="color:#d29922;font-weight:600">MODERATE</td>
+            </tr><tr>
+              <td><strong>DBUNLDGS</strong></td>
+              <td>10</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:3.4129692832764507%;height:100%"></div></div></td>
+              <td>12</td>
+              <td>9</td>
+              <td>1</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr><tr>
+              <td><strong>COPAUS2C</strong></td>
+              <td>4</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:1.3651877133105803%;height:100%"></div></div></td>
+              <td>3</td>
+              <td>3</td>
+              <td>2</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr><tr>
+              <td><strong>COACCT01</strong></td>
+              <td>4</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:1.3651877133105803%;height:100%"></div></div></td>
+              <td>5</td>
+              <td>3</td>
+              <td>1</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr><tr>
+              <td><strong>COTRTLIC</strong></td>
+              <td>1</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:0.3412969283276451%;height:100%"></div></div></td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr><tr>
+              <td><strong>00220000</strong></td>
+              <td>1</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:0.3412969283276451%;height:100%"></div></div></td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr><tr>
+              <td><strong>CODATE01</strong></td>
+              <td>1</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:0.3412969283276451%;height:100%"></div></div></td>
+              <td>2</td>
+              <td>0</td>
+              <td>1</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr><tr>
+              <td><strong>COBSWAIT</strong></td>
+              <td>1</td>
+              <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#3fb950;border-radius:3px;width:0.3412969283276451%;height:100%"></div></div></td>
+              <td>0</td>
+              <td>0</td>
+              <td>1</td>
+              <td style="color:#3fb950;font-weight:600">LOW</td>
+            </tr></tbody></table>
+        </section>
+    <section id="effort">
+      <h2>Migration Effort Estimate</h2>
+      <div class="grid-3">
+        <div class="card"><div class="card-value">213</div><div class="card-label">Person-Days Total</div><div class="card-detail">42.5 weeks / 9.7 months</div></div>
+        <div class="card"><div class="card-value">46 / 167</div><div class="card-label">Batch / CICS Days</div></div>
+        <div class="card"><div class="card-value" style="color:#3fb950">12</div><div class="card-label">Quick Wins</div><div class="card-detail">12 low risk, 1 high risk</div></div>
+      </div>
+      <p class="dim">Covers analysis + design + coding + unit testing. Does not include integration testing, UAT, data migration, or deployment.</p>
+      <h3>Migration Waves</h3>
+      <table><thead><tr><th>Wave</th><th>Programs</th><th>Days</th><th>Programs</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Wave 1: Quick Wins</strong></td>
+          <td>21</td>
+          <td>24</td>
+          <td class="dim">COBTUPDT, CBSTM03B, COBSWAIT, COPAUS2C, CSUTLDTC, DBUNLDGS, PAUDBUNL, CBACT02C +13</td>
+        </tr><tr>
+          <td><strong>Wave 2: Core Migration</strong></td>
+          <td>20</td>
+          <td>111</td>
+          <td class="dim">COUSR01C, COTRN01C, COUSR03C, COADM01C, CODATE01, COMEN01C, COUSR02C, COBIL00C +12</td>
+        </tr><tr>
+          <td><strong>Wave 3: Complex Programs</strong></td>
+          <td>3</td>
+          <td>77</td>
+          <td class="dim">COCRDUPC, COCRDLIC, COACTUPC</td>
+        </tr></tbody></table>
+      <h3>Per-Program Breakdown</h3>
+      <table><thead><tr><th>Program</th><th>LOC</th><th>Type</th><th>Ready</th><th>Days</th><th>Risk</th><th>Notes</th></tr></thead>
+      <tbody><tr>
+          <td><strong>COACTUPC</strong></td>
+          <td>3368</td>
+          <td>CICS Online</td>
+          <td>44</td>
+          <td><strong>44.5</strong></td>
+          <td style="color:#f85149;font-weight:600">HIGH</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COCRDLIC</strong></td>
+          <td>1093</td>
+          <td>CICS Online</td>
+          <td>40</td>
+          <td><strong>17.1</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COCRDUPC</strong></td>
+          <td>1194</td>
+          <td>CICS Online</td>
+          <td>44</td>
+          <td><strong>15.8</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COTRTLIC</strong></td>
+          <td>1597</td>
+          <td>Batch</td>
+          <td>46</td>
+          <td><strong>12.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COPAUA0C</strong></td>
+          <td>771</td>
+          <td>CICS Online</td>
+          <td>37</td>
+          <td><strong>10.0</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COPAUS0C</strong></td>
+          <td>792</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>8.7</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COTRTUPC</strong></td>
+          <td>1241</td>
+          <td>Batch</td>
+          <td>52</td>
+          <td><strong>8.2</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COACTVWC</strong></td>
+          <td>703</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>7.7</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COCRDSLC</strong></td>
+          <td>642</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>7.1</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COTRN02C</strong></td>
+          <td>614</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>6.8</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COACCT01</strong></td>
+          <td>500</td>
+          <td>CICS Online</td>
+          <td>42</td>
+          <td><strong>6.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COPAUS1C</strong></td>
+          <td>461</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>6.0</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COTRN00C</strong></td>
+          <td>529</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>5.8</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COUSR00C</strong></td>
+          <td>531</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>5.8</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>CORPT00C</strong></td>
+          <td>498</td>
+          <td>CICS Online</td>
+          <td>54</td>
+          <td><strong>5.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COBIL00C</strong></td>
+          <td>420</td>
+          <td>CICS Online</td>
+          <td>54</td>
+          <td><strong>4.6</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>CBSTM03A</strong></td>
+          <td>773</td>
+          <td>Batch</td>
+          <td>64</td>
+          <td><strong>3.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>CBTRN02C</strong></td>
+          <td>619</td>
+          <td>Batch</td>
+          <td>64</td>
+          <td><strong>2.8</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>COUSR02C</strong></td>
+          <td>303</td>
+          <td>CICS Online</td>
+          <td>54</td>
+          <td><strong>2.7</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>CBACT04C</strong></td>
+          <td>552</td>
+          <td>Batch</td>
+          <td>64</td>
+          <td><strong>2.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>CBTRN03C</strong></td>
+          <td>545</td>
+          <td>Batch</td>
+          <td>64</td>
+          <td><strong>2.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>COMEN01C</strong></td>
+          <td>213</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>2.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">moderate coupling (+15%), unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>CODATE01</strong></td>
+          <td>409</td>
+          <td>Batch</td>
+          <td>58</td>
+          <td><strong>2.4</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COADM01C</strong></td>
+          <td>189</td>
+          <td>CICS Online</td>
+          <td>50</td>
+          <td><strong>2.3</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">moderate coupling (+15%), unresolved dependencies (+30%)</td>
+        </tr><tr>
+          <td><strong>COUSR03C</strong></td>
+          <td>251</td>
+          <td>CICS Online</td>
+          <td>60</td>
+          <td><strong>2.2</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COTRN01C</strong></td>
+          <td>231</td>
+          <td>CICS Online</td>
+          <td>60</td>
+          <td><strong>2.0</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>CBTRN01C</strong></td>
+          <td>415</td>
+          <td>Batch</td>
+          <td>69</td>
+          <td><strong>1.9</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>COUSR01C</strong></td>
+          <td>198</td>
+          <td>CICS Online</td>
+          <td>60</td>
+          <td><strong>1.7</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>COSGN00C</strong></td>
+          <td>172</td>
+          <td>CICS Online</td>
+          <td>64</td>
+          <td><strong>1.5</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>CBEXPORT</strong></td>
+          <td>396</td>
+          <td>Batch</td>
+          <td>69</td>
+          <td><strong>1.2</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>CBACT01C</strong></td>
+          <td>358</td>
+          <td>Batch</td>
+          <td>64</td>
+          <td><strong>1.2</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim">some unclear deps (+10%)</td>
+        </tr><tr>
+          <td><strong>CBIMPORT</strong></td>
+          <td>337</td>
+          <td>Batch</td>
+          <td>69</td>
+          <td><strong>1.0</strong></td>
+          <td style="color:#d29922;font-weight:600">MEDIUM</td>
+          <td class="dim"></td>
+        </tr><tr>
+          <td><strong>CBPAUP0C</strong></td>
+          <td>266</td>
+          <td>Batch</td>
+          <td>84</td>
+          <td><strong>0.6</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>PAUDBLOD</strong></td>
+          <td>251</td>
+          <td>Batch</td>
+          <td>76</td>
+          <td><strong>0.6</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>COBTUPDT</strong></td>
+          <td>177</td>
+          <td>Batch</td>
+          <td>95</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>CBSTM03B</strong></td>
+          <td>162</td>
+          <td>Batch</td>
+          <td>90</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>COBSWAIT</strong></td>
+          <td>13</td>
+          <td>Batch</td>
+          <td>90</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>COPAUS2C</strong></td>
+          <td>201</td>
+          <td>Batch</td>
+          <td>84</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>CSUTLDTC</strong></td>
+          <td>114</td>
+          <td>Batch</td>
+          <td>84</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>DBUNLDGS</strong></td>
+          <td>198</td>
+          <td>Batch</td>
+          <td>76</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>PAUDBUNL</strong></td>
+          <td>207</td>
+          <td>Batch</td>
+          <td>76</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>CBACT02C</strong></td>
+          <td>129</td>
+          <td>Batch</td>
+          <td>74</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>CBACT03C</strong></td>
+          <td>130</td>
+          <td>Batch</td>
+          <td>74</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr><tr>
+          <td><strong>CBCUS01C</strong></td>
+          <td>130</td>
+          <td>Batch</td>
+          <td>74</td>
+          <td><strong>0.5</strong></td>
+          <td style="color:#3fb950;font-weight:600">LOW</td>
+          <td class="dim">simple structure (-20%)</td>
+        </tr></tbody></table>
+    </section>
+    <section id="dead-code">
+      <h2>Dead Code Analysis</h2>
+      <div class="grid-3">
+        <div class="card"><div class="card-value" style="color:#f85149">106</div><div class="card-label">Unreachable Paragraphs</div><div class="card-detail">12.2% of 870</div></div>
+        <div class="card"><div class="card-value">40</div><div class="card-label">Orphan Programs</div><div class="card-detail">No callers found</div></div>
+        <div class="card"><div class="card-value">0</div><div class="card-label">Unused Copybooks</div><div class="card-detail">Not COPY'd by any program</div></div>
+      </div>
+      <h3>Unreachable Paragraphs by Program</h3><table><thead><tr><th>Program</th><th>Count</th><th>Paragraphs</th></tr></thead><tbody><tr>
+          <td><strong>CBTRN02C</strong></td>
+          <td>26</td>
+          <td class="dim">0000-DALYTRAN-OPEN, 0100-TRANFILE-OPEN, 0200-XREFFILE-OPEN, 0300-DALYREJS-OPEN, 0400-ACCTFILE-OPEN, 0500-TCATBALF-OPEN, 1000-DALYTRAN-GET-NEXT, 1500-A-LOOKUP-XREF +18 more</td>
+        </tr><tr>
+          <td><strong>CBTRN03C</strong></td>
+          <td>26</td>
+          <td class="dim">0000-TRANFILE-OPEN, 0100-REPTFILE-OPEN, 0200-CARDXREF-OPEN, 0300-TRANTYPE-OPEN, 0400-TRANCATG-OPEN, 0500-DATEPARM-OPEN, 0550-DATEPARM-READ, 1000-TRANFILE-GET-NEXT +18 more</td>
+        </tr><tr>
+          <td><strong>CBACT04C</strong></td>
+          <td>22</td>
+          <td class="dim">0000-TCATBALF-OPEN, 0100-XREFFILE-OPEN, 0200-DISCGRP-OPEN, 0300-ACCTFILE-OPEN, 0400-TRANFILE-OPEN, 1000-TCATBALF-GET-NEXT, 1050-UPDATE-ACCOUNT, 1100-GET-ACCT-DATA +14 more</td>
+        </tr><tr>
+          <td><strong>CBACT01C</strong></td>
+          <td>16</td>
+          <td class="dim">0000-ACCTFILE-OPEN, 1000-ACCTFILE-GET-NEXT, 1100-DISPLAY-ACCT-RECORD, 1300-POPUL-ACCT-RECORD, 1350-WRITE-ACCT-RECORD, 1400-POPUL-ARRAY-RECORD, 1450-WRITE-ARRY-RECORD, 1500-POPUL-VBRC-RECORD +8 more</td>
+        </tr><tr>
+          <td><strong>CBACT02C</strong></td>
+          <td>5</td>
+          <td class="dim">0000-CARDFILE-OPEN, 1000-CARDFILE-GET-NEXT, 9000-CARDFILE-CLOSE, 9910-DISPLAY-IO-STATUS, 9999-ABEND-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBACT03C</strong></td>
+          <td>5</td>
+          <td class="dim">0000-XREFFILE-OPEN, 1000-XREFFILE-GET-NEXT, 9000-XREFFILE-CLOSE, 9910-DISPLAY-IO-STATUS, 9999-ABEND-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBCUS01C</strong></td>
+          <td>5</td>
+          <td class="dim">0000-CUSTFILE-OPEN, 1000-CUSTFILE-GET-NEXT, 9000-CUSTFILE-CLOSE, Z-ABEND-PROGRAM, Z-DISPLAY-IO-STATUS</td>
+        </tr><tr>
+          <td><strong>CSUTLDTC</strong></td>
+          <td>1</td>
+          <td class="dim">A000-MAIN</td>
+        </tr></tbody></table>
+      <h3>Orphan Programs (no callers)</h3><p class='dim'>May be JCL/CICS entry points or truly unused.</p><table><thead><tr><th>Program</th><th>LOC</th><th>Type</th><th>Callees</th></tr></thead><tbody><tr>
+          <td><strong>COACTUPC</strong></td>
+          <td>3368</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COTRTLIC</strong></td>
+          <td>1597</td>
+          <td>Batch</td>
+          <td class="dim">CDEMO-TO-PROGRAM, LIT-ADDTPGM</td>
+        </tr><tr>
+          <td><strong>COTRTUPC</strong></td>
+          <td>1241</td>
+          <td>Batch</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COCRDUPC</strong></td>
+          <td>1194</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COCRDLIC</strong></td>
+          <td>1093</td>
+          <td>CICS</td>
+          <td class="dim">LIT-MENUPGM, CCARD-NEXT-PROG</td>
+        </tr><tr>
+          <td><strong>COPAUS0C</strong></td>
+          <td>792</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBSTM03A</strong></td>
+          <td>773</td>
+          <td>Batch</td>
+          <td class="dim">CBSTM03B, CEE3ABD</td>
+        </tr><tr>
+          <td><strong>COPAUA0C</strong></td>
+          <td>771</td>
+          <td>CICS</td>
+          <td class="dim">MQOPEN, MQGET, MQPUT1</td>
+        </tr><tr>
+          <td><strong>COACTVWC</strong></td>
+          <td>703</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COCRDSLC</strong></td>
+          <td>642</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBTRN02C</strong></td>
+          <td>619</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>COTRN02C</strong></td>
+          <td>614</td>
+          <td>CICS</td>
+          <td class="dim">CSUTLDTC, CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBACT04C</strong></td>
+          <td>552</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>CBTRN03C</strong></td>
+          <td>545</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>COUSR00C</strong></td>
+          <td>531</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COTRN00C</strong></td>
+          <td>529</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COACCT01</strong></td>
+          <td>500</td>
+          <td>CICS</td>
+          <td class="dim">MQOPEN, MQGET, MQPUT</td>
+        </tr><tr>
+          <td><strong>CORPT00C</strong></td>
+          <td>498</td>
+          <td>CICS</td>
+          <td class="dim">CSUTLDTC, CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COPAUS1C</strong></td>
+          <td>461</td>
+          <td>CICS</td>
+          <td class="dim">WS-PGM-AUTH-FRAUD, CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>COBIL00C</strong></td>
+          <td>420</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBTRN01C</strong></td>
+          <td>415</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>CODATE01</strong></td>
+          <td>409</td>
+          <td>Batch</td>
+          <td class="dim">MQOPEN, MQGET, MQPUT</td>
+        </tr><tr>
+          <td><strong>CBEXPORT</strong></td>
+          <td>396</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>CBACT01C</strong></td>
+          <td>358</td>
+          <td>Batch</td>
+          <td class="dim">COBDATFT, CEE3ABD</td>
+        </tr><tr>
+          <td><strong>CBIMPORT</strong></td>
+          <td>337</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>COUSR02C</strong></td>
+          <td>303</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>CBPAUP0C</strong></td>
+          <td>266</td>
+          <td>Batch</td>
+          <td class="dim">(leaf)</td>
+        </tr><tr>
+          <td><strong>COUSR03C</strong></td>
+          <td>251</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>PAUDBLOD</strong></td>
+          <td>251</td>
+          <td>Batch</td>
+          <td class="dim">CBLTDLI</td>
+        </tr><tr>
+          <td><strong>COTRN01C</strong></td>
+          <td>231</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>PAUDBUNL</strong></td>
+          <td>207</td>
+          <td>Batch</td>
+          <td class="dim">CBLTDLI</td>
+        </tr><tr>
+          <td><strong>COPAUS2C</strong></td>
+          <td>201</td>
+          <td>Batch</td>
+          <td class="dim">(leaf)</td>
+        </tr><tr>
+          <td><strong>COUSR01C</strong></td>
+          <td>198</td>
+          <td>CICS</td>
+          <td class="dim">CDEMO-TO-PROGRAM</td>
+        </tr><tr>
+          <td><strong>DBUNLDGS</strong></td>
+          <td>198</td>
+          <td>Batch</td>
+          <td class="dim">CBLTDLI</td>
+        </tr><tr>
+          <td><strong>COBTUPDT</strong></td>
+          <td>177</td>
+          <td>Batch</td>
+          <td class="dim">(leaf)</td>
+        </tr><tr>
+          <td><strong>COSGN00C</strong></td>
+          <td>172</td>
+          <td>CICS</td>
+          <td class="dim">COADM01C, COMEN01C</td>
+        </tr><tr>
+          <td><strong>CBACT03C</strong></td>
+          <td>130</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>CBCUS01C</strong></td>
+          <td>130</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>CBACT02C</strong></td>
+          <td>129</td>
+          <td>Batch</td>
+          <td class="dim">CEE3ABD</td>
+        </tr><tr>
+          <td><strong>COBSWAIT</strong></td>
+          <td>13</td>
+          <td>Batch</td>
+          <td class="dim">MVSWAIT</td>
+        </tr></tbody></table>
+    </section>
+        <section id="screens">
+          <h2>CICS Screen Flow</h2>
+          <div class="grid-3">
+            <div class="card"><div class="card-value">21</div><div class="card-label">Screens (Mapsets)</div></div>
+            <div class="card"><div class="card-value">136</div><div class="card-label">Input Fields</div></div>
+            <div class="card"><div class="card-value">27</div><div class="card-label">Navigation Paths</div></div>
+          </div>
+          <h3>Screen Inventory</h3>
+          <table><thead><tr><th>Mapset</th><th>Inputs</th><th>Outputs</th><th>Program(s)</th><th>Description</th></tr></thead>
+          <tbody><tr>
+                  <td><strong>COACTUP</strong></td>
+                  <td>43</td>
+                  <td>11</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo - Account Update Screen</td>
+                </tr><tr>
+                  <td><strong>COACTVW</strong></td>
+                  <td>1</td>
+                  <td>36</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo - Account Viewer Screen</td>
+                </tr><tr>
+                  <td><strong>COADM01</strong></td>
+                  <td>1</td>
+                  <td>19</td>
+                  <td class="dim">COADM01C</td>
+                  <td class="dim">CardDemo - Admin Menu Screen</td>
+                </tr><tr>
+                  <td><strong>COBIL00</strong></td>
+                  <td>2</td>
+                  <td>8</td>
+                  <td class="dim">COBIL00C</td>
+                  <td class="dim">CardDemo - Main Menu Screen</td>
+                </tr><tr>
+                  <td><strong>COCRDLI</strong></td>
+                  <td>2</td>
+                  <td>43</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo - Card Listing Screen</td>
+                </tr><tr>
+                  <td><strong>COCRDSL</strong></td>
+                  <td>2</td>
+                  <td>13</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo - Card Selection Screen</td>
+                </tr><tr>
+                  <td><strong>COCRDUP</strong></td>
+                  <td>6</td>
+                  <td>11</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo - Card Update Screen</td>
+                </tr><tr>
+                  <td><strong>COMEN01</strong></td>
+                  <td>1</td>
+                  <td>19</td>
+                  <td class="dim">COMEN01C</td>
+                  <td class="dim">CardDemo - Main Menu Screen</td>
+                </tr><tr>
+                  <td><strong>COPAU00</strong></td>
+                  <td>6</td>
+                  <td>56</td>
+                  <td class="dim">COPAUS0C</td>
+                  <td class="dim">CardDemo - Pending Authorization Screen</td>
+                </tr><tr>
+                  <td><strong>COPAU01</strong></td>
+                  <td>0</td>
+                  <td>27</td>
+                  <td class="dim">COPAUS1C</td>
+                  <td class="dim">CardDemo - Pending Authorization Details Screen</td>
+                </tr><tr>
+                  <td><strong>CORPT00</strong></td>
+                  <td>10</td>
+                  <td>7</td>
+                  <td class="dim">CORPT00C</td>
+                  <td class="dim">CardDemo - Main Menu Screen</td>
+                </tr><tr>
+                  <td><strong>COSGN00</strong></td>
+                  <td>3</td>
+                  <td>9</td>
+                  <td class="dim">COSGN00C</td>
+                  <td class="dim">CardDemo - Login Screen</td>
+                </tr><tr>
+                  <td><strong>COTRN00</strong></td>
+                  <td>11</td>
+                  <td>48</td>
+                  <td class="dim">COTRN00C</td>
+                  <td class="dim">CardDemo - Transaction List</td>
+                </tr><tr>
+                  <td><strong>COTRN01</strong></td>
+                  <td>1</td>
+                  <td>20</td>
+                  <td class="dim">COTRN01C</td>
+                  <td class="dim">CardDemo - Transaction View</td>
+                </tr><tr>
+                  <td><strong>COTRN02</strong></td>
+                  <td>14</td>
+                  <td>7</td>
+                  <td class="dim">COTRN02C</td>
+                  <td class="dim">CardDemo - Transaction Add</td>
+                </tr><tr>
+                  <td><strong>COTRTLI</strong></td>
+                  <td>9</td>
+                  <td>31</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo - Tran Type Listing Screen</td>
+                </tr><tr>
+                  <td><strong>COTRTUP</strong></td>
+                  <td>2</td>
+                  <td>13</td>
+                  <td class="dim">(unlinked)</td>
+                  <td class="dim">CardDemo -Transaction Type Update Screen</td>
+                </tr><tr>
+                  <td><strong>COUSR00</strong></td>
+                  <td>11</td>
+                  <td>48</td>
+                  <td class="dim">COUSR00C</td>
+                  <td class="dim">CardDemo - List Users</td>
+                </tr><tr>
+                  <td><strong>COUSR01</strong></td>
+                  <td>5</td>
+                  <td>7</td>
+                  <td class="dim">COUSR01C</td>
+                  <td class="dim">CardDemo - Add User</td>
+                </tr><tr>
+                  <td><strong>COUSR02</strong></td>
+                  <td>5</td>
+                  <td>7</td>
+                  <td class="dim">COUSR02C</td>
+                  <td class="dim">CardDemo - Update User</td>
+                </tr><tr>
+                  <td><strong>COUSR03</strong></td>
+                  <td>1</td>
+                  <td>10</td>
+                  <td class="dim">COUSR03C</td>
+                  <td class="dim">CardDemo - Delete User</td>
+                </tr></tbody></table>
+          <h3>Screen Navigation</h3><table><thead><tr><th>From</th><th></th><th>To</th><th>Type</th></tr></thead><tbody><tr>
+              <td><strong>COPAUS0C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COADM01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COBIL00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COBIL00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COMEN01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COMEN01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>CORPT00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>CORPT00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COMEN01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COSGN00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COMEN01C</strong></td>
+              <td class="dim">XCTL</td>
+            </tr><tr>
+              <td><strong>COSGN00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COADM01C</strong></td>
+              <td class="dim">XCTL</td>
+            </tr><tr>
+              <td><strong>COTRN00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COMEN01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COTRN01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COTRN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COMEN01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN02C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COTRN02C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COMEN01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COUSR03C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COUSR02C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR00C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COADM01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR01C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COADM01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR02C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR02C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COADM01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR03C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COSGN00C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr><tr>
+              <td><strong>COUSR03C</strong></td>
+              <td>&rarr;</td>
+              <td><strong>COADM01C</strong></td>
+              <td class="dim">NAVIGATE</td>
+            </tr></tbody></table>
+        </section>
+        <section id="files">
+          <h2>File &amp; Dataset Contracts</h2>
+          <table><thead><tr><th>File/Dataset</th><th>Programs</th><th>Accessors</th></tr></thead>
+          <tbody><tr>
+          <td><strong>ACCTFILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>6</td>
+          <td class="dim">CBACT01C (FILE_IO), CBACT04C (FILE_IO), CBEXPORT (FILE_IO), CBSTM03B (FILE_IO), CBTRN01C (FILE_IO), CBTRN02C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>ACCTOUT</strong></td>
+          <td>1</td>
+          <td class="dim">CBIMPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>ARRYFILE</strong></td>
+          <td>1</td>
+          <td class="dim">CBACT01C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>CARDFILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>3</td>
+          <td class="dim">CBACT02C (FILE_IO), CBEXPORT (FILE_IO), CBTRN01C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>CARDOUT</strong></td>
+          <td>1</td>
+          <td class="dim">CBIMPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>CARDXREF</strong></td>
+          <td>1</td>
+          <td class="dim">CBTRN03C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>CUSTFILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>4</td>
+          <td class="dim">CBCUS01C (FILE_IO), CBEXPORT (FILE_IO), CBSTM03B (FILE_IO), CBTRN01C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>CUSTOUT</strong></td>
+          <td>1</td>
+          <td class="dim">CBIMPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>DALYREJS</strong></td>
+          <td>1</td>
+          <td class="dim">CBTRN02C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>DALYTRAN</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">CBTRN01C (FILE_IO), CBTRN02C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>DATEPARM</strong></td>
+          <td>1</td>
+          <td class="dim">CBTRN03C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>DISCGRP</strong></td>
+          <td>1</td>
+          <td class="dim">CBACT04C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>ERROUT</strong></td>
+          <td>1</td>
+          <td class="dim">CBIMPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>EXPFILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">CBEXPORT (FILE_IO), CBIMPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>HTMLFILE</strong></td>
+          <td>1</td>
+          <td class="dim">CBSTM03A (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>INFILE1</strong></td>
+          <td>1</td>
+          <td class="dim">PAUDBLOD (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>INFILE2</strong></td>
+          <td>1</td>
+          <td class="dim">PAUDBLOD (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>INPFILE</strong></td>
+          <td>1</td>
+          <td class="dim">COBTUPDT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>LIT-ACCTFILENAME</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>3</td>
+          <td class="dim">COACCT01 (READ), COACTUPC (REWRITE,READ), COACTVWC (READ)</td>
+        </tr><tr>
+          <td><strong>LIT-CARD-FILE</strong></td>
+          <td>1</td>
+          <td class="dim">COCRDLIC (STARTBR,READNEXT,ENDBR,READPREV)</td>
+        </tr><tr>
+          <td><strong>LIT-CARDFILENAME</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COCRDSLC (READ), COCRDUPC (REWRITE,READ)</td>
+        </tr><tr>
+          <td><strong>LIT-CARDFILENAME-ACCT-PATH</strong></td>
+          <td>1</td>
+          <td class="dim">COCRDSLC (READ)</td>
+        </tr><tr>
+          <td><strong>LIT-CARDXREFNAME-ACCT-PATH</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COACTUPC (READ), COACTVWC (READ)</td>
+        </tr><tr>
+          <td><strong>LIT-CUSTFILENAME</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COACTUPC (REWRITE,READ), COACTVWC (READ)</td>
+        </tr><tr>
+          <td><strong>OUTFIL1</strong></td>
+          <td>1</td>
+          <td class="dim">PAUDBUNL (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>OUTFIL2</strong></td>
+          <td>1</td>
+          <td class="dim">PAUDBUNL (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>OUTFILE</strong></td>
+          <td>1</td>
+          <td class="dim">CBACT01C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>STMTFILE</strong></td>
+          <td>1</td>
+          <td class="dim">CBSTM03A (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TCATBALF</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">CBACT04C (FILE_IO), CBTRN02C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRANCATG</strong></td>
+          <td>1</td>
+          <td class="dim">CBTRN03C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRANFILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>3</td>
+          <td class="dim">CBTRN01C (FILE_IO), CBTRN02C (FILE_IO), CBTRN03C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRANREPT</strong></td>
+          <td>1</td>
+          <td class="dim">CBTRN03C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRANSACT</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">CBACT04C (FILE_IO), CBEXPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRANTYPE</strong></td>
+          <td>1</td>
+          <td class="dim">CBTRN03C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRNXFILE</strong></td>
+          <td>1</td>
+          <td class="dim">CBSTM03B (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>TRNXOUT</strong></td>
+          <td>1</td>
+          <td class="dim">CBIMPORT (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>VBRCFILE</strong></td>
+          <td>1</td>
+          <td class="dim">CBACT01C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>WS-ACCTDAT-FILE</strong></td>
+          <td>1</td>
+          <td class="dim">COBIL00C (REWRITE,READ)</td>
+        </tr><tr>
+          <td><strong>WS-ACCTFILENAME</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COPAUA0C (READ), COPAUS0C (READ)</td>
+        </tr><tr>
+          <td><strong>WS-CARDXREFNAME-ACCT-PATH</strong></td>
+          <td>1</td>
+          <td class="dim">COPAUS0C (READ)</td>
+        </tr><tr>
+          <td><strong>WS-CCXREF-FILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COPAUA0C (READ), COTRN02C (READ)</td>
+        </tr><tr>
+          <td><strong>WS-CUSTFILENAME</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COPAUA0C (READ), COPAUS0C (READ)</td>
+        </tr><tr>
+          <td><strong>WS-CXACAIX-FILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>2</td>
+          <td class="dim">COBIL00C (READ), COTRN02C (READ)</td>
+        </tr><tr>
+          <td><strong>WS-TRANSACT-FILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>4</td>
+          <td class="dim">COBIL00C (STARTBR,WRITE,ENDBR,READPREV), COTRN00C (STARTBR,READNEXT,ENDBR,READPREV), COTRN01C (READ), COTRN02C (STARTBR,WRITE,ENDBR,READPREV)</td>
+        </tr><tr>
+          <td><strong>WS-USRSEC-FILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>5</td>
+          <td class="dim">COSGN00C (READ), COUSR00C (STARTBR,READNEXT,ENDBR,READPREV), COUSR01C (WRITE), COUSR02C (REWRITE,READ), COUSR03C (READ,DELETE)</td>
+        </tr><tr>
+          <td><strong>XREFFILE</strong><span style="color:#d29922;font-weight:600"> SHARED</span></td>
+          <td>6</td>
+          <td class="dim">CBACT03C (FILE_IO), CBACT04C (FILE_IO), CBEXPORT (FILE_IO), CBSTM03B (FILE_IO), CBTRN01C (FILE_IO), CBTRN02C (FILE_IO)</td>
+        </tr><tr>
+          <td><strong>XREFOUT</strong></td>
+          <td>1</td>
+          <td class="dim">CBIMPORT (FILE_IO)</td>
+        </tr></tbody></table>
+        </section>
+        <section id="copybooks">
+          <h2>Shared Copybooks (Coupling Indicators)</h2>
+          <table><thead><tr><th>Copybook</th><th>Users</th><th></th><th>Programs</th></tr></thead>
+          <tbody><tr>
+          <td><strong>COCOM01Y</strong></td>
+          <td>21</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTLIC, COTRTUPC, COACTUPC, COACTVWC +15</td>
+        </tr><tr>
+          <td><strong>COTTL01Y</strong></td>
+          <td>21</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTLIC, COTRTUPC, COACTUPC, COACTVWC +15</td>
+        </tr><tr>
+          <td><strong>CSDAT01Y</strong></td>
+          <td>21</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTLIC, COTRTUPC, COACTUPC, COACTVWC +15</td>
+        </tr><tr>
+          <td><strong>CSMSG01Y</strong></td>
+          <td>21</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTLIC, COTRTUPC, COACTUPC, COACTVWC +15</td>
+        </tr><tr>
+          <td><strong>DFHAID</strong></td>
+          <td>21</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTLIC, COTRTUPC, COACTUPC, COACTVWC +15</td>
+        </tr><tr>
+          <td><strong>DFHBMSCA</strong></td>
+          <td>21</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTLIC, COTRTUPC, COACTUPC, COACTVWC +15</td>
+        </tr><tr>
+          <td><strong>CSUSR01Y</strong></td>
+          <td>14</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:66.66666666666666%;height:100%"></div></div></td>
+          <td class="dim">COTRTLIC, COTRTUPC, COACTUPC, COACTVWC, COADM01C, COCRDLIC +8</td>
+        </tr><tr>
+          <td><strong>CVACT01Y</strong></td>
+          <td>14</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:66.66666666666666%;height:100%"></div></div></td>
+          <td class="dim">COPAUA0C, COPAUS0C, COACCT01, CBACT01C, CBACT04C, CBEXPORT +8</td>
+        </tr><tr>
+          <td><strong>CVACT03Y</strong></td>
+          <td>14</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:66.66666666666666%;height:100%"></div></div></td>
+          <td class="dim">COPAUA0C, COPAUS0C, CBACT03C, CBACT04C, CBEXPORT, CBIMPORT +8</td>
+        </tr><tr>
+          <td><strong>CVTRA05Y</strong></td>
+          <td>11</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:52.38095238095239%;height:100%"></div></div></td>
+          <td class="dim">CBACT04C, CBEXPORT, CBIMPORT, CBTRN01C, CBTRN02C, CBTRN03C +5</td>
+        </tr><tr>
+          <td><strong>CVACT02Y</strong></td>
+          <td>10</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:47.61904761904761%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COTRTLIC, CBACT02C, CBEXPORT, CBIMPORT, CBTRN01C +4</td>
+        </tr><tr>
+          <td><strong>CVCUS01Y</strong></td>
+          <td>10</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:47.61904761904761%;height:100%"></div></div></td>
+          <td class="dim">COPAUA0C, COPAUS0C, CBCUS01C, CBEXPORT, CBIMPORT, CBTRN01C +4</td>
+        </tr><tr>
+          <td><strong>CIPAUDTY</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:38.095238095238095%;height:100%"></div></div></td>
+          <td class="dim">CBPAUP0C, COPAUA0C, COPAUS0C, COPAUS1C, COPAUS2C, DBUNLDGS +2</td>
+        </tr><tr>
+          <td><strong>CIPAUSMY</strong></td>
+          <td>7</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:33.33333333333333%;height:100%"></div></div></td>
+          <td class="dim">CBPAUP0C, COPAUA0C, COPAUS0C, COPAUS1C, DBUNLDGS, PAUDBLOD +1</td>
+        </tr><tr>
+          <td><strong>CSMSG02Y</strong></td>
+          <td>7</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#58a6ff;border-radius:3px;width:33.33333333333333%;height:100%"></div></div></td>
+          <td class="dim">COPAUS0C, COPAUS1C, COTRTUPC, COACTUPC, COACTVWC, COCRDSLC +1</td>
+        </tr></tbody></table>
+        </section>
+        <section id="hotspots">
+          <h2>Hotspot Programs (Change Risk)</h2>
+          <table><thead><tr><th>Program</th><th>Score</th><th></th><th>Callers</th><th>Callees</th><th>Copybooks</th></tr></thead>
+          <tbody><tr>
+          <td><strong>CDEMO-TO-PROGRAM</strong></td>
+          <td>19</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:100.0%;height:100%"></div></div></td>
+          <td>19</td><td>0</td><td>0</td>
+        </tr><tr>
+          <td><strong>COPAUA0C</strong></td>
+          <td>11</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:57.89473684210527%;height:100%"></div></div></td>
+          <td>0</td><td>4</td><td>14</td>
+        </tr><tr>
+          <td><strong>CEE3ABD</strong></td>
+          <td>11</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:57.89473684210527%;height:100%"></div></div></td>
+          <td>11</td><td>0</td><td>0</td>
+        </tr><tr>
+          <td><strong>COACTUPC</strong></td>
+          <td>10</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:52.63157894736842%;height:100%"></div></div></td>
+          <td>0</td><td>1</td><td>18</td>
+        </tr><tr>
+          <td><strong>COACTVWC</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:44.73684210526316%;height:100%"></div></div></td>
+          <td>0</td><td>1</td><td>15</td>
+        </tr><tr>
+          <td><strong>COACCT01</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:42.10526315789473%;height:100%"></div></div></td>
+          <td>0</td><td>4</td><td>8</td>
+        </tr><tr>
+          <td><strong>COPAUS0C</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:42.10526315789473%;height:100%"></div></div></td>
+          <td>0</td><td>1</td><td>14</td>
+        </tr><tr>
+          <td><strong>COCRDUPC</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:39.473684210526315%;height:100%"></div></div></td>
+          <td>0</td><td>1</td><td>13</td>
+        </tr><tr>
+          <td><strong>COTRTLIC</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:39.473684210526315%;height:100%"></div></div></td>
+          <td>0</td><td>2</td><td>11</td>
+        </tr><tr>
+          <td><strong>COCRDSLC</strong></td>
+          <td>8</td>
+          <td><div style="background:#21262d;border-radius:3px;width:120px;height:8px;display:inline-block;vertical-align:middle"><div style="background:#f85149;border-radius:3px;width:39.473684210526315%;height:100%"></div></div></td>
+          <td>0</td><td>1</td><td>13</td>
+        </tr></tbody></table>
+        </section>
+        <section id="dataflow">
+          <h2>Data Flow Summary</h2>
+          <p class="dim">581 total data assignments across 44 programs</p>
+          <table><thead><tr><th>Program</th><th>Flows</th><th>Fields Written</th><th>Fields Read</th></tr></thead>
+          <tbody><tr>
+              <td><strong>CBSTM03A</strong></td>
+              <td>76</td>
+              <td>54</td>
+              <td>34</td>
+            </tr><tr>
+              <td><strong>COACTUPC</strong></td>
+              <td>33</td>
+              <td>770</td>
+              <td>115</td>
+            </tr><tr>
+              <td><strong>COTRTLIC</strong></td>
+              <td>32</td>
+              <td>292</td>
+              <td>50</td>
+            </tr><tr>
+              <td><strong>COTRTUPC</strong></td>
+              <td>30</td>
+              <td>240</td>
+              <td>35</td>
+            </tr><tr>
+              <td><strong>CBACT01C</strong></td>
+              <td>29</td>
+              <td>40</td>
+              <td>21</td>
+            </tr><tr>
+              <td><strong>COCRDUPC</strong></td>
+              <td>22</td>
+              <td>290</td>
+              <td>17</td>
+            </tr><tr>
+              <td><strong>COPAUA0C</strong></td>
+              <td>21</td>
+              <td>261</td>
+              <td>175</td>
+            </tr><tr>
+              <td><strong>COACCT01</strong></td>
+              <td>20</td>
+              <td>136</td>
+              <td>74</td>
+            </tr><tr>
+              <td><strong>CODATE01</strong></td>
+              <td>20</td>
+              <td>101</td>
+              <td>74</td>
+            </tr><tr>
+              <td><strong>CBTRN03C</strong></td>
+              <td>19</td>
+              <td>71</td>
+              <td>16</td>
+            </tr><tr>
+              <td><strong>COPAUS0C</strong></td>
+              <td>19</td>
+              <td>259</td>
+              <td>39</td>
+            </tr><tr>
+              <td><strong>CBTRN02C</strong></td>
+              <td>16</td>
+              <td>116</td>
+              <td>26</td>
+            </tr><tr>
+              <td><strong>COTRN02C</strong></td>
+              <td>15</td>
+              <td>122</td>
+              <td>59</td>
+            </tr><tr>
+              <td><strong>COACTVWC</strong></td>
+              <td>14</td>
+              <td>222</td>
+              <td>12</td>
+            </tr><tr>
+              <td><strong>COCRDLIC</strong></td>
+              <td>14</td>
+              <td>259</td>
+              <td>14</td>
+            </tr><tr>
+              <td><strong>COPAUS1C</strong></td>
+              <td>14</td>
+              <td>206</td>
+              <td>15</td>
+            </tr><tr>
+              <td><strong>COTRN00C</strong></td>
+              <td>14</td>
+              <td>155</td>
+              <td>34</td>
+            </tr><tr>
+              <td><strong>COUSR00C</strong></td>
+              <td>14</td>
+              <td>151</td>
+              <td>34</td>
+            </tr><tr>
+              <td><strong>COCRDSLC</strong></td>
+              <td>12</td>
+              <td>180</td>
+              <td>10</td>
+            </tr><tr>
+              <td><strong>CBACT04C</strong></td>
+              <td>11</td>
+              <td>65</td>
+              <td>12</td>
+            </tr></tbody></table>
+        </section>
+        <section id="jobs">
+          <h2>Batch Job Flow</h2>
+          <div class="grid-3">
+            <div class="card"><div class="card-value">55</div><div class="card-label">JCL Jobs</div></div>
+            <div class="card"><div class="card-value">136</div><div class="card-label">Execution Steps</div></div>
+            <div class="card"><div class="card-value">108</div><div class="card-label">Datasets Referenced</div></div>
+          </div>
+          <table><thead><tr><th>Job</th><th>Steps</th><th>COBOL Pgms</th><th>Programs</th><th>Description</th></tr></thead>
+          <tbody><tr>
+              <td><strong>ACCTFILE</strong></td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE ACCOUNT VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>CARDFILE</strong></td>
+              <td>8</td>
+              <td>2</td>
+              <td class="dim">SDSF, SDSF</td>
+              <td class="dim">Close files in CICS region</td>
+            </tr><tr>
+              <td><strong>CBADMCDJ</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">SET PARMS FOR THIS JOB:</td>
+            </tr><tr>
+              <td><strong>CBEXPORT</strong></td>
+              <td>2</td>
+              <td>1</td>
+              <td class="dim">CBEXPORT</td>
+              <td class="dim">EXPORT CUSTOMER DATA FROM VSAM FILES TO MULTI-RECORD EXPORT FILE FOR BRANCH MIGR</td>
+            </tr><tr>
+              <td><strong>CBIMPORT</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">CBIMPORT</td>
+              <td class="dim">IMPORT CUSTOMER DATA FROM MULTI-RECORD EXPORT FILE AND SPLIT INTO SEPARATE NORMA</td>
+            </tr><tr>
+              <td><strong>CBLDBMS</strong></td>
+              <td>2</td>
+              <td>2</td>
+              <td class="dim">BUILDBMS, SDSF</td>
+              <td class="dim">set    HLQ      to your high level qualifier Unless required by applicable law o</td>
+            </tr><tr>
+              <td><strong>CBPAUP0J</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">EXECUTE IMS PROGRAM TO DELETE EXPIRED AUTHORIZATIONS</td>
+            </tr><tr>
+              <td><strong>CICCMP</strong></td>
+              <td>2</td>
+              <td>2</td>
+              <td class="dim">BUILDONL, SDSF</td>
+              <td class="dim">set    HLQ      to your high level qualifier Unless required by applicable law o</td>
+            </tr><tr>
+              <td><strong>CIDBCMP</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">BLDCIDB2</td>
+              <td class="dim">set    HLQ  to your high level qualifier set    SSID to your DB2 SSID  !!! Unles</td>
+            </tr><tr>
+              <td><strong>CLOSEFIL</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">SDSF</td>
+              <td class="dim">Close files in CICS region</td>
+            </tr><tr>
+              <td><strong>CNJBATMP</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">BUILDBAT</td>
+              <td class="dim">Unless required by applicable law or agreed to in writing, change BATCHPGM to yo</td>
+            </tr><tr>
+              <td><strong>COMBTRAN</strong></td>
+              <td>2</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">Sort current transaction file and system generated transactions</td>
+            </tr><tr>
+              <td><strong>CREADB2</strong></td>
+              <td>5</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">SET PARMS FOR THIS JOB:                                            00070021</td>
+            </tr><tr>
+              <td><strong>CREASTMT</strong></td>
+              <td>5</td>
+              <td>1</td>
+              <td class="dim">CBSTM03A</td>
+              <td class="dim">This JCL will create statement for each CARD present in the XREF file</td>
+            </tr><tr>
+              <td><strong>CUSTFILE</strong></td>
+              <td>5</td>
+              <td>2</td>
+              <td class="dim">SDSF, SDSF</td>
+              <td class="dim">Close files in CICS region</td>
+            </tr><tr>
+              <td><strong>DALYREJS</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE TRANSACATION MASTER VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>DBPAUTP0</strong></td>
+              <td>2</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DOWNLOAD DBD DBPAUTP0</td>
+            </tr><tr>
+              <td><strong>DEFCUST</strong></td>
+              <td>2</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE CUSTOMER VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>DEFGDGB</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DEFINE GDG BASES NEEDED BY CARDDEMO PROJECT</td>
+            </tr><tr>
+              <td><strong>DEFGDGD</strong></td>
+              <td>6</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">This jcl will create GDGs and load first generation for Transaction reference da</td>
+            </tr><tr>
+              <td><strong>DISCGRP</strong></td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE DISCLOSURE GROUP VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>DUSRSECJ</strong></td>
+              <td>4</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">PRE DELETE STEP</td>
+            </tr><tr>
+              <td><strong>ESDSRRDS</strong></td>
+              <td>6</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">PRE DELETE STEP</td>
+            </tr><tr>
+              <td><strong>FTPJCLS</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">FTP</td>
+              <td class="dim">FTP JOB TO RECEIVE A FILE MY.FTP.SERVER.COM IS THE FTP SERVER NAME(SUBJECT TO CH</td>
+            </tr><tr>
+              <td><strong>IMSMQCMP</strong></td>
+              <td>6</td>
+              <td>3</td>
+              <td class="dim">DFHECP1, IGYCRCTL, IEWL</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>INTCALC</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">CBACT04C</td>
+              <td class="dim">Process transaction balance file and compute interest and fees.</td>
+            </tr><tr>
+              <td><strong>INTRDRJ1</strong></td>
+              <td>2</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>INTRDRJ2</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>LISTFILS</strong></td>
+              <td>2</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">List catalog for all the files in CARDDEMO application</td>
+            </tr><tr>
+              <td><strong>LOADPADB</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">YLIBS JCLLIB ORDER=VIPINGP.CNTL.PROCLIB EXECUTE IMS PROGRAM</td>
+            </tr><tr>
+              <td><strong>MNTTRDB2</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">USE THIS JOB TO MAINTAIN DB2 TRANSACTION TABLE, INSERTING,      *// UPDATING OR </td>
+            </tr><tr>
+              <td><strong>OPENFIL</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">SDSF</td>
+              <td class="dim">Open files in CICS region</td>
+            </tr><tr>
+              <td><strong>POSTTRAN</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">CBTRN02C</td>
+              <td class="dim">Process and load daily transaction file and create transaction category balance </td>
+            </tr><tr>
+              <td><strong>PRTCATBL</strong></td>
+              <td>3</td>
+              <td>1</td>
+              <td class="dim">PROC</td>
+              <td class="dim">Unload the processed transaction category balance file</td>
+            </tr><tr>
+              <td><strong>RACFCMDS</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">Adding a transaction to a profile (CARD)</td>
+            </tr><tr>
+              <td><strong>READACCT</strong></td>
+              <td>2</td>
+              <td>1</td>
+              <td class="dim">CBACT01C</td>
+              <td class="dim">PRE DELETE STEP</td>
+            </tr><tr>
+              <td><strong>READCARD</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">CBACT02C</td>
+              <td class="dim">RUN THE PROGRAM THAT READS THE CARD MASTER VSAM FILE</td>
+            </tr><tr>
+              <td><strong>READCUST</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">CBCUS01C</td>
+              <td class="dim">RUN THE PROGRAM THAT READS THE CUSTOMER MASTER VSAM FILE</td>
+            </tr><tr>
+              <td><strong>READXREF</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">CBACT03C</td>
+              <td class="dim">RUN THE PROGRAM THAT READS THE XREF MASTER VSAM FILE</td>
+            </tr><tr>
+              <td><strong>REPRTEST</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">PROC</td>
+              <td class="dim">CALL THE REPRO PROC</td>
+            </tr><tr>
+              <td><strong>REPTFILE</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE TRANSACATION MASTER VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>SORTTEST</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">Ver: CardDemo_v1.0-57-g40b7caa-110 Date: 2022-08-19 18:00:43 CDT</td>
+            </tr><tr>
+              <td><strong>TCATBALF</strong></td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE TRANSACTION CATEGORY BALANCE VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>TRANBKP</strong></td>
+              <td>3</td>
+              <td>1</td>
+              <td class="dim">PROC</td>
+              <td class="dim">Repro the processed transaction file</td>
+            </tr><tr>
+              <td><strong>TRANCATG</strong></td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE TRANSACTION CATEGORY TYPE VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>TRANEXTR</strong></td>
+              <td>5</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">This JCL will extract reference data for  use in Transaction Report generation. </td>
+            </tr><tr>
+              <td><strong>TRANFILE</strong></td>
+              <td>8</td>
+              <td>2</td>
+              <td class="dim">SDSF, SDSF</td>
+              <td class="dim">Close files in CICS region</td>
+            </tr><tr>
+              <td><strong>TRANIDX</strong></td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">CREATE ALTERNATE INDEX ON PROCESSED TIMESTAMP</td>
+            </tr><tr>
+              <td><strong>TRANREPT</strong></td>
+              <td>3</td>
+              <td>2</td>
+              <td class="dim">PROC, CBTRN03C</td>
+              <td class="dim">Unload the processed transaction file</td>
+            </tr><tr>
+              <td><strong>TRANTYPE</strong></td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE TRANSACATION TYPE VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr><tr>
+              <td><strong>TXT2PDF1</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">IKJEFT1B</td>
+              <td class="dim">CONVERT TEXT FILE TO A PDF FILE</td>
+            </tr><tr>
+              <td><strong>UNLDGSAM</strong></td>
+              <td>1</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">EXECUTE IMS PROGRAM</td>
+            </tr><tr>
+              <td><strong>UNLDPADB</strong></td>
+              <td>2</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">EXECUTE IMS PROGRAM</td>
+            </tr><tr>
+              <td><strong>WAITSTEP</strong></td>
+              <td>1</td>
+              <td>1</td>
+              <td class="dim">COBSWAIT</td>
+              <td class="dim">WAIT FOR CENTISECONDS IN THE PARM EG: 00003600  = 36 SECONDS</td>
+            </tr><tr>
+              <td><strong>XREFFILE</strong></td>
+              <td>6</td>
+              <td>0</td>
+              <td class="dim">(utilities only)</td>
+              <td class="dim">DELETE CARD XREF VSAM FILE IF ONE ALREADY EXISTS</td>
+            </tr></tbody></table>
+          <h3>Cross-Job Data Flows</h3><table><thead><tr><th>Producer</th><th></th><th>Consumer</th><th>Dataset</th></tr></thead><tbody><tr>
+              <td><strong>UNLDPADB</strong></td>
+              <td>&rarr;</td>
+              <td><strong>LOADPADB</strong></td>
+              <td class="dim">FILEO</td>
+            </tr><tr>
+              <td><strong>UNLDPADB</strong></td>
+              <td>&rarr;</td>
+              <td><strong>LOADPADB</strong></td>
+              <td class="dim">FILEO</td>
+            </tr><tr>
+              <td><strong>CREASTMT</strong></td>
+              <td>&rarr;</td>
+              <td><strong>TXT2PDF1</strong></td>
+              <td class="dim">PS</td>
+            </tr><tr>
+              <td><strong>SORTTEST</strong></td>
+              <td>&rarr;</td>
+              <td><strong>TRANREPT</strong></td>
+              <td class="dim">DALY(+1</td>
+            </tr></tbody></table>
+          <h3>Execution Order</h3><p><strong>Layer 0:</strong> ACCTFILE, CARDFILE, CBADMCDJ, CBEXPORT, CBIMPORT, CBLDBMS, CBPAUP0J, CICCMP, CIDBCMP, CLOSEFIL +42</p><p><strong>Layer 1:</strong> LOADPADB, TRANREPT, TXT2PDF1</p>
+        </section>
+        <section id="dictionary">
+          <h2>Copybook Data Dictionary</h2>
+          <div class="grid-3">
+            <div class="card"><div class="card-value">62</div><div class="card-label">Copybooks Parsed</div></div>
+            <div class="card"><div class="card-value">7,747</div><div class="card-label">Total Fields</div></div>
+            <div class="card"><div class="card-value">70</div><div class="card-label">88-Level Conditions</div></div>
+          </div>
+          <table><thead><tr><th>Copybook</th><th>Lines</th><th>Fields</th><th>88s</th><th>Key Fields</th></tr></thead>
+          <tbody><tr>
+              <td><strong>CCPAUERY</strong></td>
+              <td>40</td>
+              <td>12</td>
+              <td>10</td>
+              <td class="dim">ERROR-LOG-RECORD, ERR-DATE, ERR-TIME, ERR-APPLICATION, ERR-PROGRAM +7</td>
+            </tr><tr>
+              <td><strong>CCPAURLY</strong></td>
+              <td>24</td>
+              <td>6</td>
+              <td>0</td>
+              <td class="dim">PA-RL-CARD-NUM, PA-RL-TRANSACTION-ID, PA-RL-AUTH-ID-CODE, PA-RL-AUTH-RESP-CODE, PA-RL-AUTH-RESP-REASON +1</td>
+            </tr><tr>
+              <td><strong>CCPAURQY</strong></td>
+              <td>36</td>
+              <td>18</td>
+              <td>0</td>
+              <td class="dim">PA-RQ-AUTH-DATE, PA-RQ-AUTH-TIME, PA-RQ-CARD-NUM, PA-RQ-AUTH-TYPE, PA-RQ-CARD-EXPIRY-DATE +13</td>
+            </tr><tr>
+              <td><strong>CIPAUDTY</strong></td>
+              <td>54</td>
+              <td>29</td>
+              <td>7</td>
+              <td class="dim">PA-AUTHORIZATION-KEY, PA-AUTH-ORIG-DATE, PA-AUTH-ORIG-TIME, PA-CARD-NUM, PA-AUTH-TYPE +24</td>
+            </tr><tr>
+              <td><strong>CIPAUSMY</strong></td>
+              <td>31</td>
+              <td>13</td>
+              <td>0</td>
+              <td class="dim">PA-ACCT-ID, PA-CUST-ID, PA-AUTH-STATUS, PA-ACCOUNT-STATUS, PA-CREDIT-LIMIT +8</td>
+            </tr><tr>
+              <td><strong>COACTUP</strong></td>
+              <td>668</td>
+              <td>652</td>
+              <td>0</td>
+              <td class="dim">CACTUPAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +647</td>
+            </tr><tr>
+              <td><strong>COACTVW</strong></td>
+              <td>464</td>
+              <td>448</td>
+              <td>0</td>
+              <td class="dim">CACTVWAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +443</td>
+            </tr><tr>
+              <td><strong>COADM01</strong></td>
+              <td>260</td>
+              <td>244</td>
+              <td>0</td>
+              <td class="dim">COADM1AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +239</td>
+            </tr><tr>
+              <td><strong>COADM02Y</strong></td>
+              <td>62</td>
+              <td>26</td>
+              <td>0</td>
+              <td class="dim">CARDDEMO-ADMIN-MENU-OPTIONS, CDEMO-ADMIN-OPT-COUNT, CDEMO-ADMIN-OPTIONS-DATA, CDEMO-ADMIN-OPTIONS +21</td>
+            </tr><tr>
+              <td><strong>COBIL00</strong></td>
+              <td>140</td>
+              <td>124</td>
+              <td>0</td>
+              <td class="dim">COBIL0AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +119</td>
+            </tr><tr>
+              <td><strong>COCOM01Y</strong></td>
+              <td>47</td>
+              <td>22</td>
+              <td>4</td>
+              <td class="dim">CARDDEMO-COMMAREA, CDEMO-GENERAL-INFO, CDEMO-CUSTOMER-INFO, CDEMO-ACCOUNT-INFO, CDEMO-CARD-INFO +17</td>
+            </tr><tr>
+              <td><strong>COCRDLI</strong></td>
+              <td>560</td>
+              <td>544</td>
+              <td>0</td>
+              <td class="dim">CCRDLIAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +539</td>
+            </tr><tr>
+              <td><strong>COCRDSL</strong></td>
+              <td>200</td>
+              <td>184</td>
+              <td>0</td>
+              <td class="dim">CCRDSLAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +179</td>
+            </tr><tr>
+              <td><strong>COCRDUP</strong></td>
+              <td>224</td>
+              <td>208</td>
+              <td>0</td>
+              <td class="dim">CCRDUPAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +203</td>
+            </tr><tr>
+              <td><strong>CODATECN</strong></td>
+              <td>52</td>
+              <td>32</td>
+              <td>4</td>
+              <td class="dim">CODATECN-REC, CODATECN-IN-REC, CODATECN-OUT-REC, CODATECN-ERROR-MSG +27</td>
+            </tr><tr>
+              <td><strong>COMEN01</strong></td>
+              <td>260</td>
+              <td>244</td>
+              <td>0</td>
+              <td class="dim">COMEN1AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +239</td>
+            </tr><tr>
+              <td><strong>COMEN02Y</strong></td>
+              <td>101</td>
+              <td>53</td>
+              <td>0</td>
+              <td class="dim">CARDDEMO-MAIN-MENU-OPTIONS, CDEMO-MENU-OPT-COUNT, CDEMO-MENU-OPTIONS-DATA, CDEMO-MENU-OPTIONS +48</td>
+            </tr><tr>
+              <td><strong>COPAU00</strong></td>
+              <td>764</td>
+              <td>748</td>
+              <td>0</td>
+              <td class="dim">COPAU0AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +743</td>
+            </tr><tr>
+              <td><strong>COPAU01</strong></td>
+              <td>344</td>
+              <td>328</td>
+              <td>0</td>
+              <td class="dim">COPAU1AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +323</td>
+            </tr><tr>
+              <td><strong>CORPT00</strong></td>
+              <td>224</td>
+              <td>208</td>
+              <td>0</td>
+              <td class="dim">CORPT0AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +203</td>
+            </tr><tr>
+              <td><strong>COSGN00</strong></td>
+              <td>152</td>
+              <td>136</td>
+              <td>0</td>
+              <td class="dim">COSGN0AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +131</td>
+            </tr><tr>
+              <td><strong>COSTM01</strong></td>
+              <td>38</td>
+              <td>17</td>
+              <td>0</td>
+              <td class="dim">TRNX-RECORD, TRNX-KEY, TRNX-REST +12</td>
+            </tr><tr>
+              <td><strong>COTRN00</strong></td>
+              <td>728</td>
+              <td>712</td>
+              <td>0</td>
+              <td class="dim">COTRN0AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +707</td>
+            </tr><tr>
+              <td><strong>COTRN01</strong></td>
+              <td>272</td>
+              <td>256</td>
+              <td>0</td>
+              <td class="dim">COTRN1AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +251</td>
+            </tr><tr>
+              <td><strong>COTRN02</strong></td>
+              <td>272</td>
+              <td>256</td>
+              <td>0</td>
+              <td class="dim">COTRN2AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +251</td>
+            </tr><tr>
+              <td><strong>COTRTLI</strong></td>
+              <td>500</td>
+              <td>484</td>
+              <td>0</td>
+              <td class="dim">CTRTLIAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +479</td>
+            </tr><tr>
+              <td><strong>COTRTUP</strong></td>
+              <td>200</td>
+              <td>184</td>
+              <td>0</td>
+              <td class="dim">CTRTUPAI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +179</td>
+            </tr><tr>
+              <td><strong>COTTL01Y</strong></td>
+              <td>27</td>
+              <td>4</td>
+              <td>0</td>
+              <td class="dim">CCDA-SCREEN-TITLE, CCDA-TITLE01, CCDA-TITLE02, CCDA-THANK-YOU</td>
+            </tr><tr>
+              <td><strong>COUSR00</strong></td>
+              <td>728</td>
+              <td>712</td>
+              <td>0</td>
+              <td class="dim">COUSR0AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +707</td>
+            </tr><tr>
+              <td><strong>COUSR01</strong></td>
+              <td>164</td>
+              <td>148</td>
+              <td>0</td>
+              <td class="dim">COUSR1AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +143</td>
+            </tr><tr>
+              <td><strong>COUSR02</strong></td>
+              <td>164</td>
+              <td>148</td>
+              <td>0</td>
+              <td class="dim">COUSR2AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +143</td>
+            </tr><tr>
+              <td><strong>COUSR03</strong></td>
+              <td>152</td>
+              <td>136</td>
+              <td>0</td>
+              <td class="dim">COUSR3AI, FILLER, TRNNAMEL, TRNNAMEF, FILLER +131</td>
+            </tr><tr>
+              <td><strong>CSDAT01Y</strong></td>
+              <td>58</td>
+              <td>39</td>
+              <td>0</td>
+              <td class="dim">WS-DATE-TIME, WS-CURDATE-DATA, WS-CURDATE-MM-DD-YY, WS-CURTIME-HH-MM-SS, WS-TIMESTAMP +34</td>
+            </tr><tr>
+              <td><strong>CSDB2RPY</strong></td>
+              <td>89</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>CSDB2RWY</strong></td>
+              <td>46</td>
+              <td>14</td>
+              <td>2</td>
+              <td class="dim">WS-DB2-COMMON-VARS, WS-DSNTIAC-FORMATTED, WS-DSNTIAC-LRECL, WS-DSNTIAC-ERROR +9</td>
+            </tr><tr>
+              <td><strong>CSLKPCDY</strong></td>
+              <td>1318</td>
+              <td>5</td>
+              <td>5</td>
+              <td class="dim">WS-US-PHONE-AREA-CODE-TO-EDIT, US-STATE-CODE-TO-EDIT, US-STATE-ZIPCODE-TO-EDIT, US-STATE-AND-FIRST-ZIP2, LAST-3-OF-ZIP</td>
+            </tr><tr>
+              <td><strong>CSMSG01Y</strong></td>
+              <td>24</td>
+              <td>3</td>
+              <td>0</td>
+              <td class="dim">CCDA-COMMON-MESSAGES, CCDA-MSG-THANK-YOU, CCDA-MSG-INVALID-KEY</td>
+            </tr><tr>
+              <td><strong>CSMSG02Y</strong></td>
+              <td>35</td>
+              <td>5</td>
+              <td>0</td>
+              <td class="dim">ABEND-DATA, ABEND-CODE, ABEND-CULPRIT, ABEND-REASON, ABEND-MSG</td>
+            </tr><tr>
+              <td><strong>CSSETATY</strong></td>
+              <td>30</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>CSSTRPFY</strong></td>
+              <td>85</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>CSUSR01Y</strong></td>
+              <td>26</td>
+              <td>7</td>
+              <td>0</td>
+              <td class="dim">SEC-USER-DATA, SEC-USR-ID, SEC-USR-FNAME, SEC-USR-LNAME, SEC-USR-PWD +2</td>
+            </tr><tr>
+              <td><strong>CSUTLDPY</strong></td>
+              <td>375</td>
+              <td>0</td>
+              <td>0</td>
+              <td class="dim"></td>
+            </tr><tr>
+              <td><strong>CSUTLDWY</strong></td>
+              <td>89</td>
+              <td>38</td>
+              <td>21</td>
+              <td class="dim"> +33</td>
+            </tr><tr>
+              <td><strong>CUSTREC</strong></td>
+              <td>26</td>
+              <td>20</td>
+              <td>0</td>
+              <td class="dim">CUSTOMER-RECORD, CUST-ID, CUST-FIRST-NAME, CUST-MIDDLE-NAME, CUST-LAST-NAME +15</td>
+            </tr><tr>
+              <td><strong>CVACT01Y</strong></td>
+              <td>20</td>
+              <td>14</td>
+              <td>0</td>
+              <td class="dim">ACCOUNT-RECORD, ACCT-ID, ACCT-ACTIVE-STATUS, ACCT-CURR-BAL, ACCT-CREDIT-LIMIT +9</td>
+            </tr><tr>
+              <td><strong>CVACT02Y</strong></td>
+              <td>14</td>
+              <td>8</td>
+              <td>0</td>
+              <td class="dim">CARD-RECORD, CARD-NUM, CARD-ACCT-ID, CARD-CVV-CD, CARD-EMBOSSED-NAME +3</td>
+            </tr><tr>
+              <td><strong>CVACT03Y</strong></td>
+              <td>11</td>
+              <td>5</td>
+              <td>0</td>
+              <td class="dim">CARD-XREF-RECORD, XREF-CARD-NUM, XREF-CUST-ID, XREF-ACCT-ID, FILLER</td>
+            </tr><tr>
+              <td><strong>CVCRD01Y</strong></td>
+              <td>46</td>
+              <td>14</td>
+              <td>17</td>
+              <td class="dim">CC-WORK-AREAS, CC-WORK-AREA +9</td>
+            </tr><tr>
+              <td><strong>CVCUS01Y</strong></td>
+              <td>26</td>
+              <td>20</td>
+              <td>0</td>
+              <td class="dim">CUSTOMER-RECORD, CUST-ID, CUST-FIRST-NAME, CUST-MIDDLE-NAME, CUST-LAST-NAME +15</td>
+            </tr><tr>
+              <td><strong>CVEXPORT</strong></td>
+              <td>103</td>
+              <td>72</td>
+              <td>0</td>
+              <td class="dim">EXPORT-RECORD, EXPORT-REC-TYPE, EXPORT-TIMESTAMP, EXPORT-TIMESTAMP-R, EXPORT-SEQUENCE-NUM +67</td>
+            </tr><tr>
+              <td><strong>CVTRA01Y</strong></td>
+              <td>13</td>
+              <td>7</td>
+              <td>0</td>
+              <td class="dim">TRAN-CAT-BAL-RECORD, TRAN-CAT-KEY, TRAN-CAT-BAL, FILLER +2</td>
+            </tr><tr>
+              <td><strong>CVTRA02Y</strong></td>
+              <td>13</td>
+              <td>7</td>
+              <td>0</td>
+              <td class="dim">DIS-GROUP-RECORD, DIS-GROUP-KEY, DIS-INT-RATE, FILLER +2</td>
+            </tr><tr>
+              <td><strong>CVTRA03Y</strong></td>
+              <td>10</td>
+              <td>4</td>
+              <td>0</td>
+              <td class="dim">TRAN-TYPE-RECORD, TRAN-TYPE, TRAN-TYPE-DESC, FILLER</td>
+            </tr><tr>
+              <td><strong>CVTRA04Y</strong></td>
+              <td>12</td>
+              <td>6</td>
+              <td>0</td>
+              <td class="dim">TRAN-CAT-RECORD, TRAN-CAT-KEY, TRAN-CAT-TYPE-DESC, FILLER +1</td>
+            </tr><tr>
+              <td><strong>CVTRA05Y</strong></td>
+              <td>21</td>
+              <td>15</td>
+              <td>0</td>
+              <td class="dim">TRAN-RECORD, TRAN-ID, TRAN-TYPE-CD, TRAN-CAT-CD, TRAN-SOURCE +10</td>
+            </tr><tr>
+              <td><strong>CVTRA06Y</strong></td>
+              <td>21</td>
+              <td>15</td>
+              <td>0</td>
+              <td class="dim">DALYTRAN-RECORD, DALYTRAN-ID, DALYTRAN-TYPE-CD, DALYTRAN-CAT-CD, DALYTRAN-SOURCE +10</td>
+            </tr><tr>
+              <td><strong>CVTRA07Y</strong></td>
+              <td>73</td>
+              <td>45</td>
+              <td>0</td>
+              <td class="dim">REPORT-NAME-HEADER, REPT-SHORT-NAME, REPT-LONG-NAME, REPT-DATE-HEADER, REPT-START-DATE +40</td>
+            </tr><tr>
+              <td><strong>IMSFUNCS</strong></td>
+              <td>27</td>
+              <td>11</td>
+              <td>0</td>
+              <td class="dim">FUNC-CODES, FUNC-GU, FUNC-GHU, FUNC-GN, FUNC-GHN +6</td>
+            </tr><tr>
+              <td><strong>PADFLPCB</strong></td>
+              <td>26</td>
+              <td>10</td>
+              <td>0</td>
+              <td class="dim">PADFLPCB, PADFL-DBDNAME, PADFL-SEG-LEVEL, PADFL-PCB-STATUS, PADFL-PCB-PROCOPT +5</td>
+            </tr><tr>
+              <td><strong>PASFLPCB</strong></td>
+              <td>26</td>
+              <td>10</td>
+              <td>0</td>
+              <td class="dim">PASFLPCB, PASFL-DBDNAME, PASFL-SEG-LEVEL, PASFL-PCB-STATUS, PASFL-PCB-PROCOPT +5</td>
+            </tr><tr>
+              <td><strong>PAUTBPCB</strong></td>
+              <td>26</td>
+              <td>10</td>
+              <td>0</td>
+              <td class="dim">PAUTBPCB, PAUT-DBDNAME, PAUT-SEG-LEVEL, PAUT-PCB-STATUS, PAUT-PCB-PROCOPT +5</td>
+            </tr><tr>
+              <td><strong>UNUSED1Y</strong></td>
+              <td>10</td>
+              <td>7</td>
+              <td>0</td>
+              <td class="dim">UNUSED-DATA, UNUSED-ID, UNUSED-FNAME, UNUSED-LNAME, UNUSED-PWD +2</td>
+            </tr></tbody></table>
+        </section>
+        <section id="unresolved">
+          <h2>Unresolved External References</h2>
+          <h3>Copybooks (9)</h3><p class='dim'>CMQGMOV, CMQMDV, CMQODV, CMQPMOV, CMQTML, CMQV, DFHAID, DFHBMSCA, REPLACING</p>
+          <h3>Call Targets (16)</h3><p class='dim'>CBLTDLI, CCARD-NEXT-PROG, CDEMO-ADMIN-OPT-PGMNAME(WS-OPTION, CDEMO-MENU-OPT-PGMNAME(WS-OPTION, CDEMO-TO-PROGRAM, CEE3ABD, COBDATFT, LIT-ADDTPGM, LIT-MENUPGM, MQCLOSE, MQGET, MQOPEN, MQPUT, MQPUT1, MVSWAIT, WS-PGM-AUTH-FRAUD</p>
+        </section>
+</main>
+<footer>Generated by Masquerade COBOL Intelligence Engine &middot; 2026-03-14 22:44</footer>
+</body>
+</html>
